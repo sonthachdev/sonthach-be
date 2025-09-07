@@ -519,7 +519,7 @@ export class YCSCService extends BaseService<YCSCDocument> {
       nguoi_duyet_id: nhapKhoDto.thu_kho_id,
       kho: Kho.KHO_PHOI,
       trang_thai: TrangThai.NEW,
-      current_cong_doan: CongDoan.SC,
+      currentCongDoan: CongDoan.SC,
       bcsl_ids: nhapKhoDto.bao_cao_san_luong_ids,
       ngay_tao: new Date(),
       ngay_cap_nhat: new Date(),

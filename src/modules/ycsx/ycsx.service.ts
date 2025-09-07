@@ -12,10 +12,14 @@ import { InjectModel } from '@nestjs/mongoose';
 import { FilterQuery, Model } from 'mongoose';
 import { BaseService } from '../../common/base';
 import {
+  BaoCaoSanLuong,
+  BaoCaoSanLuongDocument,
   HangMuc,
   HangMucDocument,
   PhanCong,
   PhanCongDocument,
+  PhieuNghiepVu,
+  PhieuNghiepVuDocument,
   YCSX,
   YCSXDocument,
 } from '../../schemas';
@@ -28,8 +32,15 @@ import {
   UpdateHangMucYCSXDto,
   UpdateTrangThaiYCSXDto,
 } from './dto/ycsx.dto';
-import { TrangThai } from '../../utils';
+import { BaoCaoState, Kho, LoaiPhieu, TrangThai } from '../../utils';
 import { ObjectId } from 'mongodb';
+import { NhapNguyenLieuDto } from './dto/ycsx.nguyen-lieu.dto';
+import {
+  BaoCaoSanLuongByYCSXDto,
+  UpdateBaoCaoSanLuongByYCSXDto,
+  XuatKhoBaoCaoSanLuongByYCSXDto,
+  ApproveChuyenTiepBaoCaoSanLuongByYCSXDto,
+} from './dto/ycsx.bcsl';
 
 @Injectable()
 export class YCSXService extends BaseService<YCSXDocument> {
@@ -299,9 +310,264 @@ export class YCSXService extends BaseService<YCSXDocument> {
         return await newHangMuc.save();
       }),
     );
+    const listHangMucNewIds = hangMucs.map((hangMuc) => hangMuc._id);
+    const listHangMucUpdate = [...ycsx.hang_muc_ids, ...listHangMucNewIds];
     await this.update(id, {
       ngay_cap_nhat: new Date(),
+      hang_muc_ids: listHangMucUpdate,
     });
     return hangMucs;
+  }
+
+  async addNguyenLieuYCSXByCongDoan(
+    id: string,
+    congDoanId: string,
+    body: NhapNguyenLieuDto,
+  ): Promise<PhieuNghiepVuDocument> {
+    const ycsx = await this.findById(id);
+    if (!ycsx) {
+      throw new NotFoundException('Yêu cầu sản xuất không tồn tại');
+    }
+
+    const phanCongModel = this.ycsxModel.db.model(PhanCong.name);
+    const phanCong = await phanCongModel.findById(congDoanId);
+    if (!phanCong) {
+      throw new NotFoundException('Phân công không tồn tại');
+    }
+
+    const baoCaoSanLuongModel = this.ycsxModel.db.model(BaoCaoSanLuong.name);
+    const baoCaoSanLuongs = await baoCaoSanLuongModel.find({
+      _id: { $in: body.bcsl_ids },
+    });
+    if (baoCaoSanLuongs.length !== body.bcsl_ids.length) {
+      throw new NotFoundException('Một số báo cáo sản lượng không tồn tại');
+    }
+
+    const phieuNghiepVuModel = this.ycsxModel.db.model(PhieuNghiepVu.name);
+    const phieuNghiepVu = await phieuNghiepVuModel.create({
+      ycsx_id: ycsx._id,
+      ma_phieu: `NhapNguyenLieu-${(ycsx._id as any).toString()}-${new Date().getTime()}`,
+      loai_phieu: LoaiPhieu.XuatKho,
+      trang_thai: TrangThai.NEW,
+      kho: body.kho,
+      ngay_tao: new Date(),
+      ngay_cap_nhat: new Date(),
+      currentCongDoan: phanCong.cong_doan,
+      bcsl_ids: body.bcsl_ids,
+      nguoi_tao_id: phanCong.tnsx_id,
+      nguoi_duyet_id: phanCong.kcs_id,
+    });
+
+    await baoCaoSanLuongModel.updateMany(
+      { _id: { $in: body.bcsl_ids } },
+      {
+        $set: {
+          trang_thai: BaoCaoState.RESERVED,
+          ngay_cap_nhat: new Date(),
+          do_day_cua: body.do_day_cua,
+          kho: body.kho,
+          ycsx_id: ycsx._id,
+        },
+      },
+    );
+
+    const phieuNghiepVuUpdated = await phieuNghiepVuModel
+      .findById(phieuNghiepVu._id)
+      .populate('bcsl_ids');
+
+    return phieuNghiepVuUpdated;
+  }
+
+  async addBaoCaoSanLuongByYCSX(
+    id: string,
+    congDoanId: string,
+    body: BaoCaoSanLuongByYCSXDto,
+  ): Promise<BaoCaoSanLuongDocument> {
+    const ycsx = await this.findById(id);
+    if (!ycsx) {
+      throw new NotFoundException('Yêu cầu sản xuất không tồn tại');
+    }
+
+    const phanCongModel = this.ycsxModel.db.model(PhanCong.name);
+    const phanCong = await phanCongModel.findById(congDoanId);
+    if (!phanCong) {
+      throw new NotFoundException('Phân công không tồn tại');
+    }
+
+    const baoCaoSanLuongModel = this.ycsxModel.db.model(BaoCaoSanLuong.name);
+    const baoCaoSanLuong = await baoCaoSanLuongModel.create({
+      ...body,
+      ycsx_id: ycsx._id,
+      trang_thai: BaoCaoState.NEW,
+      ngay_tao: new Date(),
+      completed_cong_doan: phanCong.cong_doan,
+      tnsx_id: phanCong.tnsx_id,
+      kcs_id: phanCong.kcs_id,
+      ngay_cap_nhat: new Date(),
+    });
+
+    return baoCaoSanLuong;
+  }
+
+  async updateBaoCaoSanLuongByYCSX(
+    id: string,
+    congDoanId: string,
+    body: UpdateBaoCaoSanLuongByYCSXDto,
+  ): Promise<BaoCaoSanLuongDocument[]> {
+    const ycsx = await this.findById(id);
+    if (!ycsx) {
+      throw new NotFoundException('Yêu cầu sản xuất không tồn tại');
+    }
+
+    const phanCongModel = this.ycsxModel.db.model(PhanCong.name);
+    const phanCong = await phanCongModel.findById(congDoanId);
+    if (!phanCong) {
+      throw new NotFoundException('Phân công không tồn tại');
+    }
+
+    const baoCaoSanLuongModel = this.ycsxModel.db.model(BaoCaoSanLuong.name);
+    const baoCaoSanLuong = await baoCaoSanLuongModel.find({
+      _id: { $in: body.bcsl_ids },
+    });
+    if (baoCaoSanLuong.length !== body.bcsl_ids.length) {
+      throw new NotFoundException('Một số báo cáo sản lượng không tồn tại');
+    }
+
+    await baoCaoSanLuongModel.updateMany(
+      { _id: { $in: body.bcsl_ids } },
+      {
+        $set: {
+          trang_thai: body.trang_thai,
+          reason: body.reason,
+          ngay_cap_nhat: new Date(),
+        },
+      },
+    );
+
+    const baoCaoSanLuongUpdated = await baoCaoSanLuongModel.find({
+      _id: { $in: body.bcsl_ids },
+    });
+
+    return baoCaoSanLuongUpdated;
+  }
+
+  async xuatKhoBaoCaoSanLuongByYCSX(
+    id: string,
+    congDoanId: string,
+    body: XuatKhoBaoCaoSanLuongByYCSXDto,
+  ): Promise<BaoCaoSanLuongDocument[]> {
+    const ycsx = await this.findById(id);
+    if (!ycsx) {
+      throw new NotFoundException('Yêu cầu sản xuất không tồn tại');
+    }
+
+    const phanCongModel = this.ycsxModel.db.model(PhanCong.name);
+    const phanCong = await phanCongModel.findById(congDoanId);
+    if (!phanCong) {
+      throw new NotFoundException('Phân công không tồn tại');
+    }
+
+    const baoCaoSanLuongModel = this.ycsxModel.db.model(BaoCaoSanLuong.name);
+    const baoCaoSanLuong = await baoCaoSanLuongModel.find({
+      _id: { $in: body.bcsl_ids },
+    });
+    if (baoCaoSanLuong.length !== body.bcsl_ids.length) {
+      throw new NotFoundException('Một số báo cáo sản lượng không tồn tại');
+    }
+
+    const phieuNghiepVuModel = this.ycsxModel.db.model(PhieuNghiepVu.name);
+
+    const bodyPhieuNghiepVu = {
+      ycsx_id: ycsx._id,
+      ma_phieu: body.ma_phieu,
+      loai_phieu: body.loai_phieu,
+      trang_thai: TrangThai.NEW,
+      kho: body.kho_nhan,
+      currentCongDoan: phanCong.cong_doan,
+      nextCongDoan: body.next_cong_doan,
+      bcsl_ids: body.bcsl_ids,
+      nguoi_tao_id: phanCong.kcs_id,
+      nguoi_duyet_id:
+        body.loai_phieu === LoaiPhieu.NhapKho
+          ? body.thu_kho_id
+          : body.kcs_nhan_id,
+
+      ngay_tao: new Date(),
+      ngay_cap_nhat: new Date(),
+      theoDonHang: body.theoDonHang,
+    };
+    const phieuNghiepVu = await phieuNghiepVuModel.create(bodyPhieuNghiepVu);
+
+    await baoCaoSanLuongModel.updateMany(
+      { _id: { $in: body.bcsl_ids } },
+      {
+        $set: {
+          trang_thai: BaoCaoState.RESERVED,
+          ngay_cap_nhat: new Date(),
+          do_day_cua: body.do_day_cua,
+          theoDonHang: body.theoDonHang,
+        },
+      },
+    );
+
+    const phieuNghiepVuUpdated = await phieuNghiepVuModel
+      .findById(phieuNghiepVu._id)
+      .populate('bcsl_ids');
+    return phieuNghiepVuUpdated;
+  }
+
+  async approveChuyenTiepBaoCaoSanLuongByYCSX(
+    id: string,
+    congDoanId: string,
+    body: ApproveChuyenTiepBaoCaoSanLuongByYCSXDto,
+  ): Promise<PhieuNghiepVuDocument[]> {
+    const ycsx = await this.findById(id);
+    if (!ycsx) {
+      throw new NotFoundException('Yêu cầu sản xuất không tồn tại');
+    }
+
+    const phanCongModel = this.ycsxModel.db.model(PhanCong.name);
+    const phanCong = await phanCongModel.findById(congDoanId);
+    if (!phanCong) {
+      throw new NotFoundException('Phân công không tồn tại');
+    }
+
+    const phieuNghiepVuModel = this.ycsxModel.db.model(PhieuNghiepVu.name);
+    const phieuNghiepVu = await phieuNghiepVuModel.find({
+      _id: { $in: body.pnv_ids },
+    });
+    if (phieuNghiepVu.length !== body.pnv_ids.length) {
+      throw new NotFoundException('Một số phiếu nghiệp vụ không tồn tại');
+    }
+
+    const bcslIds = phieuNghiepVu.map((pnv) => pnv.bcsl_ids).flat();
+    const baoCaoSanLuongModel = this.ycsxModel.db.model(BaoCaoSanLuong.name);
+    await baoCaoSanLuongModel.updateMany(
+      { _id: { $in: bcslIds } },
+      {
+        $set: {
+          trang_thai: BaoCaoState.FORWARDED,
+          ngay_cap_nhat: new Date(),
+        },
+      },
+    );
+
+    await phieuNghiepVuModel.updateMany(
+      { _id: { $in: body.pnv_ids } },
+      {
+        $set: {
+          trang_thai: TrangThai.COMPLETED,
+          ngay_cap_nhat: new Date(),
+        },
+      },
+    );
+
+    const phieuNghiepVuUpdated = await phieuNghiepVuModel
+      .find({
+        _id: { $in: body.pnv_ids },
+      })
+      .populate('bcsl_ids');
+
+    return phieuNghiepVuUpdated;
   }
 }

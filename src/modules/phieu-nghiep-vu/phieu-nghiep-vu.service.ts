@@ -47,7 +47,7 @@ export class PhieuNghiepVuService extends BaseService<PhieuNghiepVuDocument> {
     const filter: Record<string, unknown> = {};
     if (query.kho) filter.kho = query.kho;
     if (query.trangThai) filter.trang_thai = query.trangThai;
-    if (query.currentCongDoan) filter.current_cong_doan = query.currentCongDoan;
+    if (query.currentCongDoan) filter.currentCongDoan = query.currentCongDoan;
     if (query.loaiPhieu) filter.loai_phieu = query.loaiPhieu;
     const { sort = 'ngay_tao:-1' } = query;
 
@@ -65,7 +65,7 @@ export class PhieuNghiepVuService extends BaseService<PhieuNghiepVuDocument> {
         model: 'NhanVien',
       })
       .select(
-        '_id ma_phieu loai_phieu ycsc_id ycsx_id nguoi_tao_id ngay_tao nguoi_duyet_id ngay_duyet kho trang_thai bcsl_ids current_cong_doan next_cong_doan',
+        '_id ma_phieu loai_phieu ycsc_id ycsx_id nguoi_tao_id ngay_tao nguoi_duyet_id ngay_duyet kho trang_thai bcsl_ids currentCongDoan next_cong_doan',
       )
       .sort(sort);
   }
@@ -520,7 +520,9 @@ export class PhieuNghiepVuService extends BaseService<PhieuNghiepVuDocument> {
           trang_thai:
             pnv.loai_phieu === LoaiPhieu.XuatKho
               ? BaoCaoState.EXPORTED
-              : BaoCaoState.IMPORTED,
+              : pnv.loai_phieu === LoaiPhieu.NhapKho
+                ? BaoCaoState.IMPORTED
+                : BaoCaoState.FORWARDED,
           // ycsc_id: pnv.ycsc_id,
           // ycsx_id: pnv.ycsx_id,
           kho: pnv.kho,
@@ -540,7 +542,7 @@ export class PhieuNghiepVuService extends BaseService<PhieuNghiepVuDocument> {
 
     return await this.phieuNghiepVuModel.find({
       _id: { $in: batchApproveDto.phieu_ids },
-    });
+    }).populate('bcsl_ids');
   }
 
   /**

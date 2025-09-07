@@ -90,7 +90,7 @@ export class CreatePhieuNghiepVuDto {
   })
   @IsOptional()
   @IsEnum(CongDoan)
-  current_cong_doan?: CongDoan;
+  currentCongDoan?: CongDoan;
 
   @ApiProperty({
     description: 'Công đoạn tiếp theo',
@@ -157,7 +157,7 @@ export class UpdatePhieuNghiepVuDto {
   })
   @IsOptional()
   @IsEnum(CongDoan)
-  current_cong_doan?: CongDoan;
+  currentCongDoan?: CongDoan;
 
   @ApiProperty({
     description: 'Công đoạn tiếp theo',

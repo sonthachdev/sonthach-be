@@ -5,4 +5,5 @@ export enum BaoCaoState {
   IMPORTED = 'imported', // đã được nhập kho
   RESERVED = 'reserved', // chờ xuất/nhập kho
   EXPORTED = 'exported', // đã được xuất kho để sản xuất hoặc bán
+  FORWARDED = 'forwarded', // đã được chuyển tiếp
 }

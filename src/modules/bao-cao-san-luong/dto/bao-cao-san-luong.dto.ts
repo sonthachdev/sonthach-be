@@ -6,6 +6,7 @@ import {
   IsDateString,
   IsMongoId,
   IsNumber,
+  IsArray,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { BaoCaoState, MauDa, MatDa, Kho, CongDoan } from '../../../utils';
@@ -311,4 +312,60 @@ export class FilterBaoCaoSanLuongDto {
   @IsOptional()
   @IsMongoId()
   ycsx_id?: string;
+}
+
+export class UpdatePalletBaoCaoSanLuongDto {
+  @ApiProperty({
+    description: 'Mã pallet',
+    example: 1,
+  })
+  @IsNumber()
+  pallet: number;
+
+  @ApiProperty({
+    description: 'Danh sách ID báo cáo sản lượng',
+    example: ['507f1f77bcf86cd799439011'],
+  })
+  @IsArray()
+  @IsMongoId({ each: true })
+  bcsl_ids: string[];
+}
+
+export class XuatHoaDonBaoCaoSanLuongDto {
+  @ApiProperty({
+    description: 'Danh sách ID báo cáo sản lượng',
+    example: ['507f1f77bcf86cd799439011'],
+  })
+  @IsArray()
+  @IsMongoId({ each: true })
+  bcsl_ids: string[];
+
+  @ApiProperty({
+    description: 'Kho',
+    enum: Kho,
+    example: Kho.KHO_BLOCK,
+  })
+  @IsEnum(Kho)
+  kho: Kho;
+
+  @ApiProperty({
+    description: 'Mã phiếu',
+    example: 'PXK-2024-001',
+  })
+  @IsString()
+  ma_phieu: string;
+
+  @ApiProperty({
+    description: 'ID người tạo phiếu',
+    example: '507f1f77bcf86cd799439011',
+  })
+  @IsMongoId()
+  nguoi_tao_id: string;
+
+  @ApiProperty({
+    description: 'ID người duyệt phiếu',
+    example: '507f1f77bcf86cd799439011',
+  })
+  @IsMongoId()
+  nguoi_duyet_id: string;
 }

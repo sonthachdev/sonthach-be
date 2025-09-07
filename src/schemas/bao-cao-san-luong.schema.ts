@@ -2,6 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Schema as MongooseSchema } from 'mongoose';
 import { CongDoan, MauDa, MatDa, BaoCaoState, Kho } from '../utils';
 import { QuyCach, QuyCachSchema } from './hang-muc.schema';
+import { GiaCong } from 'src/utils/gia-cong.enum';
 
 export type BaoCaoSanLuongDocument = BaoCaoSanLuong & Document;
 
@@ -31,6 +32,9 @@ export class BaoCaoSanLuong {
 
   @Prop({ enum: MatDa, required: false })
   mat_da?: MatDa;
+
+  @Prop({ required: false, type: Number })
+  do_day_cua?: number;
 
   @Prop({ type: QuyCachSchema, required: true })
   quy_cach: QuyCach;
@@ -80,15 +84,6 @@ export class BaoCaoSanLuong {
   @Prop({ type: Date, default: Date.now })
   ngay_cap_nhat: Date;
 
-  @Prop({ type: String, required: false })
-  ghi_chu_duyet?: string;
-
-  @Prop({ type: String, required: false })
-  ly_do_tu_choi?: string;
-
-  @Prop({ type: String, required: false })
-  ghi_chu_tu_choi?: string;
-
   @Prop({
     type: MongooseSchema.Types.ObjectId,
     ref: 'nhan_vien',
@@ -99,25 +94,23 @@ export class BaoCaoSanLuong {
   @Prop({ type: Date, required: false })
   ngay_tu_choi?: Date;
 
-  @Prop({ type: Date, required: false })
-  ngay_nhap_kho?: Date;
+  @Prop({ type: Number, required: false })
+  pallet?: number; // TP: Thủ Kho TP đánh dấu mã pallet
 
-  @Prop({
-    type: MongooseSchema.Types.ObjectId,
-    ref: 'nhan_vien',
-    required: false,
-  })
-  nguoi_nhap_kho_id?: MongooseSchema.Types.ObjectId;
+  @Prop({ type: Boolean, required: false })
+  theoDonHang?: boolean; // ĐG: KCS xuất về kho TP thì đánh dấu kiện này có theo đơn hàng hay không, nếu có thì tính tiến độ cho YCSX này
+
+  @Prop({ type: Number, required: false })
+  soMay?: number; // CQC: số máy khi báo cáo cắt quy cách, 1 - 10
 
   @Prop({ type: String, required: false })
-  ghi_chu_nhap_kho?: string;
+  nguoiVanHanhMay?: string; // CQC: người vận hành máy khi báo cáo cắt quy cách, tên do người tạo báo cáo nhập
 
-  @Prop({
-    type: MongooseSchema.Types.ObjectId,
-    ref: 'phieu_nghiep_vu',
-    required: false,
-  })
-  phieu_nhap_kho_id?: MongooseSchema.Types.ObjectId;
+  @Prop({ type: String, required: false })
+  groupId?: string; // ĐG: group BCSL khi đóng gói để đi theo kiện
+
+  @Prop({ type: String, required: false })
+  giaCong?: GiaCong;
 }
 
 export const BaoCaoSanLuongSchema =

@@ -4,4 +4,5 @@ export enum LoaiPhieu {
   YCSC = 'ycsc', // yêu cầu sơ chế nguyên liệu
   YCSX = 'ycsx', // yêu cầu sản xuất
   ChuyenTiep = 'chuyen-tiep', // chuyển tiếp
+  TraHang = 'tra-hang',
 }

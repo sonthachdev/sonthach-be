@@ -45,10 +45,10 @@ export class PhieuNghiepVu {
   trang_thai: TrangThai;
 
   @Prop({ enum: CongDoan, required: false })
-  current_cong_doan?: CongDoan;
+  currentCongDoan?: CongDoan;
 
   @Prop({ enum: CongDoan, required: false })
-  next_cong_doan?: CongDoan;
+  nextCongDoan?: CongDoan;
 
   @Prop({
     type: [MongooseSchema.Types.ObjectId],
@@ -56,13 +56,6 @@ export class PhieuNghiepVu {
     required: true,
   })
   bcsl_ids: MongooseSchema.Types.ObjectId[];
-
-  @Prop({
-    type: [MongooseSchema.Types.ObjectId],
-    ref: 'hang_muc',
-    required: false,
-  })
-  hang_muc_ids?: MongooseSchema.Types.ObjectId[];
 
   @Prop({ type: Date, default: Date.now })
   ngay_cap_nhat: Date;
@@ -82,6 +75,15 @@ export class PhieuNghiepVu {
 
   @Prop({ type: Date, required: false })
   ngay_nhap_kho?: Date;
+
+  @Prop({ type: Number, required: false })
+  pallet?: number; // metadata dùng để update cho BCSL đính kèm
+
+  @Prop({ type: Boolean, required: false })
+  theoDonHang?: boolean; // metadata dùng để update cho BCSL đính kèm
+
+  @Prop({ type: String, required: false })
+  lyDoTraHang?: string; // Phiếu Trả Hàng cần có lý do trả hàng
 }
 
 export const PhieuNghiepVuSchema = SchemaFactory.createForClass(PhieuNghiepVu);

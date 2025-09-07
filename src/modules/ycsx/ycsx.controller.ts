@@ -13,7 +13,13 @@ import {
 } from '@nestjs/swagger';
 import { BaseController, CustomApiResponse } from '../../common/base';
 import { YCSXService } from './ycsx.service';
-import { HangMucDocument, PhanCongDocument, YCSXDocument } from '../../schemas';
+import {
+  BaoCaoSanLuongDocument,
+  HangMucDocument,
+  PhanCongDocument,
+  PhieuNghiepVuDocument,
+  YCSXDocument,
+} from '../../schemas';
 import {
   CreateYCSXDto,
   FilterYCSXDto,
@@ -22,6 +28,13 @@ import {
   CreateHangMucYCSXDto,
   UpdateTrangThaiYCSXDto,
 } from './dto/ycsx.dto';
+import { NhapNguyenLieuDto } from './dto/ycsx.nguyen-lieu.dto';
+import {
+  BaoCaoSanLuongByYCSXDto,
+  UpdateBaoCaoSanLuongByYCSXDto,
+  XuatKhoBaoCaoSanLuongByYCSXDto,
+  ApproveChuyenTiepBaoCaoSanLuongByYCSXDto,
+} from './dto/ycsx.bcsl';
 
 @ApiTags('ycsx')
 @Controller('ycsx')
@@ -506,7 +519,6 @@ export class YCSXController extends BaseController<YCSXDocument> {
   > {
     try {
       const data = await this.ycsxService.getDetailYCSX(id);
-      console.log('data', data);
       return {
         success: true,
         message: 'Lấy yêu cầu sản xuất theo ID thành công',
@@ -599,6 +611,234 @@ export class YCSXController extends BaseController<YCSXDocument> {
       return {
         success: false,
         message: 'Tạo hang-muc thất bại',
+        error: error.message,
+      };
+    }
+  }
+
+  // post :id/congdoan/:congdoanId/nhap-nguyen-lieu
+  @Post(':id/congdoan/:congdoanId/nhap-nguyen-lieu')
+  @ApiOperation({
+    summary: 'Nhập nguyên liệu',
+  })
+  @ApiParam({
+    name: 'id',
+    description: 'ID của yêu cầu sản xuất',
+    example: '507f1f77bcf86cd799439011',
+  })
+  @ApiParam({
+    name: 'congdoanId',
+    description: 'ID của công đoạn',
+    example: '507f1f77bcf86cd799439011',
+  })
+  @ApiBody({ type: NhapNguyenLieuDto })
+  @ApiOkResponse({
+    description: 'Nhập nguyên liệu thành công',
+  })
+  @ApiBadRequestResponse({ description: 'Dữ liệu không hợp lệ' })
+  @ApiInternalServerErrorResponse({ description: 'Lỗi server' })
+  async nhapNguyenLieu(
+    @Param('id') id: string,
+    @Param('congdoanId') congdoanId: string,
+    @Body() body: NhapNguyenLieuDto,
+  ): Promise<CustomApiResponse<PhieuNghiepVuDocument>> {
+    try {
+      const data = await this.ycsxService.addNguyenLieuYCSXByCongDoan(
+        id,
+        congdoanId,
+        body,
+      );
+      return {
+        success: true,
+        message: 'Nhập nguyên liệu thành công',
+        data,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message: 'Nhập nguyên liệu thất bại',
+        error: error.message,
+      };
+    }
+  }
+
+  // post :id/congdoan/:congdoanId/bao-cao-san-luong
+  @Post(':id/congdoan/:congdoanId/bao-cao-san-luong')
+  @ApiOperation({
+    summary: 'Thêm báo cáo sản lượng vào yêu cầu sản xuất',
+  })
+  @ApiParam({
+    name: 'id',
+    description: 'ID của yêu cầu sản xuất',
+    example: '507f1f77bcf86cd799439011',
+  })
+  @ApiParam({
+    name: 'congdoanId',
+    description: 'ID của công đoạn',
+    example: '507f1f77bcf86cd799439011',
+  })
+  @ApiBody({ type: BaoCaoSanLuongByYCSXDto })
+  async addBaoCaoSanLuongByYCSX(
+    @Param('id') id: string,
+    @Param('congdoanId') congdoanId: string,
+    @Body() body: BaoCaoSanLuongByYCSXDto,
+  ): Promise<CustomApiResponse<BaoCaoSanLuongDocument>> {
+    try {
+      const data = await this.ycsxService.addBaoCaoSanLuongByYCSX(
+        id,
+        congdoanId,
+        body,
+      );
+      return {
+        success: true,
+        message: 'Thêm báo cáo sản lượng vào yêu cầu sản xuất thành công',
+        data,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message: 'Thêm báo cáo sản lượng vào yêu cầu sản xuất thất bại',
+        error: error.message,
+      };
+    }
+  }
+
+  // put :id/congdoan/:congdoanId/bao-cao-san-luong
+  @Put(':id/congdoan/:congdoanId/bao-cao-san-luong')
+  @ApiOperation({
+    summary: 'Cập nhật báo cáo sản lượng vào yêu cầu sản xuất',
+  })
+  @ApiParam({
+    name: 'id',
+    description: 'ID của yêu cầu sản xuất',
+    example: '507f1f77bcf86cd799439011',
+  })
+  @ApiParam({
+    name: 'congdoanId',
+    description: 'ID của công đoạn',
+    example: '507f1f77bcf86cd799439011',
+  })
+  @ApiBody({ type: UpdateBaoCaoSanLuongByYCSXDto })
+  @ApiOkResponse({
+    description: 'Cập nhật báo cáo sản lượng vào yêu cầu sản xuất thành công',
+  })
+  @ApiBadRequestResponse({ description: 'Dữ liệu không hợp lệ' })
+  @ApiInternalServerErrorResponse({ description: 'Lỗi server' })
+  async updateBaoCaoSanLuongByYCSX(
+    @Param('id') id: string,
+    @Param('congdoanId') congdoanId: string,
+    @Body() body: UpdateBaoCaoSanLuongByYCSXDto,
+  ): Promise<CustomApiResponse<BaoCaoSanLuongDocument[]>> {
+    try {
+      const data = await this.ycsxService.updateBaoCaoSanLuongByYCSX(
+        id,
+        congdoanId,
+        body,
+      );
+      return {
+        success: true,
+        message: 'Cập nhật báo cáo sản lượng vào yêu cầu sản xuất thành công',
+        data,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message: 'Cập nhật báo cáo sản lượng vào yêu cầu sản xuất thất bại',
+        error: error.message,
+      };
+    }
+  }
+
+  // post :id/congdoan/:congdoanId/xuat-kho
+  @Post(':id/congdoan/:congdoanId/xuat-kho')
+  @ApiOperation({
+    summary: 'Xuất kho báo cáo sản lượng vào yêu cầu sản xuất',
+  })
+  @ApiParam({
+    name: 'id',
+    description: 'ID của yêu cầu sản xuất',
+    example: '507f1f77bcf86cd799439011',
+  })
+  @ApiParam({
+    name: 'congdoanId',
+    description: 'ID của công đoạn',
+    example: '507f1f77bcf86cd799439011',
+  })
+  @ApiBody({ type: XuatKhoBaoCaoSanLuongByYCSXDto })
+  @ApiOkResponse({
+    description: 'Xuất kho báo cáo sản lượng vào yêu cầu sản xuất thành công',
+  })
+  @ApiBadRequestResponse({ description: 'Dữ liệu không hợp lệ' })
+  @ApiInternalServerErrorResponse({ description: 'Lỗi server' })
+  async xuatKhoBaoCaoSanLuongByYCSX(
+    @Param('id') id: string,
+    @Param('congdoanId') congdoanId: string,
+    @Body() body: XuatKhoBaoCaoSanLuongByYCSXDto,
+  ): Promise<CustomApiResponse<BaoCaoSanLuongDocument[]>> {
+    try {
+      const data = await this.ycsxService.xuatKhoBaoCaoSanLuongByYCSX(
+        id,
+        congdoanId,
+        body,
+      );
+      return {
+        success: true,
+        message: 'Xuất kho báo cáo sản lượng vào yêu cầu sản xuất thành công',
+        data,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message: 'Xuất kho báo cáo sản lượng vào yêu cầu sản xuất thất bại',
+        error: error.message,
+      };
+    }
+  }
+
+  // put :id/congdoan/:congdoanId/duyet-chuyen-tiep
+  @Put(':id/congdoan/:congdoanId/duyet-chuyen-tiep')
+  @ApiOperation({
+    summary: 'Duyệt chuyển tiếp báo cáo sản lượng vào yêu cầu sản xuất',
+  })
+  @ApiParam({
+    name: 'id',
+    description: 'ID của yêu cầu sản xuất',
+    example: '507f1f77bcf86cd799439011',
+  })
+  @ApiParam({
+    name: 'congdoanId',
+    description: 'ID của công đoạn',
+    example: '507f1f77bcf86cd799439011',
+  })
+  @ApiBody({ type: ApproveChuyenTiepBaoCaoSanLuongByYCSXDto })
+  @ApiOkResponse({
+    description:
+      'Duyệt chuyển tiếp báo cáo sản lượng vào yêu cầu sản xuất thành công',
+  })
+  @ApiBadRequestResponse({ description: 'Dữ liệu không hợp lệ' })
+  @ApiInternalServerErrorResponse({ description: 'Lỗi server' })
+  async approveChuyenTiepBaoCaoSanLuongByYCSX(
+    @Param('id') id: string,
+    @Param('congdoanId') congdoanId: string,
+    @Body() body: ApproveChuyenTiepBaoCaoSanLuongByYCSXDto,
+  ): Promise<CustomApiResponse<PhieuNghiepVuDocument[]>> {
+    try {
+      const data = await this.ycsxService.approveChuyenTiepBaoCaoSanLuongByYCSX(
+        id,
+        congdoanId,
+        body,
+      );
+      return {
+        success: true,
+        message:
+          'Duyệt chuyển tiếp báo cáo sản lượng vào yêu cầu sản xuất thành công',
+        data,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message:
+          'Duyệt chuyển tiếp báo cáo sản lượng vào yêu cầu sản xuất thất bại',
         error: error.message,
       };
     }

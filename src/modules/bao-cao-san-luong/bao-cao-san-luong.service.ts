@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import {
   Injectable,
@@ -7,13 +9,19 @@ import {
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, FilterQuery, UpdateQuery } from 'mongoose';
 import { BaseService } from '../../common/base';
-import { BaoCaoSanLuongDocument } from '../../schemas';
-import { BaoCaoState } from '../../utils';
+import {
+  BaoCaoSanLuongDocument,
+  PhieuNghiepVu,
+  PhieuNghiepVuDocument,
+} from '../../schemas';
+import { BaoCaoState, LoaiPhieu, TrangThai } from '../../utils';
 import {
   CreateBaoCaoSanLuongDto,
   ApproveBaoCaoSanLuongDto,
   RejectBaoCaoSanLuongDto,
   ImportBaoCaoSanLuongDto,
+  UpdatePalletBaoCaoSanLuongDto,
+  XuatHoaDonBaoCaoSanLuongDto,
 } from './dto/bao-cao-san-luong.dto';
 import { FilterBaoCaoSanLuongDto } from './dto/bao-cao-san-luong.dto';
 
@@ -313,5 +321,65 @@ export class BaoCaoSanLuongService extends BaseService<BaoCaoSanLuongDocument> {
     ]);
 
     return { new: newCount, approved, rejected, imported, total };
+  }
+
+  async updatePalletBaoCaoSanLuong(
+    updateDto: UpdatePalletBaoCaoSanLuongDto,
+  ): Promise<BaoCaoSanLuongDocument[]> {
+    const baoCaoSanLuong = await this.baoCaoSanLuongModel.find({
+      _id: { $in: updateDto.bcsl_ids },
+    });
+    if (baoCaoSanLuong.length !== updateDto.bcsl_ids.length) {
+      throw new NotFoundException('Một số báo cáo sản lượng không tồn tại');
+    }
+
+    await this.baoCaoSanLuongModel.updateMany(
+      { _id: { $in: updateDto.bcsl_ids } },
+      { pallet: updateDto.pallet, ngay_cap_nhat: new Date() },
+    );
+
+    const baoCaoSanLuongUpdated = await this.baoCaoSanLuongModel.find({
+      _id: { $in: updateDto.bcsl_ids },
+    });
+
+    return baoCaoSanLuongUpdated;
+  }
+
+  async xuatHoaDonBaoCaoSanLuong(
+    xuatHoaDonDto: XuatHoaDonBaoCaoSanLuongDto,
+  ): Promise<PhieuNghiepVuDocument> {
+    const baoCaoSanLuong = await this.baoCaoSanLuongModel.find({
+      _id: { $in: xuatHoaDonDto.bcsl_ids },
+    });
+
+    if (baoCaoSanLuong.length !== xuatHoaDonDto.bcsl_ids.length) {
+      throw new NotFoundException('Một số báo cáo sản lượng không tồn tại');
+    }
+
+    const phieuNghiepVuModel = this.baoCaoSanLuongModel.db.model(
+      PhieuNghiepVu.name,
+    );
+    const phieuNghiepVuCreated = await phieuNghiepVuModel.create({
+      bcsl_ids: xuatHoaDonDto.bcsl_ids,
+      ma_phieu: xuatHoaDonDto.ma_phieu,
+      kho: xuatHoaDonDto.kho,
+      nguoi_tao_id: xuatHoaDonDto.nguoi_tao_id,
+      nguoi_duyet_id: xuatHoaDonDto.nguoi_duyet_id,
+      ngay_tao: new Date(),
+      ngay_cap_nhat: new Date(),
+      trang_thai: TrangThai.NEW,
+      loai_phieu: LoaiPhieu.XuatKho,
+    });
+
+    await this.baoCaoSanLuongModel.updateMany(
+      { _id: { $in: xuatHoaDonDto.bcsl_ids } },
+      { trang_thai: BaoCaoState.RESERVED, ngay_cap_nhat: new Date() },
+    );
+
+    const phieuNghiepVuUpdated = await phieuNghiepVuModel
+      .findById(phieuNghiepVuCreated._id)
+      .populate('bcsl_ids');
+
+    return phieuNghiepVuUpdated;
   }
 }

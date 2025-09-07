@@ -21,13 +21,15 @@ import {
 } from '@nestjs/swagger';
 import { BaseController, CustomApiResponse } from '../../common/base';
 import { BaoCaoSanLuongService } from './bao-cao-san-luong.service';
-import { BaoCaoSanLuongDocument } from '../../schemas';
+import { BaoCaoSanLuongDocument, PhieuNghiepVuDocument } from '../../schemas';
 import {
   CreateBaoCaoSanLuongDto,
   ApproveBaoCaoSanLuongDto,
   RejectBaoCaoSanLuongDto,
   ImportBaoCaoSanLuongDto,
   FilterBaoCaoSanLuongDto,
+  UpdatePalletBaoCaoSanLuongDto,
+  XuatHoaDonBaoCaoSanLuongDto,
 } from './dto/bao-cao-san-luong.dto';
 
 @ApiTags('bao-cao-san-luong')
@@ -787,6 +789,80 @@ export class BaoCaoSanLuongController extends BaseController<BaoCaoSanLuongDocum
       return {
         success: false,
         message: 'Cập nhật trạng thái thất bại',
+        error: (error as Error).message,
+      };
+    }
+  }
+
+  /**
+   * Cập nhật mã pallet báo cáo sản lượng
+   */
+  @Put('pallet')
+  @ApiOperation({
+    summary: 'Cập nhật mã pallet báo cáo sản lượng',
+    description: 'Cập nhật mã pallet báo cáo sản lượng cụ thể',
+  })
+  @ApiBody({
+    type: UpdatePalletBaoCaoSanLuongDto,
+    description: 'Thông tin cập nhật mã pallet báo cáo sản lượng',
+  })
+  @ApiOkResponse({
+    description: 'Cập nhật mã pallet báo cáo sản lượng thành công',
+  })
+  @ApiBadRequestResponse({ description: 'Dữ liệu không hợp lệ' })
+  @ApiInternalServerErrorResponse({ description: 'Lỗi server' })
+  async updatePalletBaoCaoSanLuong(
+    @Body() updateDto: UpdatePalletBaoCaoSanLuongDto,
+  ): Promise<CustomApiResponse<BaoCaoSanLuongDocument[]>> {
+    try {
+      const data =
+        await this.baoCaoSanLuongService.updatePalletBaoCaoSanLuong(updateDto);
+      return {
+        success: true,
+        message: 'Cập nhật mã pallet báo cáo sản lượng thành công',
+        data,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message: 'Cập nhật mã pallet báo cáo sản lượng thất bại',
+        error: (error as Error).message,
+      };
+    }
+  }
+
+  /**
+   * Xuất đơn báo cáo sản lượng
+   */
+  @Post('xuat-don')
+  @ApiOperation({
+    summary: 'Xuất hóa đơn báo cáo sản lượng',
+    description: 'Xuất hóa đơn báo cáo sản lượng cụ thể',
+  })
+  @ApiBody({
+    type: XuatHoaDonBaoCaoSanLuongDto,
+    description: 'Thông tin xuất đơn báo cáo sản lượng',
+  })
+  @ApiOkResponse({
+    description: 'Xuất đơn báo cáo sản lượng thành công',
+  })
+  @ApiBadRequestResponse({ description: 'Dữ liệu không hợp lệ' })
+  @ApiInternalServerErrorResponse({ description: 'Lỗi server' })
+  async xuatDonBaoCaoSanLuong(
+    @Body() xuatDonDto: XuatHoaDonBaoCaoSanLuongDto,
+  ): Promise<CustomApiResponse<PhieuNghiepVuDocument>> {
+    try {
+      const data =
+        await this.baoCaoSanLuongService.xuatHoaDonBaoCaoSanLuong(xuatDonDto);
+      return {
+        success: true,
+        message: 'Xuất đơn báo cáo sản lượng thành công',
+        data,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message: 'Xuất đơn báo cáo sản lượng thất bại',
         error: (error as Error).message,
       };
     }

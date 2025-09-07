@@ -68,7 +68,7 @@ export class CreatePhieuXuatKhoDto {
   })
   @IsOptional()
   @IsEnum(CongDoan)
-  current_cong_doan?: CongDoan;
+  currentCongDoan?: CongDoan;
 
   @ApiProperty({
     description: 'Công đoạn tiếp theo',
