@@ -29,11 +29,12 @@ import {
   SignOutDto,
   SignUpDto,
   AuthResponseDto,
+  RefreshTokenDto,
 } from './dto/auth.dto';
 import { JwtAuthGuard } from './jwt-auth.guard';
 
 @ApiTags('nhan-vien')
-@Controller('nhan-vien')
+@Controller('api/nhan-vien')
 export class NhanVienController extends BaseController<NhanVienDocument> {
   constructor(
     private readonly nhanVienService: NhanVienService,
@@ -136,6 +137,40 @@ export class NhanVienController extends BaseController<NhanVienDocument> {
       return {
         success: false,
         message: 'Đăng xuất thất bại',
+        error: error.message,
+      };
+    }
+  }
+
+  /**
+   * Refresh access token
+   */
+  @Post('refresh-token')
+  @ApiOperation({
+    summary: 'Refresh access token',
+    description: 'Sử dụng refresh token để tạo access token mới',
+  })
+  @ApiBody({ type: RefreshTokenDto })
+  @ApiOkResponse({
+    description: 'Refresh token thành công',
+    type: AuthResponseDto,
+  })
+  @ApiBadRequestResponse({ description: 'Refresh token không hợp lệ' })
+  @ApiInternalServerErrorResponse({ description: 'Lỗi server' })
+  async refreshToken(
+    @Body() refreshTokenDto: RefreshTokenDto,
+  ): Promise<AuthResponseDto> {
+    try {
+      const data = await this.authService.refreshToken(refreshTokenDto);
+      return {
+        success: true,
+        message: 'Refresh token thành công',
+        data,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message: 'Refresh token thất bại',
         error: error.message,
       };
     }

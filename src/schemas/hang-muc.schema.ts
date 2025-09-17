@@ -17,43 +17,46 @@ export class QuyCach {
   day: number;
 
   @Prop({ required: true, type: Number, default: 1 })
-  so_luong: number;
+  soLuong: number;
 
   @Prop({ required: false, enum: DonViDoLuong, default: DonViDoLuong.MET })
-  dvt_do_luong: DonViDoLuong;
+  dvtDoLuong: DonViDoLuong;
 
   @Prop({ required: false, enum: DonViQuyCach, default: DonViQuyCach.VIEN })
-  dvt_quy_cach: DonViQuyCach;
+  dvtQuyCach: DonViQuyCach;
 }
 
 @Schema({ collection: 'hang_muc', timestamps: false })
 export class HangMuc {
   @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'ycsx', required: false })
-  ycsx_id?: MongooseSchema.Types.ObjectId;
+  ycsx?: MongooseSchema.Types.ObjectId;
 
   @Prop({ required: true })
   mota: string;
 
   @Prop({ enum: MauDa, required: false })
-  mau_da?: MauDa;
+  mauDa?: MauDa;
 
   @Prop({ enum: MatDa, required: false })
-  mat_da?: MatDa;
+  matDa?: MatDa;
 
   @Prop({ enum: GiaCong, required: false })
-  gia_cong?: GiaCong;
+  giaCong?: GiaCong;
 
   @Prop({ type: QuyCach, required: true })
-  quy_cach: QuyCach;
+  quyCach: QuyCach;
 
   @Prop({ required: false })
-  group_id?: string;
+  groupId?: string;
 
   @Prop({ required: false })
   ghichu?: string;
 
   @Prop({ type: Date, default: Date.now })
-  ngay_tao: Date;
+  ngayTao: Date;
+
+  @Prop({ type: Date, default: Date.now })
+  ngayCapNhat: Date;
 }
 
 export const QuyCachSchema = SchemaFactory.createForClass(QuyCach);

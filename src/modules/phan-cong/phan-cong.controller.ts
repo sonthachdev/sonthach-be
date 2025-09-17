@@ -13,7 +13,7 @@ import { PhanCongService } from './phan-cong.service';
 import { PhanCongDocument } from '../../schemas';
 
 @ApiTags('phan-cong')
-@Controller('phan-cong')
+@Controller('api/phan-cong')
 export class PhanCongController extends BaseController<PhanCongDocument> {
   constructor(private readonly phanCongService: PhanCongService) {
     super(phanCongService);

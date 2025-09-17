@@ -9,90 +9,73 @@ export type BaoCaoSanLuongDocument = BaoCaoSanLuong & Document;
 @Schema({ collection: 'bao_cao_san_luong', timestamps: false })
 export class BaoCaoSanLuong {
   @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'ycsc', required: false })
-  ycsc_id?: MongooseSchema.Types.ObjectId;
+  ycscId?: MongooseSchema.Types.ObjectId;
 
   @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'ycsx', required: false })
-  ycsx_id?: MongooseSchema.Types.ObjectId;
-
-  @Prop({
-    type: MongooseSchema.Types.ObjectId,
-    ref: 'hang_muc',
-    required: false,
-  })
-  hang_muc_id?: MongooseSchema.Types.ObjectId;
+  ycsxId?: MongooseSchema.Types.ObjectId;
 
   @Prop({ required: true })
-  ma_da: string;
+  maDa: string;
 
   @Prop({ required: false, type: Number })
-  ma_phoi?: number;
+  maPhoi?: number;
 
   @Prop({ required: true, enum: MauDa })
-  mau_da: MauDa;
+  mauDa: MauDa;
 
   @Prop({ enum: MatDa, required: false })
-  mat_da?: MatDa;
+  matDa?: MatDa;
 
   @Prop({ required: false, type: Number })
-  do_day_cua?: number;
+  doDayCua?: number;
 
   @Prop({ type: QuyCachSchema, required: true })
-  quy_cach: QuyCach;
+  quyCach: QuyCach;
 
   @Prop({ required: true, type: Date })
-  ngay_tao: Date;
+  ngayTao: Date;
 
   @Prop({ required: false, type: Date })
-  ngay_duyet?: Date;
+  ngayDuyet?: Date;
 
   @Prop({
     type: MongooseSchema.Types.ObjectId,
     ref: 'nhan_vien',
     required: false,
   })
-  tnsx_id?: MongooseSchema.Types.ObjectId;
+  tnsx?: MongooseSchema.Types.ObjectId;
 
   @Prop({
     type: MongooseSchema.Types.ObjectId,
     ref: 'nhan_vien',
     required: false,
   })
-  kcs_id?: MongooseSchema.Types.ObjectId;
+  kcs?: MongooseSchema.Types.ObjectId;
 
   @Prop({ enum: Kho, required: false })
   kho?: Kho;
 
   @Prop({ required: false })
-  vi_tri?: string; // A1-A10, B1-B10, C1-C10
+  viTri?: string; // A1-A10, B1-B10, C1-C10
 
   @Prop({
     type: MongooseSchema.Types.ObjectId,
     ref: 'bao_cao_san_luong',
     required: false,
   })
-  parent_id?: MongooseSchema.Types.ObjectId;
+  parentId?: MongooseSchema.Types.ObjectId;
 
   @Prop({ enum: CongDoan, required: false })
-  completed_cong_doan?: CongDoan;
+  completedCongDoan?: CongDoan;
 
   @Prop({ required: false })
   reason?: string;
 
   @Prop({ required: true, enum: BaoCaoState })
-  trang_thai: BaoCaoState;
+  trangThai: BaoCaoState;
 
   @Prop({ type: Date, default: Date.now })
-  ngay_cap_nhat: Date;
-
-  @Prop({
-    type: MongooseSchema.Types.ObjectId,
-    ref: 'nhan_vien',
-    required: false,
-  })
-  nguoi_tu_choi_id?: MongooseSchema.Types.ObjectId;
-
-  @Prop({ type: Date, required: false })
-  ngay_tu_choi?: Date;
+  ngayCapNhat: Date;
 
   @Prop({ type: Number, required: false })
   pallet?: number; // TP: Thủ Kho TP đánh dấu mã pallet

@@ -19,7 +19,7 @@
 									"const response = pm.response.json();\r",
 									"const data = response.data;\r",
 									"for (let i = 0; i < data.length; i++) {\r",
-									"    pm.collectionVariables.set(`nhanVien_${data[i].vai_tro}_${data[i].cong_doan}_${i}_id`, data[i]._id);\r",
+									"    pm.collectionVariables.set(`nhanVien_${data[i].vaiTro}_${data[i].congDoan}_${i}_id`, data[i]._id);\r",
 									"}"
 								],
 								"type": "text/javascript",
@@ -36,13 +36,14 @@
 							}
 						],
 						"url": {
-							"raw": "http://localhost:4300/nhan-vien?page=1&limit=100",
+							"raw": "http://localhost:4300/api/nhan-vien?page=1&limit=100",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "4300",
 							"path": [
+								"api",
 								"nhan-vien"
 							],
 							"query": [
@@ -121,7 +122,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"ten\": \"Nguyễn Văn {{randomUsername}}\",\n  \"username\": \"{{randomUsername}}\",\n  \"password\": \"{{randomPassword}}\",\n  \"vai_tro\": \"{{randomVaiTro}}\",\n  \"cong_doan\": \"{{randomCongDoan}}\",\n  \"trang_thai\": true\n}",
+							"raw": "{\n  \"ten\": \"Nguyễn Văn {{randomUsername}}\",\n  \"username\": \"{{randomUsername}}\",\n  \"password\": \"{{randomPassword}}\",\n  \"vaiTro\": \"{{randomVaiTro}}\",\n  \"congDoan\": \"{{randomCongDoan}}\",\n  \"trangThai\": true\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -129,13 +130,14 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:4300/nhan-vien/signup",
+							"raw": "http://localhost:4300/api/nhan-vien/signup",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "4300",
 							"path": [
+								"api",
 								"nhan-vien",
 								"signup"
 							]
@@ -185,7 +187,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:4300/nhan-vien/signin",
+							"raw": "http://localhost:4300/api/nhan-vien/signin",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -233,7 +235,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:4300/nhan-vien/signout",
+							"raw": "http://localhost:4300/api/nhan-vien/signout",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -275,7 +277,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://localhost:4300/nhan-vien/vai-tro/{{randomVaiTro}}",
+							"raw": "http://localhost:4300/api/nhan-vien/vai-tro/{{randomVaiTro}}",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -319,7 +321,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://localhost:4300/nhan-vien/cong-doan/{{randomCongDoan}}",
+							"raw": "http://localhost:4300/api/nhan-vien/cong-doan/{{randomCongDoan}}",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -345,7 +347,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://localhost:4300/nhan-vien/{{id}}",
+							"raw": "http://localhost:4300/api/nhan-vien/{{id}}",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -385,7 +387,7 @@
 									"const response = pm.response.json();\r",
 									"const data = response.data;\r",
 									"pm.collectionVariables.set(\"phieu_nhap_kho_new_id\", data._id);\r",
-									"pm.collectionVariables.set(\"bcsl_new_id\", data.bcsl_ids[0]);"
+									"pm.collectionVariables.set(\"bcsl_new_id\", data.bcsl[0]);"
 								],
 								"type": "text/javascript",
 								"packages": {}
@@ -406,7 +408,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"ma_phieu\": \"PNV-{{pnv_nhapkho_block_random}}\",\n  \"loai_phieu\": \"nhap-kho\",\n  \"nguoi_tao_id\": \"{{nhanVien_kcs_gc_4_id}}\",\n  \"nguoi_duyet_id\": \"{{nhanVien_kcs_gc_4_id}}\",\n  \"ma_da\": \"DA-{{pnv_nhapkho_block_random}}\",\n  \"mau_da\": \"den\",\n  \"dai\": 100,\n  \"rong\": 50,\n  \"day\": 20\n}",
+							"raw": "{\n  \"maPhieu\": \"PNV-{{pnv_nhapkho_block_random}}\",\n  \"loaiPhieu\": \"nhap-kho\",\n  \"nguoiTaoId\": \"{{nhanVien_nvkd_sc_4_id}}\",\n  \"nguoiDuyetId\": \"{{nhanVien_nvkd_sc_4_id}}\",\n  \"maDa\": \"DA-{{pnv_nhapkho_block_random}}\",\n  \"mauDa\": \"den\",\n  \"dai\": 100,\n  \"rong\": 50,\n  \"day\": 20\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -414,13 +416,14 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:4300/phieu-nghiep-vu/nhap-kho-block",
+							"raw": "http://localhost:4300/api/phieu-nghiep-vu/nhap-kho-block",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "4300",
 							"path": [
+								"api",
 								"phieu-nghiep-vu",
 								"nhap-kho-block"
 							]
@@ -444,7 +447,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"phieu_ids\": [\n    \"{{phieu_nhap_kho_new_id}}\"\n        \n  ],\n  \"vi_tri\": \"A1\"\n}",
+							"raw": "{\n  \"phieuIds\": [\n    \"{{phieu_nhap_kho_new_id}}\"\n        \n  ],\n  \"vi_tri\": \"A1\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -452,13 +455,14 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:4300/phieu-nghiep-vu/nhap-kho-block",
+							"raw": "http://localhost:4300/api/phieu-nghiep-vu/nhap-kho-block",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "4300",
 							"path": [
+								"api",
 								"phieu-nghiep-vu",
 								"nhap-kho-block"
 							]
@@ -481,7 +485,7 @@
 									"const response = pm.response.json();\r",
 									"const data = response.data;\r",
 									"for (let i = 0; i < data.length; i++) {\r",
-									"    pm.collectionVariables.set(`bcsl_${data[i].mau_da}_${data[i].quy_cach.dai}_${data[i].quy_cach.rong}_${data[i].quy_cach.day}_${data[i].trang_thai}_${i}_id`, data[i]._id);\r",
+									"    pm.collectionVariables.set(`bcsl_${data[i].mauDa}_${data[i].quyCach.dai}_${data[i].quyCach.rong}_${data[i].quyCach.day}_${data[i].trangThai}_${i}_id`, data[i]._id);\r",
 									"}"
 								],
 								"type": "text/javascript",
@@ -498,13 +502,14 @@
 							}
 						],
 						"url": {
-							"raw": "http://localhost:4300/bao-cao-san-luong/filter?trang_thai=new&ycsx_id={{ycsx_id}}",
+							"raw": "http://localhost:4300/api/bao-cao-san-luong/filter?trang_thai=new",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "4300",
 							"path": [
+								"api",
 								"bao-cao-san-luong",
 								"filter"
 							],
@@ -545,7 +550,8 @@
 								},
 								{
 									"key": "ycsx_id",
-									"value": "{{ycsx_id}}"
+									"value": "{{ycsx_id}}",
+									"disabled": true
 								}
 							]
 						}
@@ -576,7 +582,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:4300/bao-cao-san-luong/pallet",
+							"raw": "http://localhost:4300/api/bao-cao-san-luong/pallet",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -628,7 +634,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:4300/bao-cao-san-luong/xuat-don",
+							"raw": "http://localhost:4300/api/bao-cao-san-luong/xuat-don",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -637,6 +643,44 @@
 							"path": [
 								"bao-cao-san-luong",
 								"xuat-don"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Duyet pnv - duyet xuat don",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"phieu_ids\": [\n        \"{{don_hang_new_id}}\"\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:4300/api/phieu-nghiep-vu/batch-duyet",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4300",
+							"path": [
+								"phieu-nghiep-vu",
+								"batch-duyet"
 							]
 						}
 					},
@@ -674,7 +718,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://localhost:4300/phieu-nghiep-vu/filter?trangThai=new&sort=ngay_tao%3A+1",
+							"raw": "http://localhost:4300/api/phieu-nghiep-vu/filter?trangThai=new&sort=ngay_tao%3A+1",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -721,6 +765,18 @@
 								"type": "text/javascript",
 								"packages": {}
 							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseBody = pm.response.json();\r",
+									"const data = responseBody.data;\r",
+									"pm.collectionVariables.set(\"ycsc_new_id\", data._id);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
 						}
 					],
 					"request": {
@@ -737,7 +793,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"ma_phieu\": \"YCSC-{{ycsc_randdom}}\",\n  \"nguoi_tao_id\": \"{{nhanVien_kcs_bo_18_id}}\",\n  \"nguoi_duyet_id\": \"{{nhanVien_kcs_cqc_1_id}}\",\n  \"kcs_id\": \"{{nhanVien_kcs_bo_18_id}}\",\n  \"tnsx_id\": \"{{nhanVien_kcs_bo_18_id}}\",\n  \"block_ids\": [\n    \"{{bcsl_den_100_50_20_imported_0_id}}\"\n  ]\n}",
+							"raw": "{\n  \"maPhieu\": \"YCSC-{{ycsc_randdom}}\",\n  \"nguoiTaoId\": \"{{nhanVien_nvkd_sc_4_id}}\",\n  \"nguoiDuyetId\": \"{{nhanVien_nvkd_sc_4_id}}\",\n  \"kcsId\": \"{{nhanVien_nvkd_sc_4_id}}\",\n  \"tnsxId\": \"{{nhanVien_nvkd_sc_4_id}}\",\n  \"blockIds\": [\n    \"{{bcsl_new_id}}\"\n  ]\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -745,13 +801,14 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:4300/ycsc",
+							"raw": "http://localhost:4300/api/ycsc",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "4300",
 							"path": [
+								"api",
 								"ycsc"
 							]
 						}
@@ -769,15 +826,16 @@
 							}
 						],
 						"url": {
-							"raw": "http://localhost:4300/ycsc/68bb94debeb41e6ebce70cc2/detail",
+							"raw": "http://localhost:4300/api/ycsc/{{ycsc_new_id}}/detail",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "4300",
 							"path": [
+								"api",
 								"ycsc",
-								"68bb94debeb41e6ebce70cc2",
+								"{{ycsc_new_id}}",
 								"detail"
 							]
 						}
@@ -811,13 +869,14 @@
 							}
 						],
 						"url": {
-							"raw": "http://localhost:4300/ycsc/filter",
+							"raw": "http://localhost:4300/api/ycsc/filter",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "4300",
 							"path": [
+								"api",
 								"ycsc",
 								"filter"
 							],
@@ -848,7 +907,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"ycsc_ids\": [\n    \"{{ycsc_new_0_id}}\"\n  ]\n}",
+							"raw": "{\n  \"ycscIds\": [\n    \"{{ycsc_new_id}}\"\n  ]\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -856,13 +915,14 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:4300/ycsc/batch-duyet",
+							"raw": "http://localhost:4300/api/ycsc/batch-duyet",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "4300",
 							"path": [
+								"api",
 								"ycsc",
 								"batch-duyet"
 							]
@@ -881,7 +941,7 @@
 									"const data = response.data;\r",
 									"for (let i = 0; i < data.length; i++) {\r",
 									"    // pm.collectionVariables.set(`ycsc_${data[i].trang_thai}_${i}_id`, data[i]._id)\r",
-									"    const pnvs = data[i].phieu_nghiep_vu;\r",
+									"    const pnvs = data[i].phieuNghiepVu;\r",
 									"    for (let j = 0; j < pnvs.length; j++) {\r",
 									"        pm.collectionVariables.set(`pnv_xk_${i}_${j}_id`, pnvs[j]._id);\r",
 									"    }\r",
@@ -901,13 +961,14 @@
 							}
 						],
 						"url": {
-							"raw": "http://localhost:4300/ycsc/filter?trang_thai=processing",
+							"raw": "http://localhost:4300/api/ycsc/filter?trang_thai=processing",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "4300",
 							"path": [
+								"api",
 								"ycsc",
 								"filter"
 							],
@@ -937,7 +998,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"bao_cao_san_luong_ids\": [\n    \"{{bcsl_den_100_50_20_imported_1_id}}\",\n    \"{{bcsl_den_100_50_20_imported_2_id}}\"\n  ]\n}",
+							"raw": "{\n  \"bao_cao_san_luong_ids\": [\n    \"{{bcsl_den_100_50_20_new_0_id}}\"\n    // \"{{bcsl_den_100_50_20_imported_2_id}}\"\n  ]\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -945,15 +1006,16 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:4300/ycsc/{{ycsc_processing_0_id}}/add-nguyen-lieu",
+							"raw": "http://localhost:4300/api/ycsc/{{ycsc_new_id}}/add-nguyen-lieu",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "4300",
 							"path": [
+								"api",
 								"ycsc",
-								"{{ycsc_processing_0_id}}",
+								"{{ycsc_new_id}}",
 								"add-nguyen-lieu"
 							]
 						}
@@ -976,7 +1038,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"phieu_ids\": [\n        \"{{pnv_xk_0_0_id}}\"\n        // \"{{pnv_xk_0_1_id}}\"\n    ]\n}   ",
+							"raw": "{\n    \"phieuIds\": [\n        \"{{pnv_xk_0_0_id}}\"\n        // \"{{pnv_xk_0_1_id}}\"\n    ]\n}   ",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -984,13 +1046,14 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:4300/phieu-nghiep-vu/batch-duyet",
+							"raw": "http://localhost:4300/api/phieu-nghiep-vu/batch-duyet",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "4300",
 							"path": [
+								"api",
 								"phieu-nghiep-vu",
 								"batch-duyet"
 							]
@@ -1014,7 +1077,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"ma_da\": \"DA-001\",\n    \"ma_phoi\": 1,\n    \"mau_da\": \"den\",\n    \"parent_id\": \"{{bcsl_den_100_50_20_exported_0_id}}\",\n    \"kho\": \"kho-block\",\n    \"quy_cach\": {\n        \"dai\": 100,\n        \"rong\": 50,\n        \"day\": 20,\n        \"so_luong\": 10,\n        \"dvt_do_luong\": \"m\",\n        \"dvt_quy_cach\": \"vien\"\n    }\n}",
+							"raw": "{\n    \"maDa\": \"DA-001\",\n    \"maPhoi\": 1,\n    \"mauDa\": \"den\",\n    \"parentId\": \"{{bcsl_den_100_50_20_new_0_id}}\",\n    \"kho\": \"kho-block\",\n    \"quyCach\": {\n        \"dai\": 100,\n        \"rong\": 50,\n        \"day\": 20,\n        \"soLuong\": 10,\n        \"dvtDoLuong\": \"m\",\n        \"dvtQuyCach\": \"vien\"\n    }\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1022,15 +1085,16 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:4300/ycsc/{{ycsc_processing_0_id}}/bao-cao-san-luong",
+							"raw": "http://localhost:4300/api/ycsc/{{ycsc_new_id}}/bao-cao-san-luong",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "4300",
 							"path": [
+								"api",
 								"ycsc",
-								"{{ycsc_processing_0_id}}",
+								"{{ycsc_new_id}}",
 								"bao-cao-san-luong"
 							]
 						}
@@ -1064,15 +1128,16 @@
 							}
 						],
 						"url": {
-							"raw": "http://localhost:4300/ycsc/{{ycsc_processing_0_id}}/bao-cao-san-luong",
+							"raw": "http://localhost:4300/api/ycsc/{{ycsc_new_id}}/bao-cao-san-luong",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "4300",
 							"path": [
+								"api",
 								"ycsc",
-								"{{ycsc_processing_0_id}}",
+								"{{ycsc_new_id}}",
 								"bao-cao-san-luong"
 							]
 						}
@@ -1095,7 +1160,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"bao_cao_san_luong_ids\": [\n    \"{{bcsl_by_ycsc_0_id}}\"\n  ],\n  \"nguoi_duyet_id\": \"{{nhanVien_kcs_bo_18_id}}\",\n  \"trang_thai\": \"approved\",\n  \"reason\": \"string\"\n}",
+							"raw": "{\n  \"baoCaoSanLuongIds\": [\n    \"{{bcsl_by_ycsc_0_id}}\"\n  ],\n  \"nguoiDuyetId\": \"{{nhanVien_kcs_bo_18_id}}\",\n  \"trangThai\": \"approved\",\n  \"reason\": \"string\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1103,15 +1168,16 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:4300/ycsc/{{ycsc_processing_0_id}}/bao-cao-san-luong/duyet",
+							"raw": "http://localhost:4300/api/ycsc/{{ycsc_new_id}}/bao-cao-san-luong/duyet",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "4300",
 							"path": [
+								"api",
 								"ycsc",
-								"{{ycsc_processing_0_id}}",
+								"{{ycsc_new_id}}",
 								"bao-cao-san-luong",
 								"duyet"
 							]
@@ -1160,7 +1226,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"ma_phieu\": \"pnk-{{pnk_random}}\",\n  \"nguoi_tao_id\": \"{{nhanVien_kcs_bo_18_id}}\",\n  \"thu_kho_id\": \"{{nhanVien_kcs_bo_18_id}}\",\n  \"bao_cao_san_luong_ids\": [\n    \"{{bcsl_by_ycsc_0_id}}\"\n  ]\n}",
+							"raw": "{\n  \"maPhieu\": \"pnk-{{pnk_random}}\",\n  \"nguoiTaoId\": \"{{nhanVien_nvkd_sc_4_id}}\",\n  \"thuKhoId\": \"{{nhanVien_nvkd_sc_4_id}}\",\n  \"baoCaoSanLuongIds\": [\n    \"{{bcsl_by_ycsc_0_id}}\"\n  ]\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1168,15 +1234,16 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:4300/ycsc/{{ycsc_processing_0_id}}/phieu-ra",
+							"raw": "http://localhost:4300/api/ycsc/{{ycsc_new_id}}/phieu-ra",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "4300",
 							"path": [
+								"api",
 								"ycsc",
-								"{{ycsc_processing_0_id}}",
+								"{{ycsc_new_id}}",
 								"phieu-ra"
 							]
 						}
@@ -1199,7 +1266,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"phieu_ids\": [\n        \"{{pvn_nhap-kho_kho-phoi_0_id}}\"\n    ]\n}   ",
+							"raw": "{\n    \"phieuIds\": [\n        \"{{phieu_nhap_kho_phoi_newest}}\"\n    ]\n}   ",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1207,13 +1274,14 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:4300/phieu-nghiep-vu/batch-duyet",
+							"raw": "http://localhost:4300/api/phieu-nghiep-vu/batch-duyet",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "4300",
 							"path": [
+								"api",
 								"phieu-nghiep-vu",
 								"batch-duyet"
 							]
@@ -1245,15 +1313,16 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:4300/ycsc/{{ycsc_new_0_id}}/hoan-thanh",
+							"raw": "http://localhost:4300/api/ycsc/{{ycsc_new_id}}/hoan-thanh",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "4300",
 							"path": [
+								"api",
 								"ycsc",
-								"{{ycsc_new_0_id}}",
+								"{{ycsc_new_id}}",
 								"hoan-thanh"
 							]
 						}
@@ -1265,6 +1334,425 @@
 		{
 			"name": "YCSX",
 			"item": [
+				{
+					"name": "init ycsx",
+					"item": [
+						{
+							"name": "Tao moi ycsx",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const response = pm.response.json();\r",
+											"const data = response.data;\r",
+											"pm.collectionVariables.set(\"ycsx_new_Id\", data._id);"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"ma_phieu\": \"YCSX-{{$randomCurrencyName}}\",\n  \"nguoi_tao_id\": \"{{nhanVien_kcs_gc_4_id}}\",\n  \"nguoi_duyet_id\": \"{{nhanVien_kcs_gc_4_id}}\",\n  \"thu_ky_id\": \"{{nhanVien_kcs_gc_4_id}}\",\n  \"ma_hop_dong\": \"HD-{{$randomLoremWords}}\",\n  \"ten_khach_hang\": \"Công ty TNHH ABC\",\n  \"hang_muc\": [\n    {\n      \"mota\": \"Đá granite {{$randomLoremWords}}\",\n      \"group_id\": \"{{$randomUUID}}\",\n      \"ghichu\": \"Đá granite {{$randomLoremWords}}\",\n      \"mau_da\": \"den\",\n      \"mat_da\": \"bong\",\n      \"gia_cong\": \"kho-tay\",\n      \"quy_cach\": {\n        \"dai\": 100,\n        \"rong\": 50,\n        \"day\": 20,\n        \"so_luong\": 1,\n        \"dvt_do_luong\": \"m\",\n        \"dvt_quy_cach\": \"vien\"\n      }\n    }\n  ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:4300/api/ycsx",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4300",
+									"path": [
+										"ycsx"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "filter ycsx",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const response = pm.response.json();\r",
+											"const data = response.data;\r",
+											"const ycsx = data.ycsx;\r",
+											"for (let i = 0; i < ycsx.length; i++) {\r",
+											"    pm.collectionVariables.set(`ycsx_${ycsx[i].trang_thai}_${i}_id`, ycsx[i]._id);\r",
+											"}"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "accept",
+										"value": "*/*"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:4300/api/ycsx/filter?trang_thai=new&sort=%2Bngay_tao&page=1&limit=10",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4300",
+									"path": [
+										"ycsx",
+										"filter"
+									],
+									"query": [
+										{
+											"key": "trang_thai",
+											"value": "new"
+										},
+										{
+											"key": "sort",
+											"value": "%2Bngay_tao"
+										},
+										{
+											"key": "page",
+											"value": "1"
+										},
+										{
+											"key": "limit",
+											"value": "10"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get detail",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const response = pm.response.json();\r",
+											"const data = response.data;\r",
+											"const ycsx = data.ycsx;\r",
+											"pm.collectionVariables.set(\"ycsx_id\", ycsx._id);\r",
+											"\r",
+											"const phancong = data.phan_cong;\r",
+											"for (let i = 0; i < phancong.length; i++) {\r",
+											"    pm.collectionVariables.set(`phancong_${phancong[i].cong_doan}_id`, phancong[i]._id);\r",
+											"\r",
+											"}"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:4300/api/ycsx/{{ycsx_new_Id}}/detail",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4300",
+									"path": [
+										"ycsx",
+										"{{ycsx_new_Id}}",
+										"detail"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "tksx phan cong - de nghi sx",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "accept",
+										"value": "*/*"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"items\": [\n    {\n      \"kcs_id\": \"{{nhanVien_kcs_gc_4_id}}\",\n      \"tnsx_id\": \"{{nhanVien_kcs_gc_4_id}}\",\n      \"cong_doan\": \"bo\"\n    },\n    {\n      \"kcs_id\": \"{{nhanVien_kcs_gc_4_id}}\",\n      \"tnsx_id\": \"{{nhanVien_kcs_gc_4_id}}\",\n      \"cong_doan\": \"cua\"\n    },\n    {\n      \"kcs_id\": \"{{nhanVien_kcs_gc_4_id}}\",\n      \"tnsx_id\": \"{{nhanVien_kcs_gc_4_id}}\",\n      \"cong_doan\": \"htm\"\n    },\n    {\n      \"kcs_id\": \"{{nhanVien_kcs_gc_4_id}}\",\n      \"tnsx_id\": \"{{nhanVien_kcs_gc_4_id}}\",\n      \"cong_doan\": \"cqc\"\n    },\n    {\n      \"kcs_id\": \"{{nhanVien_kcs_gc_4_id}}\",\n      \"tnsx_id\": \"{{nhanVien_kcs_gc_4_id}}\",\n      \"cong_doan\": \"gc\"\n    },\n    {\n      \"kcs_id\": \"{{nhanVien_kcs_gc_4_id}}\",\n      \"tnsx_id\": \"{{nhanVien_kcs_gc_4_id}}\",\n      \"cong_doan\": \"dg\"\n    }   \n  ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:4300/api/ycsx/{{ycsx_new_Id}}/de-nghi-san-xuat",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4300",
+									"path": [
+										"ycsx",
+										"{{ycsx_new_Id}}",
+										"de-nghi-san-xuat"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "quan doc duyet ycsx",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "accept",
+										"value": "*/*"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"trang_thai\": \"processing\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:4300/api/ycsx/{{ycsx_new_0_id}}/trang-thai",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4300",
+									"path": [
+										"ycsx",
+										"{{ycsx_new_0_id}}",
+										"trang-thai"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Them hang muc",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "accept",
+										"value": "*/*"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"hang_muc\": [\n    {\n      \"mota\": \"Đá granite\",\n      \"group_id\": \"68bbe97694eb2b9bfe8f530f\",\n      \"ghichu\": \"Đá granite\",\n      \"mau_da\": \"den\",\n      \"mat_da\": \"bong\",\n      \"gia_cong\": \"kho-tay\",\n      \"quy_cach\": {\n        \"dai\": 100,\n        \"rong\": 50,\n        \"day\": 20,\n        \"so_luong\": 1,\n        \"dvt_do_luong\": \"m\",\n        \"dvt_quy_cach\": \"vien\"\n      }\n    }\n  ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:4300/api/ycsx/{{ycsx_new_Id}}/hang-muc",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4300",
+									"path": [
+										"ycsx",
+										"{{ycsx_new_Id}}",
+										"hang-muc"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "chinh sua 1 hang muc",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "accept",
+										"value": "*/*"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"hang_muc\": {\n        \"mota\": \"Đá granite xxxxxxx\",\n        \"ghichu\": \"Đá granite xxxxx\",\n        \"mau_da\": \"den\",\n        \"mat_da\": \"bong\",\n        \"gia_cong\": \"kho-tay\",\n        \"quy_cach\": {\n            \"dai\": 100,\n            \"rong\": 50,\n            \"day\": 20,\n            \"so_luong\": 2,\n            \"dvt_do_luong\": \"m\",\n            \"dvt_quy_cach\": \"vien\"\n        }\n    }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:4300/api/ycsx/{{ycsx_new_0_id}}/hang-muc/{{hang_muc_id}}",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4300",
+									"path": [
+										"ycsx",
+										"{{ycsx_new_0_id}}",
+										"hang-muc",
+										"{{hang_muc_id}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "nhap nguyen lieu",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const responseBody = pm.response.json();\r",
+											"pm.collectionVariables.set(\"phieu_nhap_nguyen_lieu_bo_new_id\", responseBody.data._id);"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "accept",
+										"value": "*/*"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"bcsl_ids\": [\n    \"{{bcsl_new_id}}\"\n  ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:4300/api/ycsx/{{ycsx_id}}/congdoan/{{phancong_bo_id}}/nhap-nguyen-lieu",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4300",
+									"path": [
+										"ycsx",
+										"{{ycsx_id}}",
+										"congdoan",
+										"{{phancong_bo_id}}",
+										"nhap-nguyen-lieu"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Duyet pnv - nhap kho bo",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"phieu_ids\": [\n        \"{{phieu_nhap_nguyen_lieu_bo_new_id}}\"\n    ]\n}   ",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:4300/api/phieu-nghiep-vu/batch-duyet",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4300",
+									"path": [
+										"phieu-nghiep-vu",
+										"batch-duyet"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
 				{
 					"name": "bo",
 					"item": [
@@ -1292,7 +1780,7 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:4300/ycsx/{{ycsx_id}}/congdoan/{{phancong_bo_id}}/bao-cao-san-luong",
+									"raw": "http://localhost:4300/api/ycsx/{{ycsx_id}}/congdoan/{{phancong_bo_id}}/bao-cao-san-luong",
 									"protocol": "http",
 									"host": [
 										"localhost"
@@ -1333,7 +1821,7 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:4300/ycsx/{{ycsx_id}}/congdoan/{{phancong_bo_id}}/bao-cao-san-luong",
+									"raw": "http://localhost:4300/api/ycsx/{{ycsx_id}}/congdoan/{{phancong_bo_id}}/bao-cao-san-luong",
 									"protocol": "http",
 									"host": [
 										"localhost"
@@ -1374,7 +1862,7 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:4300/ycsx/{{ycsx_id}}/congdoan/{{phancong_bo_id}}/bao-cao-san-luong",
+									"raw": "http://localhost:4300/api/ycsx/{{ycsx_id}}/congdoan/{{phancong_bo_id}}/bao-cao-san-luong",
 									"protocol": "http",
 									"host": [
 										"localhost"
@@ -1429,7 +1917,7 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:4300/ycsx/{{ycsx_id}}/congdoan/{{phancong_bo_id}}/xuat-kho",
+									"raw": "http://localhost:4300/api/ycsx/{{ycsx_id}}/congdoan/{{phancong_bo_id}}/xuat-kho",
 									"protocol": "http",
 									"host": [
 										"localhost"
@@ -1470,7 +1958,7 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:4300/phieu-nghiep-vu/batch-duyet",
+									"raw": "http://localhost:4300/api/phieu-nghiep-vu/batch-duyet",
 									"protocol": "http",
 									"host": [
 										"localhost"
@@ -1522,7 +2010,7 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:4300/ycsx/{{ycsx_id}}/congdoan/{{phancong_bo_id}}/xuat-kho",
+									"raw": "http://localhost:4300/api/ycsx/{{ycsx_id}}/congdoan/{{phancong_bo_id}}/xuat-kho",
 									"protocol": "http",
 									"host": [
 										"localhost"
@@ -1578,7 +2066,7 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:4300/ycsx/{{ycsx_id}}/congdoan/{{phancong_cua_id}}/duyet-chuyen-tiep",
+									"raw": "http://localhost:4300/api/ycsx/{{ycsx_id}}/congdoan/{{phancong_cua_id}}/duyet-chuyen-tiep",
 									"protocol": "http",
 									"host": [
 										"localhost"
@@ -1598,753 +2086,3783 @@
 					]
 				},
 				{
-					"name": "init ycsx",
-					"item": []
-				},
-				{
 					"name": "cua",
-					"item": []
-				},
-				{
-					"name": "Tao moi ycsx",
-					"event": [
+					"item": [
 						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"const response = pm.response.json();\r",
-									"const data = response.data;\r",
-									"pm.collectionVariables.set(\"ycsx_new_Id\", data._id);"
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "accept",
-								"value": "application/json"
-							},
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n  \"ma_phieu\": \"YCSX-{{$randomCurrencyName}}\",\n  \"nguoi_tao_id\": \"{{nhanVien_kcs_gc_4_id}}\",\n  \"nguoi_duyet_id\": \"{{nhanVien_kcs_gc_4_id}}\",\n  \"thu_ky_id\": \"{{nhanVien_kcs_gc_4_id}}\",\n  \"ma_hop_dong\": \"HD-{{$randomLoremWords}}\",\n  \"ten_khach_hang\": \"Công ty TNHH ABC\",\n  \"hang_muc\": [\n    {\n      \"mota\": \"Đá granite {{$randomLoremWords}}\",\n      \"group_id\": \"{{$randomUUID}}\",\n      \"ghichu\": \"Đá granite {{$randomLoremWords}}\",\n      \"mau_da\": \"den\",\n      \"mat_da\": \"bong\",\n      \"gia_cong\": \"kho-tay\",\n      \"quy_cach\": {\n        \"dai\": 100,\n        \"rong\": 50,\n        \"day\": 20,\n        \"so_luong\": 1,\n        \"dvt_do_luong\": \"m\",\n        \"dvt_quy_cach\": \"vien\"\n      }\n    }\n  ]\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:4300/ycsx",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "4300",
-							"path": [
-								"ycsx"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "filter ycsx",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"const response = pm.response.json();\r",
-									"const data = response.data;\r",
-									"const ycsx = data.ycsx;\r",
-									"for (let i = 0; i < ycsx.length; i++) {\r",
-									"    pm.collectionVariables.set(`ycsx_${ycsx[i].trang_thai}_${i}_id`, ycsx[i]._id);\r",
-									"}"
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "accept",
-								"value": "*/*"
-							}
-						],
-						"url": {
-							"raw": "http://localhost:4300/ycsx/filter?trang_thai=new&sort=%2Bngay_tao&page=1&limit=10",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "4300",
-							"path": [
-								"ycsx",
-								"filter"
-							],
-							"query": [
+							"name": "nhap nguyen lieu",
+							"event": [
 								{
-									"key": "trang_thai",
-									"value": "new"
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const responseBody = pm.response.json();\r",
+											"pm.collectionVariables.set(\"phieu_nhap_nguyen_lieu_bo_new_id\", responseBody.data._id);"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "accept",
+										"value": "*/*"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"bcsl_ids\": [\n    \"68bd40969a2c3ada95bbc5ce\"\n  ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
 								},
-								{
-									"key": "sort",
-									"value": "%2Bngay_tao"
+								"url": {
+									"raw": "http://localhost:4300/api/ycsx/{{ycsx_id}}/congdoan/{{phancong_cua_id}}/nhap-nguyen-lieu",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4300",
+									"path": [
+										"ycsx",
+										"{{ycsx_id}}",
+										"congdoan",
+										"{{phancong_cua_id}}",
+										"nhap-nguyen-lieu"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Duyet pnv - nhap kho bo Copy",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"phieu_ids\": [\n        \"{{phieu_nhap_nguyen_lieu_bo_new_id}}\"\n    ]\n}   ",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
 								},
-								{
-									"key": "page",
-									"value": "1"
+								"url": {
+									"raw": "http://localhost:4300/api/phieu-nghiep-vu/batch-duyet",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4300",
+									"path": [
+										"phieu-nghiep-vu",
+										"batch-duyet"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Tao bcsl",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "accept",
+										"value": "*/*"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"ma_da\": \"DA-{{$randomWords}}\",\n  \"mau_da\": \"den\",\n  \"parent_id\": \"{{bcsl_new_id}}\",\n  \"quy_cach\": {\n    \"dai\": 100,\n    \"rong\": 50,\n    \"day\": 20,\n    \"so_luong\": 1,\n    \"dvt_do_luong\": \"m\",\n    \"dvt_quy_cach\": \"vien\"\n  }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
 								},
+								"url": {
+									"raw": "http://localhost:4300/api/ycsx/{{ycsx_id}}/congdoan/{{phancong_cua_id}}/bao-cao-san-luong",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4300",
+									"path": [
+										"ycsx",
+										"{{ycsx_id}}",
+										"congdoan",
+										"{{phancong_cua_id}}",
+										"bao-cao-san-luong"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "2. filter danh sach bcsl Copy",
+							"event": [
 								{
-									"key": "limit",
-									"value": "10"
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const response = pm.response.json();\r",
+											"const data = response.data;\r",
+											"for (let i = 0; i < data.length; i++) {\r",
+											"    pm.collectionVariables.set(`bcsl_${data[i].mau_da}_${data[i].quy_cach.dai}_${data[i].quy_cach.rong}_${data[i].quy_cach.day}_${data[i].trang_thai}_${i}_id`, data[i]._id);\r",
+											"}"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
 								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "get detail",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"const response = pm.response.json();\r",
-									"const data = response.data;\r",
-									"const ycsx = data.ycsx;\r",
-									"pm.collectionVariables.set(\"ycsx_id\", ycsx._id);\r",
-									"\r",
-									"const phancong = data.phan_cong;\r",
-									"for (let i = 0; i < phancong.length; i++) {\r",
-									"    pm.collectionVariables.set(`phancong_${phancong[i].cong_doan}_id`, phancong[i]._id);\r",
-									"\r",
-									"}"
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "accept",
+										"value": "*/*"
+									}
 								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "",
-							"options": {
-								"raw": {
-									"language": "json"
+								"url": {
+									"raw": "http://localhost:4300/api/bao-cao-san-luong/filter?trang_thai=new&ycsx_id={{ycsx_id}}",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4300",
+									"path": [
+										"bao-cao-san-luong",
+										"filter"
+									],
+									"query": [
+										{
+											"key": "dai",
+											"value": "100",
+											"disabled": true
+										},
+										{
+											"key": "rong",
+											"value": "50",
+											"disabled": true
+										},
+										{
+											"key": "day",
+											"value": "20",
+											"disabled": true
+										},
+										{
+											"key": "vi_tri",
+											"value": "A1",
+											"disabled": true
+										},
+										{
+											"key": "trang_thai",
+											"value": "new"
+										},
+										{
+											"key": "kho",
+											"value": "kho-block",
+											"disabled": true
+										},
+										{
+											"key": "ycsc_id",
+											"value": "507f1f77bcf86cd799439011",
+											"disabled": true
+										},
+										{
+											"key": "ycsx_id",
+											"value": "{{ycsx_id}}"
+										}
+									]
 								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:4300/ycsx/{{ycsx_new_Id}}/detail",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "4300",
-							"path": [
-								"ycsx",
-								"{{ycsx_new_Id}}",
-								"detail"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "tksx phan cong - de nghi sx",
-					"request": {
-						"method": "PUT",
-						"header": [
-							{
-								"key": "accept",
-								"value": "*/*"
 							},
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n  \"items\": [\n    {\n      \"kcs_id\": \"{{nhanVien_kcs_gc_4_id}}\",\n      \"tnsx_id\": \"{{nhanVien_kcs_gc_4_id}}\",\n      \"cong_doan\": \"bo\"\n    },\n    {\n      \"kcs_id\": \"{{nhanVien_kcs_gc_4_id}}\",\n      \"tnsx_id\": \"{{nhanVien_kcs_gc_4_id}}\",\n      \"cong_doan\": \"cua\"\n    },\n    {\n      \"kcs_id\": \"{{nhanVien_kcs_gc_4_id}}\",\n      \"tnsx_id\": \"{{nhanVien_kcs_gc_4_id}}\",\n      \"cong_doan\": \"htm\"\n    },\n    {\n      \"kcs_id\": \"{{nhanVien_kcs_gc_4_id}}\",\n      \"tnsx_id\": \"{{nhanVien_kcs_gc_4_id}}\",\n      \"cong_doan\": \"cqc\"\n    },\n    {\n      \"kcs_id\": \"{{nhanVien_kcs_gc_4_id}}\",\n      \"tnsx_id\": \"{{nhanVien_kcs_gc_4_id}}\",\n      \"cong_doan\": \"gc\"\n    },\n    {\n      \"kcs_id\": \"{{nhanVien_kcs_gc_4_id}}\",\n      \"tnsx_id\": \"{{nhanVien_kcs_gc_4_id}}\",\n      \"cong_doan\": \"dg\"\n    }   \n  ]\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
+							"response": []
 						},
-						"url": {
-							"raw": "http://localhost:4300/ycsx/{{ycsx_new_Id}}/de-nghi-san-xuat",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "4300",
-							"path": [
-								"ycsx",
-								"{{ycsx_new_Id}}",
-								"de-nghi-san-xuat"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "quan doc duyet ycsx",
-					"request": {
-						"method": "PUT",
-						"header": [
-							{
-								"key": "accept",
-								"value": "*/*"
-							},
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n  \"trang_thai\": \"processing\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:4300/ycsx/{{ycsx_new_0_id}}/trang-thai",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "4300",
-							"path": [
-								"ycsx",
-								"{{ycsx_new_0_id}}",
-								"trang-thai"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Them hang muc",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "accept",
-								"value": "*/*"
-							},
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n  \"hang_muc\": [\n    {\n      \"mota\": \"Đá granite\",\n      \"group_id\": \"68bbe97694eb2b9bfe8f530f\",\n      \"ghichu\": \"Đá granite\",\n      \"mau_da\": \"den\",\n      \"mat_da\": \"bong\",\n      \"gia_cong\": \"kho-tay\",\n      \"quy_cach\": {\n        \"dai\": 100,\n        \"rong\": 50,\n        \"day\": 20,\n        \"so_luong\": 1,\n        \"dvt_do_luong\": \"m\",\n        \"dvt_quy_cach\": \"vien\"\n      }\n    }\n  ]\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:4300/ycsx/{{ycsx_new_Id}}/hang-muc",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "4300",
-							"path": [
-								"ycsx",
-								"{{ycsx_new_Id}}",
-								"hang-muc"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "chinh sua 1 hang muc",
-					"request": {
-						"method": "PUT",
-						"header": [
-							{
-								"key": "accept",
-								"value": "*/*"
-							},
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"hang_muc\": {\n        \"mota\": \"Đá granite xxxxxxx\",\n        \"ghichu\": \"Đá granite xxxxx\",\n        \"mau_da\": \"den\",\n        \"mat_da\": \"bong\",\n        \"gia_cong\": \"kho-tay\",\n        \"quy_cach\": {\n            \"dai\": 100,\n            \"rong\": 50,\n            \"day\": 20,\n            \"so_luong\": 2,\n            \"dvt_do_luong\": \"m\",\n            \"dvt_quy_cach\": \"vien\"\n        }\n    }\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:4300/ycsx/{{ycsx_new_0_id}}/hang-muc/{{hang_muc_id}}",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "4300",
-							"path": [
-								"ycsx",
-								"{{ycsx_new_0_id}}",
-								"hang-muc",
-								"{{hang_muc_id}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "nhap nguyen lieu",
-					"event": [
 						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"const responseBody = pm.response.json();\r",
-									"pm.collectionVariables.set(\"phieu_nhap_nguyen_lieu_bo_new_id\", responseBody.data._id);"
+							"name": "Duyet bcsl Copy",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "accept",
+										"value": "*/*"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
 								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "accept",
-								"value": "*/*"
-							},
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n  \"bcsl_ids\": [\n    \"{{bcsl_new_id}}\"\n  ]\n}",
-							"options": {
-								"raw": {
-									"language": "json"
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"bcsl_ids\": [\n    \"{{bcsl_den_100_50_20_new_0_id}}\",\n    \"{{bcsl_den_100_50_20_new_1_id}}\",\n    \"{{bcsl_den_100_50_20_new_2_id}}\",\n    \"{{bcsl_den_100_50_20_new_3_id}}\"\n  ],\n  \"trang_thai\": \"approved\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:4300/api/ycsx/{{ycsx_id}}/congdoan/{{phancong_cua_id}}/bao-cao-san-luong",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4300",
+									"path": [
+										"ycsx",
+										"{{ycsx_id}}",
+										"congdoan",
+										"{{phancong_cua_id}}",
+										"bao-cao-san-luong"
+									]
 								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:4300/ycsx/{{ycsx_id}}/congdoan/{{phancong_bo_id}}/nhap-nguyen-lieu",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "4300",
-							"path": [
-								"ycsx",
-								"{{ycsx_id}}",
-								"congdoan",
-								"{{phancong_bo_id}}",
-								"nhap-nguyen-lieu"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Duyet pnv - nhap kho bo",
-					"request": {
-						"method": "PUT",
-						"header": [
-							{
-								"key": "accept",
-								"value": "application/json"
 							},
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"phieu_ids\": [\n        \"{{phieu_nhap_nguyen_lieu_bo_new_id}}\"\n    ]\n}   ",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
+							"response": []
 						},
-						"url": {
-							"raw": "http://localhost:4300/phieu-nghiep-vu/batch-duyet",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "4300",
-							"path": [
-								"phieu-nghiep-vu",
-								"batch-duyet"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Tao bcsl",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "accept",
-								"value": "*/*"
-							},
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n  \"ma_da\": \"DA-{{$randomWords}}\",\n  \"mau_da\": \"den\",\n  \"ma_phoi\": 3,\n  \"parent_id\": \"{{bcsl_new_id}}\",\n  \"quy_cach\": {\n    \"dai\": 100,\n    \"rong\": 50,\n    \"day\": 20,\n    \"so_luong\": 1,\n    \"dvt_do_luong\": \"m\",\n    \"dvt_quy_cach\": \"vien\"\n  }\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:4300/ycsx/{{ycsx_id}}/congdoan/{{phancong_bo_id}}/bao-cao-san-luong",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "4300",
-							"path": [
-								"ycsx",
-								"{{ycsx_id}}",
-								"congdoan",
-								"{{phancong_bo_id}}",
-								"bao-cao-san-luong"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Duyet bcsl",
-					"request": {
-						"method": "PUT",
-						"header": [
-							{
-								"key": "accept",
-								"value": "*/*"
-							},
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n  \"bcsl_ids\": [\n    \"{{bcsl_den_100_50_20_new_0_id}}\",\n    \"{{bcsl_den_100_50_20_new_1_id}}\"\n  ],\n  \"trang_thai\": \"approved\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:4300/ycsx/{{ycsx_id}}/congdoan/{{phancong_bo_id}}/bao-cao-san-luong",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "4300",
-							"path": [
-								"ycsx",
-								"{{ycsx_id}}",
-								"congdoan",
-								"{{phancong_bo_id}}",
-								"bao-cao-san-luong"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Reject bcsl",
-					"request": {
-						"method": "PUT",
-						"header": [
-							{
-								"key": "accept",
-								"value": "*/*"
-							},
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n  \"bcsl_ids\": [\n    \"{{bcsl_den_100_50_20_new_2_id}}\"\n  ],\n  \"reason\": \"ko du chat luong\",\n  \"trang_thai\": \"rejected\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:4300/ycsx/{{ycsx_id}}/congdoan/{{phancong_bo_id}}/bao-cao-san-luong",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "4300",
-							"path": [
-								"ycsx",
-								"{{ycsx_id}}",
-								"congdoan",
-								"{{phancong_bo_id}}",
-								"bao-cao-san-luong"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "khi co bcsl -> xuat kho mong muon",
-					"event": [
 						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"const response = pm.response.json();\r",
-									"const data = response.data;\r",
-									"pm.collectionVariables.set(\"pnk_new_id\", data._id);"
+							"name": "Reject bcsl Copy",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "accept",
+										"value": "*/*"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
 								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "accept",
-								"value": "*/*"
-							},
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n  \"bcsl_ids\": [\n    \"{{bcsl_den_100_50_20_new_0_id}}\"\n  ],\n//   \"do_day_cua\": 10,\n  \"kho_nhan\": \"kho-phoi\",\n  \"ma_phieu\": \"PNK-{{$randomWords}}\",\n  \"thu_kho_id\": \"{{nhanVien_kcs_gc_4_id}}\",\n  \"loai_phieu\": \"nhap-kho\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"bcsl_ids\": [\n    \"{{bcsl_den_100_50_20_new_4_id}}\"\n  ],\n  \"reason\": \"ko du chat luong\",\n  \"trang_thai\": \"rejected\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:4300/api/ycsx/{{ycsx_id}}/congdoan/{{phancong_cua_id}}/bao-cao-san-luong",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4300",
+									"path": [
+										"ycsx",
+										"{{ycsx_id}}",
+										"congdoan",
+										"{{phancong_cua_id}}",
+										"bao-cao-san-luong"
+									]
 								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:4300/ycsx/{{ycsx_id}}/congdoan/{{phancong_bo_id}}/xuat-kho",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "4300",
-							"path": [
-								"ycsx",
-								"{{ycsx_id}}",
-								"congdoan",
-								"{{phancong_bo_id}}",
-								"xuat-kho"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "3. Duyet phieu nhap kho",
-					"request": {
-						"method": "PUT",
-						"header": [
-							{
-								"key": "accept",
-								"value": "application/json"
 							},
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n  \"phieu_ids\": [\n    \"{{pnk_new_id}}\"\n        \n  ],\n  \"vi_tri\": \"A1\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
+							"response": []
 						},
-						"url": {
-							"raw": "http://localhost:4300/phieu-nghiep-vu/batch-duyet",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "4300",
-							"path": [
-								"phieu-nghiep-vu",
-								"batch-duyet"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "khi co bcsl -> chuyen tiep -> cho kcs buoc tiep theo duyet",
-					"event": [
 						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"const response = pm.response.json();\r",
-									"const data = response.data;\r",
-									"pm.collectionVariables.set(\"pct_new_id\", data._id);"
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "accept",
-								"value": "*/*"
-							},
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n  \"bcsl_ids\": [\n    \"{{bcsl_den_100_50_20_new_1_id}}\"\n  ],\n  \"do_day_cua\": 10,\n  \"nextCongDoan\": \"cua\",\n  \"ma_phieu\": \"PCT-{{$randomWords}}\",\n  \"kcs_nhan_id\": \"{{nhanVien_kcs_gc_4_id}}\",\n  \"loai_phieu\": \"chuyen-tiep\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
+							"name": "khi co bcsl -> xuat sang \"kho-slap\"",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const response = pm.response.json();\r",
+											"const data = response.data;\r",
+											"pm.collectionVariables.set(\"pnk_new_id\", data._id);"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
 								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:4300/ycsx/{{ycsx_id}}/congdoan/{{phancong_bo_id}}/xuat-kho",
-							"protocol": "http",
-							"host": [
-								"localhost"
 							],
-							"port": "4300",
-							"path": [
-								"ycsx",
-								"{{ycsx_id}}",
-								"congdoan",
-								"{{phancong_bo_id}}",
-								"xuat-kho"
-							]
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "accept",
+										"value": "*/*"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"bcsl_ids\": [\n    \"{{bcsl_den_100_50_20_new_0_id}}\"\n  ],\n//   \"do_day_cua\": 10,\n  \"kho_nhan\": \"kho-slap\",\n  \"ma_phieu\": \"PNK-{{$randomWords}}\",\n  \"thu_kho_id\": \"{{nhanVien_kcs_gc_4_id}}\",\n  \"loai_phieu\": \"nhap-kho\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:4300/api/ycsx/{{ycsx_id}}/congdoan/{{phancong_cua_id}}/xuat-kho",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4300",
+									"path": [
+										"ycsx",
+										"{{ycsx_id}}",
+										"congdoan",
+										"{{phancong_cua_id}}",
+										"xuat-kho"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "3. Duyet phieu nhap \"kho-slap\"",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"phieu_ids\": [\n    \"{{pnk_new_id}}\"\n        \n  ],\n  \"vi_tri\": \"A1\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:4300/api/phieu-nghiep-vu/batch-duyet",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4300",
+									"path": [
+										"phieu-nghiep-vu",
+										"batch-duyet"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "khi co bcsl -> xuat sang \"kho-thanh-pham\"",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const response = pm.response.json();\r",
+											"const data = response.data;\r",
+											"pm.collectionVariables.set(\"pnk_new_id\", data._id);"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "accept",
+										"value": "*/*"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"bcsl_ids\": [\n    \"{{bcsl_den_100_50_20_new_1_id}}\"\n  ],\n//   \"do_day_cua\": 10,\n  \"kho_nhan\": \"kho-thanh-pham\",\n  \"ma_phieu\": \"PNK-{{$randomWords}}\",\n  \"thu_kho_id\": \"{{nhanVien_kcs_gc_4_id}}\",\n  \"loai_phieu\": \"nhap-kho\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:4300/api/ycsx/{{ycsx_id}}/congdoan/{{phancong_cua_id}}/xuat-kho",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4300",
+									"path": [
+										"ycsx",
+										"{{ycsx_id}}",
+										"congdoan",
+										"{{phancong_cua_id}}",
+										"xuat-kho"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "3. Duyet phieu nhap \"kho-thanh-pham\"",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"phieu_ids\": [\n    \"{{pnk_new_id}}\"\n        \n  ],\n  \"vi_tri\": \"A1\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:4300/api/phieu-nghiep-vu/batch-duyet",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4300",
+									"path": [
+										"phieu-nghiep-vu",
+										"batch-duyet"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "khi co bcsl -> xuat sang \"kho-phe-pham\"",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const response = pm.response.json();\r",
+											"const data = response.data;\r",
+											"pm.collectionVariables.set(\"pnk_new_id\", data._id);"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "accept",
+										"value": "*/*"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"bcsl_ids\": [\n    \"{{bcsl_den_100_50_20_new_2_id}}\"\n  ],\n//   \"do_day_cua\": 10,\n  \"kho_nhan\": \"kho-phe-pham\",\n  \"ma_phieu\": \"PNK-{{$randomWords}}\",\n  \"thu_kho_id\": \"{{nhanVien_kcs_gc_4_id}}\",\n  \"loai_phieu\": \"nhap-kho\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:4300/api/ycsx/{{ycsx_id}}/congdoan/{{phancong_cua_id}}/xuat-kho",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4300",
+									"path": [
+										"ycsx",
+										"{{ycsx_id}}",
+										"congdoan",
+										"{{phancong_cua_id}}",
+										"xuat-kho"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "3. Duyet phieu nhap \"kho-phe-pham\"",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"phieu_ids\": [\n    \"{{pnk_new_id}}\"\n        \n  ],\n  \"vi_tri\": \"A1\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:4300/api/phieu-nghiep-vu/batch-duyet",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4300",
+									"path": [
+										"phieu-nghiep-vu",
+										"batch-duyet"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "khi co bcsl -> chuyen tiep -> cho kcs buoc tiep theo duyet Copy",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const response = pm.response.json();\r",
+											"const data = response.data;\r",
+											"pm.collectionVariables.set(\"pct_new_id\", data._id);"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "accept",
+										"value": "*/*"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"bcsl_ids\": [\n    \"{{bcsl_den_100_50_20_new_3_id}}\"\n  ],\n//   \"do_day_cua\": 10,\n  \"nextCongDoan\": \"htm\",\n  \"ma_phieu\": \"PCT-{{$randomWords}}\",\n  \"kcs_nhan_id\": \"{{nhanVien_kcs_gc_4_id}}\",\n  \"loai_phieu\": \"chuyen-tiep\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:4300/api/ycsx/{{ycsx_id}}/congdoan/{{phancong_cua_id}}/xuat-kho",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4300",
+									"path": [
+										"ycsx",
+										"{{ycsx_id}}",
+										"congdoan",
+										"{{phancong_cua_id}}",
+										"xuat-kho"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "kcs duyet phieu chuyen tiep Copy",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const response = pm.response.json();\r",
+											"const data = response.data[0];\r",
+											"const bcsl_ids = data.bcsl_ids[0];\r",
+											"pm.collectionVariables.set(\"bcsl_new_id\", bcsl_ids._id);"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "accept",
+										"value": "*/*"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"pnv_ids\": [\n    \"{{pct_new_id}}\"\n  ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:4300/api/ycsx/{{ycsx_id}}/congdoan/{{phancong_htm_id}}/duyet-chuyen-tiep",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4300",
+									"path": [
+										"ycsx",
+										"{{ycsx_id}}",
+										"congdoan",
+										"{{phancong_htm_id}}",
+										"duyet-chuyen-tiep"
+									]
+								}
+							},
+							"response": []
 						}
-					},
-					"response": []
+					]
 				},
 				{
-					"name": "kcs duyet phieu chuyen tiep",
-					"event": [
+					"name": "hoan thien mat",
+					"item": [
 						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"const response = pm.response.json();\r",
-									"const data = response.data[0];\r",
-									"const bcsl_ids = data.bcsl_ids[0];\r",
-									"pm.collectionVariables.set(\"bcsl_new_id\", bcsl_ids._id);"
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"request": {
-						"method": "PUT",
-						"header": [
-							{
-								"key": "accept",
-								"value": "*/*"
-							},
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n  \"pnv_ids\": [\n    \"{{pct_new_id}}\"\n  ]\n}",
-							"options": {
-								"raw": {
-									"language": "json"
+							"name": "2. filter danh sach bcsl Copy 2",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const response = pm.response.json();\r",
+											"const data = response.data;\r",
+											"for (let i = 0; i < data.length; i++) {\r",
+											"    pm.collectionVariables.set(`bcsl_${data[i].kho}_${data[i].trang_thai}_${i}_id`, data[i]._id);\r",
+											"    pm.collectionVariables.set(\"bcsl_new_id\", data[i]._id);\r",
+											"}"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
 								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:4300/ycsx/{{ycsx_id}}/congdoan/{{phancong_cua_id}}/duyet-chuyen-tiep",
-							"protocol": "http",
-							"host": [
-								"localhost"
 							],
-							"port": "4300",
-							"path": [
-								"ycsx",
-								"{{ycsx_id}}",
-								"congdoan",
-								"{{phancong_cua_id}}",
-								"duyet-chuyen-tiep"
-							]
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "accept",
+										"value": "*/*"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:4300/api/bao-cao-san-luong/filter?trang_thai=imported&kho=kho-slap&ycsx_id={{ycsx_id}}",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4300",
+									"path": [
+										"bao-cao-san-luong",
+										"filter"
+									],
+									"query": [
+										{
+											"key": "dai",
+											"value": "100",
+											"disabled": true
+										},
+										{
+											"key": "rong",
+											"value": "50",
+											"disabled": true
+										},
+										{
+											"key": "day",
+											"value": "20",
+											"disabled": true
+										},
+										{
+											"key": "vi_tri",
+											"value": "A1",
+											"disabled": true
+										},
+										{
+											"key": "trang_thai",
+											"value": "imported"
+										},
+										{
+											"key": "kho",
+											"value": "kho-slap"
+										},
+										{
+											"key": "ycsc_id",
+											"value": "507f1f77bcf86cd799439011",
+											"disabled": true
+										},
+										{
+											"key": "ycsx_id",
+											"value": "{{ycsx_id}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "nhap nguyen lieu",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const responseBody = pm.response.json();\r",
+											"pm.collectionVariables.set(\"phieu_nhap_nguyen_lieu_bo_new_id\", responseBody.data._id);"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "accept",
+										"value": "*/*"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"bcsl_ids\": [\n    \"{{bcsl_kho-slap_imported_0_id}}\"\n  ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:4300/api/ycsx/{{ycsx_id}}/congdoan/{{phancong_htm_id}}/nhap-nguyen-lieu",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4300",
+									"path": [
+										"ycsx",
+										"{{ycsx_id}}",
+										"congdoan",
+										"{{phancong_htm_id}}",
+										"nhap-nguyen-lieu"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Duyet pnv - nhap kho bo Copy",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"phieu_ids\": [\n        \"{{phieu_nhap_nguyen_lieu_bo_new_id}}\"\n    ]\n}   ",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:4300/api/phieu-nghiep-vu/batch-duyet",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4300",
+									"path": [
+										"phieu-nghiep-vu",
+										"batch-duyet"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Tao bcsl",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "accept",
+										"value": "*/*"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"ma_da\": \"DA-{{$randomWords}}\",\n  \"mau_da\": \"den\",\n  \"mat_da\": \"bong\",\n//   \"parent_id\": \"{{bcsl_new_id}}\",\n  \"parent_id\": \"68bd48e547d42ba78593f1ee\",\n  \"quy_cach\": {\n    \"dai\": 100,\n    \"rong\": 50,\n    \"day\": 20,\n    \"so_luong\": 1,\n    \"dvt_do_luong\": \"m\",\n    \"dvt_quy_cach\": \"vien\"\n  }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:4300/api/ycsx/{{ycsx_id}}/congdoan/{{phancong_htm_id}}/bao-cao-san-luong",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4300",
+									"path": [
+										"ycsx",
+										"{{ycsx_id}}",
+										"congdoan",
+										"{{phancong_htm_id}}",
+										"bao-cao-san-luong"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "2. filter danh sach bcsl Copy",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const response = pm.response.json();\r",
+											"const data = response.data;\r",
+											"for (let i = 0; i < data.length; i++) {\r",
+											"    pm.collectionVariables.set(`bcsl_${data[i].mau_da}_${data[i].quy_cach.dai}_${data[i].quy_cach.rong}_${data[i].quy_cach.day}_${data[i].trang_thai}_${i}_id`, data[i]._id);\r",
+											"}"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "accept",
+										"value": "*/*"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:4300/api/bao-cao-san-luong/filter?trang_thai=new&ycsx_id={{ycsx_id}}",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4300",
+									"path": [
+										"bao-cao-san-luong",
+										"filter"
+									],
+									"query": [
+										{
+											"key": "dai",
+											"value": "100",
+											"disabled": true
+										},
+										{
+											"key": "rong",
+											"value": "50",
+											"disabled": true
+										},
+										{
+											"key": "day",
+											"value": "20",
+											"disabled": true
+										},
+										{
+											"key": "vi_tri",
+											"value": "A1",
+											"disabled": true
+										},
+										{
+											"key": "trang_thai",
+											"value": "new"
+										},
+										{
+											"key": "kho",
+											"value": "kho-block",
+											"disabled": true
+										},
+										{
+											"key": "ycsc_id",
+											"value": "507f1f77bcf86cd799439011",
+											"disabled": true
+										},
+										{
+											"key": "ycsx_id",
+											"value": "{{ycsx_id}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Duyet bcsl Copy",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "accept",
+										"value": "*/*"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"bcsl_ids\": [\n    \"{{bcsl_den_100_50_20_new_0_id}}\",\n    \"{{bcsl_den_100_50_20_new_1_id}}\",\n    \"{{bcsl_den_100_50_20_new_2_id}}\",\n    \"{{bcsl_den_100_50_20_new_3_id}}\"\n  ],\n  \"trang_thai\": \"approved\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:4300/api/ycsx/{{ycsx_id}}/congdoan/{{phancong_htm_id}}/bao-cao-san-luong",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4300",
+									"path": [
+										"ycsx",
+										"{{ycsx_id}}",
+										"congdoan",
+										"{{phancong_htm_id}}",
+										"bao-cao-san-luong"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Reject bcsl Copy",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "accept",
+										"value": "*/*"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"bcsl_ids\": [\n    \"{{bcsl_den_100_50_20_new_4_id}}\"\n  ],\n  \"reason\": \"ko du chat luong\",\n  \"trang_thai\": \"rejected\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:4300/api/ycsx/{{ycsx_id}}/congdoan/{{phancong_htm_id}}/bao-cao-san-luong",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4300",
+									"path": [
+										"ycsx",
+										"{{ycsx_id}}",
+										"congdoan",
+										"{{phancong_htm_id}}",
+										"bao-cao-san-luong"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "khi co bcsl -> xuat sang \"kho-slap\"",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const response = pm.response.json();\r",
+											"const data = response.data;\r",
+											"pm.collectionVariables.set(\"pnk_new_id\", data._id);"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "accept",
+										"value": "*/*"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"bcsl_ids\": [\n    \"{{bcsl_den_100_50_20_new_0_id}}\"\n  ],\n//   \"do_day_cua\": 10,\n  \"kho_nhan\": \"kho-slap\",\n  \"ma_phieu\": \"PNK-{{$randomWords}}\",\n  \"thu_kho_id\": \"{{nhanVien_kcs_gc_4_id}}\",\n  \"loai_phieu\": \"nhap-kho\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:4300/api/ycsx/{{ycsx_id}}/congdoan/{{phancong_htm_id}}/xuat-kho",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4300",
+									"path": [
+										"ycsx",
+										"{{ycsx_id}}",
+										"congdoan",
+										"{{phancong_htm_id}}",
+										"xuat-kho"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "3. Duyet phieu nhap \"kho-slap\"",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"phieu_ids\": [\n    \"{{pnk_new_id}}\"\n        \n  ],\n  \"vi_tri\": \"A1\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:4300/api/phieu-nghiep-vu/batch-duyet",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4300",
+									"path": [
+										"phieu-nghiep-vu",
+										"batch-duyet"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "khi co bcsl -> xuat sang \"kho-thanh-pham\"",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const response = pm.response.json();\r",
+											"const data = response.data;\r",
+											"pm.collectionVariables.set(\"pnk_new_id\", data._id);"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "accept",
+										"value": "*/*"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"bcsl_ids\": [\n    \"{{bcsl_den_100_50_20_new_1_id}}\"\n  ],\n//   \"do_day_cua\": 10,\n  \"kho_nhan\": \"kho-thanh-pham\",\n  \"ma_phieu\": \"PNK-{{$randomWords}}\",\n  \"thu_kho_id\": \"{{nhanVien_kcs_gc_4_id}}\",\n  \"loai_phieu\": \"nhap-kho\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:4300/api/ycsx/{{ycsx_id}}/congdoan/{{phancong_htm_id}}/xuat-kho",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4300",
+									"path": [
+										"ycsx",
+										"{{ycsx_id}}",
+										"congdoan",
+										"{{phancong_htm_id}}",
+										"xuat-kho"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "3. Duyet phieu nhap \"kho-thanh-pham\"",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"phieu_ids\": [\n    \"{{pnk_new_id}}\"\n        \n  ],\n  \"vi_tri\": \"A1\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:4300/api/phieu-nghiep-vu/batch-duyet",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4300",
+									"path": [
+										"phieu-nghiep-vu",
+										"batch-duyet"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "khi co bcsl -> xuat sang \"kho-phe-pham\"",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const response = pm.response.json();\r",
+											"const data = response.data;\r",
+											"pm.collectionVariables.set(\"pnk_new_id\", data._id);"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "accept",
+										"value": "*/*"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"bcsl_ids\": [\n    \"{{bcsl_den_100_50_20_new_2_id}}\"\n  ],\n//   \"do_day_cua\": 10,\n  \"kho_nhan\": \"kho-phe-pham\",\n  \"ma_phieu\": \"PNK-{{$randomWords}}\",\n  \"thu_kho_id\": \"{{nhanVien_kcs_gc_4_id}}\",\n  \"loai_phieu\": \"nhap-kho\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:4300/api/ycsx/{{ycsx_id}}/congdoan/{{phancong_htm_id}}/xuat-kho",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4300",
+									"path": [
+										"ycsx",
+										"{{ycsx_id}}",
+										"congdoan",
+										"{{phancong_htm_id}}",
+										"xuat-kho"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "3. Duyet phieu nhap \"kho-phe-pham\"",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"phieu_ids\": [\n    \"{{pnk_new_id}}\"\n        \n  ],\n  \"vi_tri\": \"A1\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:4300/api/phieu-nghiep-vu/batch-duyet",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4300",
+									"path": [
+										"phieu-nghiep-vu",
+										"batch-duyet"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "khi co bcsl -> chuyen tiep -> cho kcs buoc tiep theo duyet Copy",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const response = pm.response.json();\r",
+											"const data = response.data;\r",
+											"pm.collectionVariables.set(\"pct_new_id\", data._id);"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "accept",
+										"value": "*/*"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"bcsl_ids\": [\n    \"{{bcsl_den_100_50_20_new_3_id}}\"\n  ],\n//   \"do_day_cua\": 10,\n  \"nextCongDoan\": \"cqc\",\n  \"ma_phieu\": \"PCT-{{$randomWords}}\",\n  \"kcs_nhan_id\": \"{{nhanVien_kcs_gc_4_id}}\",\n  \"loai_phieu\": \"chuyen-tiep\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:4300/api/ycsx/{{ycsx_id}}/congdoan/{{phancong_htm_id}}/xuat-kho",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4300",
+									"path": [
+										"ycsx",
+										"{{ycsx_id}}",
+										"congdoan",
+										"{{phancong_htm_id}}",
+										"xuat-kho"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "kcs duyet phieu chuyen tiep Copy",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const response = pm.response.json();\r",
+											"const data = response.data[0];\r",
+											"const bcsl_ids = data.bcsl_ids[0];\r",
+											"pm.collectionVariables.set(\"bcsl_new_id\", bcsl_ids._id);"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "accept",
+										"value": "*/*"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"pnv_ids\": [\n    \"{{pct_new_id}}\"\n  ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:4300/api/ycsx/{{ycsx_id}}/congdoan/{{phancong_cqc_id}}/duyet-chuyen-tiep",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4300",
+									"path": [
+										"ycsx",
+										"{{ycsx_id}}",
+										"congdoan",
+										"{{phancong_cqc_id}}",
+										"duyet-chuyen-tiep"
+									]
+								}
+							},
+							"response": []
 						}
-					},
-					"response": []
+					]
+				},
+				{
+					"name": "cat quy cach",
+					"item": [
+						{
+							"name": "2. filter danh sach bcsl Copy 2",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const response = pm.response.json();\r",
+											"const data = response.data;\r",
+											"for (let i = 0; i < data.length; i++) {\r",
+											"    pm.collectionVariables.set(`bcsl_${data[i].kho}_${data[i].trang_thai}_${i}_id`, data[i]._id);\r",
+											"    pm.collectionVariables.set(\"bcsl_new_id\", data[i]._id);\r",
+											"}"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "accept",
+										"value": "*/*"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:4300/api/bao-cao-san-luong/filter?trang_thai=imported&kho=kho-slap&ycsx_id={{ycsx_id}}",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4300",
+									"path": [
+										"bao-cao-san-luong",
+										"filter"
+									],
+									"query": [
+										{
+											"key": "dai",
+											"value": "100",
+											"disabled": true
+										},
+										{
+											"key": "rong",
+											"value": "50",
+											"disabled": true
+										},
+										{
+											"key": "day",
+											"value": "20",
+											"disabled": true
+										},
+										{
+											"key": "vi_tri",
+											"value": "A1",
+											"disabled": true
+										},
+										{
+											"key": "trang_thai",
+											"value": "imported"
+										},
+										{
+											"key": "kho",
+											"value": "kho-slap"
+										},
+										{
+											"key": "ycsc_id",
+											"value": "507f1f77bcf86cd799439011",
+											"disabled": true
+										},
+										{
+											"key": "ycsx_id",
+											"value": "{{ycsx_id}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "nhap nguyen lieu",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const responseBody = pm.response.json();\r",
+											"pm.collectionVariables.set(\"phieu_nhap_nguyen_lieu_bo_new_id\", responseBody.data._id);"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "accept",
+										"value": "*/*"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"bcsl_ids\": [\n    \"{{bcsl_kho-slap_imported_0_id}}\"\n  ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:4300/api/ycsx/{{ycsx_id}}/congdoan/{{phancong_cqc_id}}/nhap-nguyen-lieu",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4300",
+									"path": [
+										"ycsx",
+										"{{ycsx_id}}",
+										"congdoan",
+										"{{phancong_cqc_id}}",
+										"nhap-nguyen-lieu"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Duyet pnv - nhap kho bo Copy",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"phieu_ids\": [\n        \"{{phieu_nhap_nguyen_lieu_bo_new_id}}\"\n    ]\n}   ",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:4300/api/phieu-nghiep-vu/batch-duyet",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4300",
+									"path": [
+										"phieu-nghiep-vu",
+										"batch-duyet"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Tao bcsl",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "accept",
+										"value": "*/*"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"ma_da\": \"DA-{{$randomWords}}\",\n  \"mau_da\": \"den\",\n//   \"parent_id\": \"{{bcsl_new_id}}\",\n  \"parent_id\": \"68bd5a91fdab98e00d889e7b\",\n  \"quy_cach\": {\n    \"dai\": 100,\n    \"rong\": 50,\n    \"day\": 20,\n    \"so_luong\": 1,\n    \"dvt_do_luong\": \"m\",\n    \"dvt_quy_cach\": \"vien\"\n  }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:4300/api/ycsx/{{ycsx_id}}/congdoan/{{phancong_cqc_id}}/bao-cao-san-luong",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4300",
+									"path": [
+										"ycsx",
+										"{{ycsx_id}}",
+										"congdoan",
+										"{{phancong_cqc_id}}",
+										"bao-cao-san-luong"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "2. filter danh sach bcsl Copy",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const response = pm.response.json();\r",
+											"const data = response.data;\r",
+											"for (let i = 0; i < data.length; i++) {\r",
+											"    pm.collectionVariables.set(`bcsl_${data[i].mau_da}_${data[i].quy_cach.dai}_${data[i].quy_cach.rong}_${data[i].quy_cach.day}_${data[i].trang_thai}_${i}_id`, data[i]._id);\r",
+											"}"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "accept",
+										"value": "*/*"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:4300/api/bao-cao-san-luong/filter?trang_thai=new&ycsx_id={{ycsx_id}}",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4300",
+									"path": [
+										"bao-cao-san-luong",
+										"filter"
+									],
+									"query": [
+										{
+											"key": "dai",
+											"value": "100",
+											"disabled": true
+										},
+										{
+											"key": "rong",
+											"value": "50",
+											"disabled": true
+										},
+										{
+											"key": "day",
+											"value": "20",
+											"disabled": true
+										},
+										{
+											"key": "vi_tri",
+											"value": "A1",
+											"disabled": true
+										},
+										{
+											"key": "trang_thai",
+											"value": "new"
+										},
+										{
+											"key": "kho",
+											"value": "kho-block",
+											"disabled": true
+										},
+										{
+											"key": "ycsc_id",
+											"value": "507f1f77bcf86cd799439011",
+											"disabled": true
+										},
+										{
+											"key": "ycsx_id",
+											"value": "{{ycsx_id}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Duyet bcsl Copy",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "accept",
+										"value": "*/*"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"bcsl_ids\": [\n    \"{{bcsl_den_100_50_20_new_0_id}}\",\n    \"{{bcsl_den_100_50_20_new_1_id}}\",\n    \"{{bcsl_den_100_50_20_new_2_id}}\",\n    \"{{bcsl_den_100_50_20_new_3_id}}\"\n  ],\n  \"trang_thai\": \"approved\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:4300/api/ycsx/{{ycsx_id}}/congdoan/{{phancong_cqc_id}}/bao-cao-san-luong",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4300",
+									"path": [
+										"ycsx",
+										"{{ycsx_id}}",
+										"congdoan",
+										"{{phancong_cqc_id}}",
+										"bao-cao-san-luong"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Reject bcsl Copy",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "accept",
+										"value": "*/*"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"bcsl_ids\": [\n    \"{{bcsl_den_100_50_20_new_4_id}}\"\n  ],\n  \"reason\": \"ko du chat luong\",\n  \"trang_thai\": \"rejected\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:4300/api/ycsx/{{ycsx_id}}/congdoan/{{phancong_cqc_id}}/bao-cao-san-luong",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4300",
+									"path": [
+										"ycsx",
+										"{{ycsx_id}}",
+										"congdoan",
+										"{{phancong_cqc_id}}",
+										"bao-cao-san-luong"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "khi co bcsl -> xuat sang \"kho-slap\"",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const response = pm.response.json();\r",
+											"const data = response.data;\r",
+											"pm.collectionVariables.set(\"pnk_new_id\", data._id);"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "accept",
+										"value": "*/*"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"bcsl_ids\": [\n    \"{{bcsl_den_100_50_20_new_0_id}}\"\n  ],\n//   \"do_day_cua\": 10,\n  \"kho_nhan\": \"kho-slap\",\n  \"ma_phieu\": \"PNK-{{$randomWords}}\",\n  \"thu_kho_id\": \"{{nhanVien_kcs_gc_4_id}}\",\n  \"loai_phieu\": \"nhap-kho\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:4300/api/ycsx/{{ycsx_id}}/congdoan/{{phancong_cqc_id}}/xuat-kho",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4300",
+									"path": [
+										"ycsx",
+										"{{ycsx_id}}",
+										"congdoan",
+										"{{phancong_cqc_id}}",
+										"xuat-kho"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "3. Duyet phieu nhap \"kho-slap\"",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"phieu_ids\": [\n    \"{{pnk_new_id}}\"\n        \n  ],\n  \"vi_tri\": \"A1\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:4300/api/phieu-nghiep-vu/batch-duyet",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4300",
+									"path": [
+										"phieu-nghiep-vu",
+										"batch-duyet"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "khi co bcsl -> xuat sang \"kho-thanh-pham\"",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const response = pm.response.json();\r",
+											"const data = response.data;\r",
+											"pm.collectionVariables.set(\"pnk_new_id\", data._id);"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "accept",
+										"value": "*/*"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"bcsl_ids\": [\n    \"{{bcsl_den_100_50_20_new_1_id}}\"\n  ],\n//   \"do_day_cua\": 10,\n  \"kho_nhan\": \"kho-thanh-pham\",\n  \"ma_phieu\": \"PNK-{{$randomWords}}\",\n  \"thu_kho_id\": \"{{nhanVien_kcs_gc_4_id}}\",\n  \"loai_phieu\": \"nhap-kho\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:4300/api/ycsx/{{ycsx_id}}/congdoan/{{phancong_cqc_id}}/xuat-kho",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4300",
+									"path": [
+										"ycsx",
+										"{{ycsx_id}}",
+										"congdoan",
+										"{{phancong_cqc_id}}",
+										"xuat-kho"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "3. Duyet phieu nhap \"kho-thanh-pham\"",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"phieu_ids\": [\n    \"{{pnk_new_id}}\"\n        \n  ],\n  \"vi_tri\": \"A1\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:4300/api/phieu-nghiep-vu/batch-duyet",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4300",
+									"path": [
+										"phieu-nghiep-vu",
+										"batch-duyet"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "khi co bcsl -> xuat sang \"kho-phe-pham\"",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const response = pm.response.json();\r",
+											"const data = response.data;\r",
+											"pm.collectionVariables.set(\"pnk_new_id\", data._id);"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "accept",
+										"value": "*/*"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"bcsl_ids\": [\n    \"{{bcsl_den_100_50_20_new_2_id}}\"\n  ],\n//   \"do_day_cua\": 10,\n  \"kho_nhan\": \"kho-phe-pham\",\n  \"ma_phieu\": \"PNK-{{$randomWords}}\",\n  \"thu_kho_id\": \"{{nhanVien_kcs_gc_4_id}}\",\n  \"loai_phieu\": \"nhap-kho\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:4300/api/ycsx/{{ycsx_id}}/congdoan/{{phancong_cqc_id}}/xuat-kho",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4300",
+									"path": [
+										"ycsx",
+										"{{ycsx_id}}",
+										"congdoan",
+										"{{phancong_cqc_id}}",
+										"xuat-kho"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "3. Duyet phieu nhap \"kho-phe-pham\"",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"phieu_ids\": [\n    \"{{pnk_new_id}}\"\n        \n  ],\n  \"vi_tri\": \"A1\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:4300/api/phieu-nghiep-vu/batch-duyet",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4300",
+									"path": [
+										"phieu-nghiep-vu",
+										"batch-duyet"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "khi co bcsl -> chuyen tiep -> cho kcs buoc tiep theo duyet Copy",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const response = pm.response.json();\r",
+											"const data = response.data;\r",
+											"pm.collectionVariables.set(\"pct_new_id\", data._id);"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "accept",
+										"value": "*/*"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"bcsl_ids\": [\n    \"{{bcsl_den_100_50_20_new_3_id}}\"\n  ],\n//   \"do_day_cua\": 10,\n  \"nextCongDoan\": \"gc\",\n  \"ma_phieu\": \"PCT-{{$randomWords}}\",\n  \"kcs_nhan_id\": \"{{nhanVien_kcs_gc_4_id}}\",\n  \"loai_phieu\": \"chuyen-tiep\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:4300/api/ycsx/{{ycsx_id}}/congdoan/{{phancong_cqc_id}}/xuat-kho",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4300",
+									"path": [
+										"ycsx",
+										"{{ycsx_id}}",
+										"congdoan",
+										"{{phancong_cqc_id}}",
+										"xuat-kho"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "kcs duyet phieu chuyen tiep Copy",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const response = pm.response.json();\r",
+											"const data = response.data[0];\r",
+											"const bcsl_ids = data.bcsl_ids[0];\r",
+											"pm.collectionVariables.set(\"bcsl_new_id\", bcsl_ids._id);"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "accept",
+										"value": "*/*"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"pnv_ids\": [\n    \"{{pct_new_id}}\"\n  ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:4300/api/ycsx/{{ycsx_id}}/congdoan/{{phancong_gc_id}}/duyet-chuyen-tiep",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4300",
+									"path": [
+										"ycsx",
+										"{{ycsx_id}}",
+										"congdoan",
+										"{{phancong_gc_id}}",
+										"duyet-chuyen-tiep"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "gia cong",
+					"item": [
+						{
+							"name": "2. filter danh sach bcsl Copy 2",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const response = pm.response.json();\r",
+											"const data = response.data;\r",
+											"for (let i = 0; i < data.length; i++) {\r",
+											"    pm.collectionVariables.set(`bcsl_${data[i].kho}_${data[i].trang_thai}_${i}_id`, data[i]._id);\r",
+											"    pm.collectionVariables.set(\"bcsl_new_id\", data[i]._id);\r",
+											"}"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "accept",
+										"value": "*/*"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:4300/api/bao-cao-san-luong/filter?trang_thai=imported&kho=kho-slap&ycsx_id={{ycsx_id}}",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4300",
+									"path": [
+										"bao-cao-san-luong",
+										"filter"
+									],
+									"query": [
+										{
+											"key": "dai",
+											"value": "100",
+											"disabled": true
+										},
+										{
+											"key": "rong",
+											"value": "50",
+											"disabled": true
+										},
+										{
+											"key": "day",
+											"value": "20",
+											"disabled": true
+										},
+										{
+											"key": "vi_tri",
+											"value": "A1",
+											"disabled": true
+										},
+										{
+											"key": "trang_thai",
+											"value": "imported"
+										},
+										{
+											"key": "kho",
+											"value": "kho-slap"
+										},
+										{
+											"key": "ycsc_id",
+											"value": "507f1f77bcf86cd799439011",
+											"disabled": true
+										},
+										{
+											"key": "ycsx_id",
+											"value": "{{ycsx_id}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "nhap nguyen lieu",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const responseBody = pm.response.json();\r",
+											"pm.collectionVariables.set(\"phieu_nhap_nguyen_lieu_bo_new_id\", responseBody.data._id);"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "accept",
+										"value": "*/*"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"bcsl_ids\": [\n    \"{{bcsl_kho-slap_imported_0_id}}\"\n  ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:4300/api/ycsx/{{ycsx_id}}/congdoan/{{phancong_gc_id}}/nhap-nguyen-lieu",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4300",
+									"path": [
+										"ycsx",
+										"{{ycsx_id}}",
+										"congdoan",
+										"{{phancong_gc_id}}",
+										"nhap-nguyen-lieu"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Duyet pnv - nhap kho bo Copy",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"phieu_ids\": [\n        \"{{phieu_nhap_nguyen_lieu_bo_new_id}}\"\n    ]\n}   ",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:4300/api/phieu-nghiep-vu/batch-duyet",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4300",
+									"path": [
+										"phieu-nghiep-vu",
+										"batch-duyet"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Tao bcsl",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "accept",
+										"value": "*/*"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"ma_da\": \"DA-{{$randomWords}}\",\n  \"mau_da\": \"den\",\n//   \"parent_id\": \"{{bcsl_new_id}}\",\n  \"parent_id\": \"68bd5a91fdab98e00d889e7b\",\n  \"giaCong\": \"bo-canh\",\n  \"quy_cach\": {\n    \"dai\": 100,\n    \"rong\": 50,\n    \"day\": 20,\n    \"so_luong\": 1,\n    \"dvt_do_luong\": \"m\",\n    \"dvt_quy_cach\": \"vien\"\n  }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:4300/api/ycsx/{{ycsx_id}}/congdoan/{{phancong_gc_id}}/bao-cao-san-luong",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4300",
+									"path": [
+										"ycsx",
+										"{{ycsx_id}}",
+										"congdoan",
+										"{{phancong_gc_id}}",
+										"bao-cao-san-luong"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "2. filter danh sach bcsl Copy",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const response = pm.response.json();\r",
+											"const data = response.data;\r",
+											"for (let i = 0; i < data.length; i++) {\r",
+											"    pm.collectionVariables.set(`bcsl_${data[i].mau_da}_${data[i].quy_cach.dai}_${data[i].quy_cach.rong}_${data[i].quy_cach.day}_${data[i].trang_thai}_${i}_id`, data[i]._id);\r",
+											"}"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "accept",
+										"value": "*/*"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:4300/api/bao-cao-san-luong/filter?trang_thai=new&ycsx_id={{ycsx_id}}",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4300",
+									"path": [
+										"bao-cao-san-luong",
+										"filter"
+									],
+									"query": [
+										{
+											"key": "dai",
+											"value": "100",
+											"disabled": true
+										},
+										{
+											"key": "rong",
+											"value": "50",
+											"disabled": true
+										},
+										{
+											"key": "day",
+											"value": "20",
+											"disabled": true
+										},
+										{
+											"key": "vi_tri",
+											"value": "A1",
+											"disabled": true
+										},
+										{
+											"key": "trang_thai",
+											"value": "new"
+										},
+										{
+											"key": "kho",
+											"value": "kho-block",
+											"disabled": true
+										},
+										{
+											"key": "ycsc_id",
+											"value": "507f1f77bcf86cd799439011",
+											"disabled": true
+										},
+										{
+											"key": "ycsx_id",
+											"value": "{{ycsx_id}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Duyet bcsl Copy",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "accept",
+										"value": "*/*"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"bcsl_ids\": [\n    \"{{bcsl_den_100_50_20_new_0_id}}\",\n    \"{{bcsl_den_100_50_20_new_1_id}}\",\n    \"{{bcsl_den_100_50_20_new_2_id}}\",\n    \"{{bcsl_den_100_50_20_new_3_id}}\"\n  ],\n  \"trang_thai\": \"approved\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:4300/api/ycsx/{{ycsx_id}}/congdoan/{{phancong_gc_id}}/bao-cao-san-luong",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4300",
+									"path": [
+										"ycsx",
+										"{{ycsx_id}}",
+										"congdoan",
+										"{{phancong_gc_id}}",
+										"bao-cao-san-luong"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Reject bcsl Copy",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "accept",
+										"value": "*/*"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"bcsl_ids\": [\n    \"{{bcsl_den_100_50_20_new_4_id}}\"\n  ],\n  \"reason\": \"ko du chat luong\",\n  \"trang_thai\": \"rejected\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:4300/api/ycsx/{{ycsx_id}}/congdoan/{{phancong_gc_id}}/bao-cao-san-luong",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4300",
+									"path": [
+										"ycsx",
+										"{{ycsx_id}}",
+										"congdoan",
+										"{{phancong_gc_id}}",
+										"bao-cao-san-luong"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "khi co bcsl -> xuat sang \"kho-slap\"",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const response = pm.response.json();\r",
+											"const data = response.data;\r",
+											"pm.collectionVariables.set(\"pnk_new_id\", data._id);"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "accept",
+										"value": "*/*"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"bcsl_ids\": [\n    \"{{bcsl_den_100_50_20_new_0_id}}\"\n  ],\n//   \"do_day_cua\": 10,\n  \"kho_nhan\": \"kho-slap\",\n  \"ma_phieu\": \"PNK-{{$randomWords}}\",\n  \"thu_kho_id\": \"{{nhanVien_kcs_gc_4_id}}\",\n  \"loai_phieu\": \"nhap-kho\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:4300/api/ycsx/{{ycsx_id}}/congdoan/{{phancong_gc_id}}/xuat-kho",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4300",
+									"path": [
+										"ycsx",
+										"{{ycsx_id}}",
+										"congdoan",
+										"{{phancong_gc_id}}",
+										"xuat-kho"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "3. Duyet phieu nhap \"kho-slap\"",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"phieu_ids\": [\n    \"{{pnk_new_id}}\"\n        \n  ],\n  \"vi_tri\": \"A1\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:4300/api/phieu-nghiep-vu/batch-duyet",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4300",
+									"path": [
+										"phieu-nghiep-vu",
+										"batch-duyet"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "khi co bcsl -> xuat sang \"kho-thanh-pham\"",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const response = pm.response.json();\r",
+											"const data = response.data;\r",
+											"pm.collectionVariables.set(\"pnk_new_id\", data._id);"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "accept",
+										"value": "*/*"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"bcsl_ids\": [\n    \"{{bcsl_den_100_50_20_new_1_id}}\"\n  ],\n//   \"do_day_cua\": 10,\n  \"kho_nhan\": \"kho-thanh-pham\",\n  \"ma_phieu\": \"PNK-{{$randomWords}}\",\n  \"thu_kho_id\": \"{{nhanVien_kcs_gc_4_id}}\",\n  \"loai_phieu\": \"nhap-kho\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:4300/api/ycsx/{{ycsx_id}}/congdoan/{{phancong_gc_id}}/xuat-kho",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4300",
+									"path": [
+										"ycsx",
+										"{{ycsx_id}}",
+										"congdoan",
+										"{{phancong_gc_id}}",
+										"xuat-kho"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "3. Duyet phieu nhap \"kho-thanh-pham\"",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"phieu_ids\": [\n    \"{{pnk_new_id}}\"\n        \n  ],\n  \"vi_tri\": \"A1\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:4300/api/phieu-nghiep-vu/batch-duyet",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4300",
+									"path": [
+										"phieu-nghiep-vu",
+										"batch-duyet"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "khi co bcsl -> xuat sang \"kho-phe-pham\"",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const response = pm.response.json();\r",
+											"const data = response.data;\r",
+											"pm.collectionVariables.set(\"pnk_new_id\", data._id);"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "accept",
+										"value": "*/*"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"bcsl_ids\": [\n    \"{{bcsl_den_100_50_20_new_2_id}}\"\n  ],\n//   \"do_day_cua\": 10,\n  \"kho_nhan\": \"kho-phe-pham\",\n  \"ma_phieu\": \"PNK-{{$randomWords}}\",\n  \"thu_kho_id\": \"{{nhanVien_kcs_gc_4_id}}\",\n  \"loai_phieu\": \"nhap-kho\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:4300/api/ycsx/{{ycsx_id}}/congdoan/{{phancong_gc_id}}/xuat-kho",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4300",
+									"path": [
+										"ycsx",
+										"{{ycsx_id}}",
+										"congdoan",
+										"{{phancong_gc_id}}",
+										"xuat-kho"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "3. Duyet phieu nhap \"kho-phe-pham\"",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"phieu_ids\": [\n    \"{{pnk_new_id}}\"\n        \n  ],\n  \"vi_tri\": \"A1\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:4300/api/phieu-nghiep-vu/batch-duyet",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4300",
+									"path": [
+										"phieu-nghiep-vu",
+										"batch-duyet"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "khi co bcsl -> chuyen tiep -> cho kcs buoc tiep theo duyet Copy",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const response = pm.response.json();\r",
+											"const data = response.data;\r",
+											"pm.collectionVariables.set(\"pct_new_id\", data._id);"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "accept",
+										"value": "*/*"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"bcsl_ids\": [\n    \"{{bcsl_den_100_50_20_new_3_id}}\"\n  ],\n//   \"do_day_cua\": 10,\n  \"nextCongDoan\": \"dg\",\n  \"ma_phieu\": \"PCT-{{$randomWords}}\",\n  \"kcs_nhan_id\": \"{{nhanVien_kcs_gc_4_id}}\",\n  \"loai_phieu\": \"chuyen-tiep\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:4300/api/ycsx/{{ycsx_id}}/congdoan/{{phancong_gc_id}}/xuat-kho",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4300",
+									"path": [
+										"ycsx",
+										"{{ycsx_id}}",
+										"congdoan",
+										"{{phancong_gc_id}}",
+										"xuat-kho"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "kcs duyet phieu chuyen tiep Copy",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const response = pm.response.json();\r",
+											"const data = response.data[0];\r",
+											"const bcsl_ids = data.bcsl_ids[0];\r",
+											"pm.collectionVariables.set(\"bcsl_new_id\", bcsl_ids._id);"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "accept",
+										"value": "*/*"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"pnv_ids\": [\n    \"{{pct_new_id}}\"\n  ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:4300/api/ycsx/{{ycsx_id}}/congdoan/{{phancong_dg_id}}/duyet-chuyen-tiep",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4300",
+									"path": [
+										"ycsx",
+										"{{ycsx_id}}",
+										"congdoan",
+										"{{phancong_dg_id}}",
+										"duyet-chuyen-tiep"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "dong goi",
+					"item": [
+						{
+							"name": "2. filter danh sach bcsl Copy 2",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const response = pm.response.json();\r",
+											"const data = response.data;\r",
+											"for (let i = 0; i < data.length; i++) {\r",
+											"    pm.collectionVariables.set(`bcsl_${data[i].kho}_${data[i].trang_thai}_${i}_id`, data[i]._id);\r",
+											"    pm.collectionVariables.set(\"bcsl_new_id\", data[i]._id);\r",
+											"}"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "accept",
+										"value": "*/*"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:4300/api/bao-cao-san-luong/filter?trang_thai=imported&kho=kho-slap&ycsx_id={{ycsx_id}}",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4300",
+									"path": [
+										"bao-cao-san-luong",
+										"filter"
+									],
+									"query": [
+										{
+											"key": "dai",
+											"value": "100",
+											"disabled": true
+										},
+										{
+											"key": "rong",
+											"value": "50",
+											"disabled": true
+										},
+										{
+											"key": "day",
+											"value": "20",
+											"disabled": true
+										},
+										{
+											"key": "vi_tri",
+											"value": "A1",
+											"disabled": true
+										},
+										{
+											"key": "trang_thai",
+											"value": "imported"
+										},
+										{
+											"key": "kho",
+											"value": "kho-slap"
+										},
+										{
+											"key": "ycsc_id",
+											"value": "507f1f77bcf86cd799439011",
+											"disabled": true
+										},
+										{
+											"key": "ycsx_id",
+											"value": "{{ycsx_id}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "nhap nguyen lieu",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const responseBody = pm.response.json();\r",
+											"pm.collectionVariables.set(\"phieu_nhap_nguyen_lieu_bo_new_id\", responseBody.data._id);"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "accept",
+										"value": "*/*"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"bcsl_ids\": [\n    \"{{bcsl_kho-slap_imported_0_id}}\"\n  ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:4300/api/ycsx/{{ycsx_id}}/congdoan/{{phancong_dg_id}}/nhap-nguyen-lieu",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4300",
+									"path": [
+										"ycsx",
+										"{{ycsx_id}}",
+										"congdoan",
+										"{{phancong_dg_id}}",
+										"nhap-nguyen-lieu"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Duyet pnv - nhap kho bo Copy",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"phieu_ids\": [\n        \"{{phieu_nhap_nguyen_lieu_bo_new_id}}\"\n    ]\n}   ",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:4300/api/phieu-nghiep-vu/batch-duyet",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4300",
+									"path": [
+										"phieu-nghiep-vu",
+										"batch-duyet"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Tao bcsl",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "accept",
+										"value": "*/*"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"ma_da\": \"DA-{{$randomWords}}\",\n  \"mau_da\": \"den\",\n//   \"parent_id\": \"{{bcsl_new_id}}\",\n  \"parent_id\": \"68bd5a91fdab98e00d889e7b\",\n  \"quy_cach\": {\n    \"dai\": 100,\n    \"rong\": 50,\n    \"day\": 20,\n    \"so_luong\": 1,\n    \"dvt_do_luong\": \"m\",\n    \"dvt_quy_cach\": \"vien\"\n  }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:4300/api/ycsx/{{ycsx_id}}/congdoan/{{phancong_dg_id}}/bao-cao-san-luong",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4300",
+									"path": [
+										"ycsx",
+										"{{ycsx_id}}",
+										"congdoan",
+										"{{phancong_dg_id}}",
+										"bao-cao-san-luong"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "2. filter danh sach bcsl Copy",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const response = pm.response.json();\r",
+											"const data = response.data;\r",
+											"for (let i = 0; i < data.length; i++) {\r",
+											"    pm.collectionVariables.set(`bcsl_${data[i].mau_da}_${data[i].quy_cach.dai}_${data[i].quy_cach.rong}_${data[i].quy_cach.day}_${data[i].trang_thai}_${i}_id`, data[i]._id);\r",
+											"}"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "accept",
+										"value": "*/*"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:4300/api/bao-cao-san-luong/filter?trang_thai=new&ycsx_id={{ycsx_id}}",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4300",
+									"path": [
+										"bao-cao-san-luong",
+										"filter"
+									],
+									"query": [
+										{
+											"key": "dai",
+											"value": "100",
+											"disabled": true
+										},
+										{
+											"key": "rong",
+											"value": "50",
+											"disabled": true
+										},
+										{
+											"key": "day",
+											"value": "20",
+											"disabled": true
+										},
+										{
+											"key": "vi_tri",
+											"value": "A1",
+											"disabled": true
+										},
+										{
+											"key": "trang_thai",
+											"value": "new"
+										},
+										{
+											"key": "kho",
+											"value": "kho-block",
+											"disabled": true
+										},
+										{
+											"key": "ycsc_id",
+											"value": "507f1f77bcf86cd799439011",
+											"disabled": true
+										},
+										{
+											"key": "ycsx_id",
+											"value": "{{ycsx_id}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Duyet bcsl Copy",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "accept",
+										"value": "*/*"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"bcsl_ids\": [\n    \"{{bcsl_den_100_50_20_new_0_id}}\",\n    \"{{bcsl_den_100_50_20_new_1_id}}\",\n    \"{{bcsl_den_100_50_20_new_2_id}}\",\n    \"{{bcsl_den_100_50_20_new_3_id}}\"\n  ],\n  \"trang_thai\": \"approved\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:4300/api/ycsx/{{ycsx_id}}/congdoan/{{phancong_gc_id}}/bao-cao-san-luong",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4300",
+									"path": [
+										"ycsx",
+										"{{ycsx_id}}",
+										"congdoan",
+										"{{phancong_gc_id}}",
+										"bao-cao-san-luong"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Reject bcsl Copy",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "accept",
+										"value": "*/*"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"bcsl_ids\": [\n    \"{{bcsl_den_100_50_20_new_4_id}}\"\n  ],\n  \"reason\": \"ko du chat luong\",\n  \"trang_thai\": \"rejected\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:4300/api/ycsx/{{ycsx_id}}/congdoan/{{phancong_gc_id}}/bao-cao-san-luong",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4300",
+									"path": [
+										"ycsx",
+										"{{ycsx_id}}",
+										"congdoan",
+										"{{phancong_gc_id}}",
+										"bao-cao-san-luong"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "khi co bcsl -> xuat sang \"kho-thanh-pham\" - theo don hang",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const response = pm.response.json();\r",
+											"const data = response.data;\r",
+											"pm.collectionVariables.set(\"pnk_new_id\", data._id);"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "accept",
+										"value": "*/*"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"bcsl_ids\": [\n        \"{{bcsl_den_100_50_20_new_0_id}}\"\n    ],\n    //   \"do_day_cua\": 10,\n    \"theoDonHang\": true,\n    \"kho_nhan\": \"kho-thanh-pham\",\n    \"ma_phieu\": \"PNK-{{$randomWords}}\",\n    \"thu_kho_id\": \"{{nhanVien_kcs_gc_4_id}}\",\n    \"loai_phieu\": \"nhap-kho\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:4300/api/ycsx/{{ycsx_id}}/congdoan/{{phancong_dg_id}}/xuat-kho",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4300",
+									"path": [
+										"ycsx",
+										"{{ycsx_id}}",
+										"congdoan",
+										"{{phancong_dg_id}}",
+										"xuat-kho"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "3. Duyet phieu nhap \"kho-thanh-pham\"",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"phieu_ids\": [\n    \"{{pnk_new_id}}\"\n        \n  ],\n  \"vi_tri\": \"A1\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:4300/api/phieu-nghiep-vu/batch-duyet",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4300",
+									"path": [
+										"phieu-nghiep-vu",
+										"batch-duyet"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "khi co bcsl -> xuat sang \"kho-thanh-pham\" - ko theo don hang",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const response = pm.response.json();\r",
+											"const data = response.data;\r",
+											"pm.collectionVariables.set(\"pnk_new_id\", data._id);"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "accept",
+										"value": "*/*"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"bcsl_ids\": [\n        \"{{bcsl_den_100_50_20_new_1_id}}\"\n    ],\n    //   \"do_day_cua\": 10,\n    \"theoDonHang\": false,\n    \"kho_nhan\": \"kho-thanh-pham\",\n    \"ma_phieu\": \"PNK-{{$randomWords}}\",\n    \"thu_kho_id\": \"{{nhanVien_kcs_gc_4_id}}\",\n    \"loai_phieu\": \"nhap-kho\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:4300/api/ycsx/{{ycsx_id}}/congdoan/{{phancong_dg_id}}/xuat-kho",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4300",
+									"path": [
+										"ycsx",
+										"{{ycsx_id}}",
+										"congdoan",
+										"{{phancong_dg_id}}",
+										"xuat-kho"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "3. Duyet phieu nhap \"kho-thanh-pham\" Copy",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"phieu_ids\": [\n    \"{{pnk_new_id}}\"\n        \n  ],\n  \"vi_tri\": \"A1\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:4300/api/phieu-nghiep-vu/batch-duyet",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4300",
+									"path": [
+										"phieu-nghiep-vu",
+										"batch-duyet"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "khi co bcsl -> xuat sang \"kho-phe-pham\"",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const response = pm.response.json();\r",
+											"const data = response.data;\r",
+											"pm.collectionVariables.set(\"pnk_new_id\", data._id);"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "accept",
+										"value": "*/*"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"bcsl_ids\": [\n    \"{{bcsl_den_100_50_20_new_2_id}}\"\n  ],\n//   \"do_day_cua\": 10,\n  \"kho_nhan\": \"kho-phe-pham\",\n  \"ma_phieu\": \"PNK-{{$randomWords}}\",\n  \"thu_kho_id\": \"{{nhanVien_kcs_gc_4_id}}\",\n  \"loai_phieu\": \"nhap-kho\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:4300/api/ycsx/{{ycsx_id}}/congdoan/{{phancong_gc_id}}/xuat-kho",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4300",
+									"path": [
+										"ycsx",
+										"{{ycsx_id}}",
+										"congdoan",
+										"{{phancong_gc_id}}",
+										"xuat-kho"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "3. Duyet phieu nhap \"kho-phe-pham\"",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"phieu_ids\": [\n    \"{{pnk_new_id}}\"\n        \n  ],\n  \"vi_tri\": \"A1\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:4300/api/phieu-nghiep-vu/batch-duyet",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4300",
+									"path": [
+										"phieu-nghiep-vu",
+										"batch-duyet"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "khi co bcsl -> chuyen tiep -> cho kcs buoc tiep theo duyet Copy",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const response = pm.response.json();\r",
+											"const data = response.data;\r",
+											"pm.collectionVariables.set(\"pct_new_id\", data._id);"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "accept",
+										"value": "*/*"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"bcsl_ids\": [\n    \"{{bcsl_den_100_50_20_new_3_id}}\"\n  ],\n//   \"do_day_cua\": 10,\n  \"nextCongDoan\": \"dg\",\n  \"ma_phieu\": \"PCT-{{$randomWords}}\",\n  \"kcs_nhan_id\": \"{{nhanVien_kcs_gc_4_id}}\",\n  \"loai_phieu\": \"chuyen-tiep\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:4300/api/ycsx/{{ycsx_id}}/congdoan/{{phancong_gc_id}}/xuat-kho",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4300",
+									"path": [
+										"ycsx",
+										"{{ycsx_id}}",
+										"congdoan",
+										"{{phancong_gc_id}}",
+										"xuat-kho"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "kcs duyet phieu chuyen tiep Copy",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const response = pm.response.json();\r",
+											"const data = response.data[0];\r",
+											"const bcsl_ids = data.bcsl_ids[0];\r",
+											"pm.collectionVariables.set(\"bcsl_new_id\", bcsl_ids._id);"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "accept",
+										"value": "*/*"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"pnv_ids\": [\n    \"{{pct_new_id}}\"\n  ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:4300/api/ycsx/{{ycsx_id}}/congdoan/{{phancong_dg_id}}/duyet-chuyen-tiep",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4300",
+									"path": [
+										"ycsx",
+										"{{ycsx_id}}",
+										"congdoan",
+										"{{phancong_dg_id}}",
+										"duyet-chuyen-tiep"
+									]
+								}
+							},
+							"response": []
+						}
+					]
 				}
 			]
 		}
@@ -2397,27 +5915,43 @@
 			"value": ""
 		},
 		{
-			"key": "nhanVien_tksx_cqc_0_id",
+			"key": "nhanVien_tpsx_cqc_0_id",
 			"value": ""
 		},
 		{
-			"key": "nhanVien_kcs_sc_1_id",
+			"key": "nhanVien_qd_htm_1_id",
 			"value": ""
 		},
 		{
-			"key": "nhanVien_nvkd_bo_2_id",
+			"key": "nhanVien_qd_sc_2_id",
 			"value": ""
 		},
 		{
-			"key": "nhanVien_qd_dg_3_id",
+			"key": "nhanVien_tpsx_cua_3_id",
 			"value": ""
 		},
 		{
-			"key": "nhanVien_kcs_gc_4_id",
+			"key": "nhanVien_nvkd_sc_4_id",
 			"value": ""
 		},
 		{
-			"key": "nhanVien_tk_gc_5_id",
+			"key": "nhanVien_tnsx_bo_5_id",
+			"value": ""
+		},
+		{
+			"key": "nhanVien_tk_cqc_6_id",
+			"value": ""
+		},
+		{
+			"key": "nhanVien_tnsx_cqc_7_id",
+			"value": ""
+		},
+		{
+			"key": "nhanVien_qd_gc_8_id",
+			"value": ""
+		},
+		{
+			"key": "nhanVien_qd_gc_9_id",
 			"value": ""
 		},
 		{
@@ -2433,43 +5967,19 @@
 			"value": ""
 		},
 		{
-			"key": "ycsx_new_0_id",
+			"key": "ycsc_randdom",
 			"value": ""
 		},
 		{
-			"key": "ycsx_id",
+			"key": "ycsc_new_id",
 			"value": ""
 		},
 		{
-			"key": "phancong_bo_id",
+			"key": "ycsc_undefined_0_id",
 			"value": ""
 		},
 		{
-			"key": "phancong_gc_id",
-			"value": ""
-		},
-		{
-			"key": "phancong_cua_id",
-			"value": ""
-		},
-		{
-			"key": "phancong_cqc_id",
-			"value": ""
-		},
-		{
-			"key": "phancong_htm_id",
-			"value": ""
-		},
-		{
-			"key": "phancong_dg_id",
-			"value": ""
-		},
-		{
-			"key": "phieu_nhap_nguyen_lieu_bo_new_id",
-			"value": ""
-		},
-		{
-			"key": "ycsx_new_Id",
+			"key": "pnv_xk_0_0_id",
 			"value": ""
 		},
 		{
@@ -2481,60 +5991,23 @@
 			"value": ""
 		},
 		{
-			"key": "bcsl_den_100_50_20_new_2_id",
+			"key": "ycsc_undefined_1_id",
 			"value": ""
 		},
 		{
-			"key": "pvn_nhap-kho_kho-phoi_0_id",
+			"key": "pnv_xk_1_0_id",
 			"value": ""
 		},
 		{
-			"key": "pvn_chuyen-tiep_undefined_1_id",
+			"key": "bcsl_by_ycsc_0_id",
 			"value": ""
 		},
 		{
-			"key": "pnk_new_id",
+			"key": "pnk_random",
 			"value": ""
 		},
 		{
-			"key": "pct_new_id",
-			"value": "",
-			"type": "string"
-		},
-		{
-			"key": "bcsl_den_100_50_20_exported_0_id",
-			"value": ""
-		},
-		{
-			"key": "bcsl_den_100_50_20_forwarded_1_id",
-			"value": ""
-		},
-		{
-			"key": "bcsl_den_100_50_20_rejected_2_id",
-			"value": ""
-		},
-		{
-			"key": "bcsl_den_100_50_20_new_3_id",
-			"value": ""
-		},
-		{
-			"key": "bcsl_den_100_50_20_new_4_id",
-			"value": ""
-		},
-		{
-			"key": "bcsl_den_100_50_20_new_5_id",
-			"value": ""
-		},
-		{
-			"key": "bcsl_den_100_50_20_imported_0_id",
-			"value": ""
-		},
-		{
-			"key": "bcsl_kho-slap_imported_0_id",
-			"value": ""
-		},
-		{
-			"key": "don_hang_new_id",
+			"key": "phieu_nhap_kho_phoi_newest",
 			"value": ""
 		}
 	]

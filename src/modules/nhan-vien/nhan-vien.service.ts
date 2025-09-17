@@ -18,7 +18,7 @@ export class NhanVienService extends BaseService<NhanVienDocument> {
    * Tìm nhân viên theo vai trò
    */
   async findByVaiTro(vaiTro: string): Promise<NhanVienDocument[]> {
-    return await this.model.find({ vai_tro: vaiTro }).exec();
+    return await this.model.find({ vaiTro: vaiTro }).exec();
   }
 
   /**
@@ -44,8 +44,8 @@ export class NhanVienService extends BaseService<NhanVienDocument> {
     trangThai: boolean,
   ): Promise<NhanVienDocument> {
     return await this.update(id, {
-      trang_thai: trangThai,
-      ngay_cap_nhat: new Date(),
+      trangThai: trangThai,
+      ngayCapNhat: new Date(),
     });
   }
 
@@ -53,7 +53,7 @@ export class NhanVienService extends BaseService<NhanVienDocument> {
    * Lấy danh sách nhân viên đang hoạt động
    */
   async findActive(): Promise<NhanVienDocument[]> {
-    return await this.model.find({ trang_thai: true }).exec();
+    return await this.model.find({ trangThai: true }).exec();
   }
 
   /**
@@ -65,9 +65,9 @@ export class NhanVienService extends BaseService<NhanVienDocument> {
   ): Promise<NhanVienDocument[]> {
     return await this.model
       .find({
-        vai_tro: vaiTro,
+        vaiTro: vaiTro,
         cong_doan: congDoan,
-        trang_thai: true,
+        trangThai: true,
       })
       .exec();
   }
@@ -108,7 +108,7 @@ export class NhanVienService extends BaseService<NhanVienDocument> {
 
     return await this.update(id, {
       password: hashedPassword,
-      ngay_cap_nhat: new Date(),
+      ngayCapNhat: new Date(),
     });
   }
 

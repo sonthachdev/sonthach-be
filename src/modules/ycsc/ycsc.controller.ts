@@ -34,7 +34,7 @@ import {
 } from './dto/ycsc.dto';
 
 @ApiTags('ycsc')
-@Controller('ycsc')
+@Controller('api/ycsc')
 export class YCSCController extends BaseController<YCSCDocument> {
   constructor(private readonly ycscService: YCSCService) {
     super(ycscService);
@@ -790,7 +790,7 @@ export class YCSCController extends BaseController<YCSCDocument> {
   @ApiInternalServerErrorResponse({ description: 'Lỗi server' })
   async filterYCSC(
     @Query() filter: FilterYCSCDto,
-  ): Promise<CustomApiResponse<YCSCDocument[]>> {
+  ): Promise<CustomApiResponse<any[]>> {
     try {
       const data = await this.ycscService.filterYCSC(filter);
       return {
@@ -996,8 +996,8 @@ export class YCSCController extends BaseController<YCSCDocument> {
   async getDetailYCSC(@Param('id') id: string): Promise<
     CustomApiResponse<{
       ycsc: YCSCDocument;
-      phieu_nghiep_vu: PhieuNghiepVuDocument[];
-      bao_cao_san_luong: BaoCaoSanLuongDocument[];
+      phieuNghiepVu: PhieuNghiepVuDocument[];
+      baoCaoSanLuong: BaoCaoSanLuongDocument[];
     }>
   > {
     try {

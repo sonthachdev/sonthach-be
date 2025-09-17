@@ -37,7 +37,7 @@ import {
 } from './dto/ycsx.bcsl';
 
 @ApiTags('ycsx')
-@Controller('ycsx')
+@Controller('api/ycsx')
 export class YCSXController extends BaseController<YCSXDocument> {
   constructor(private readonly ycsxService: YCSXService) {
     super(ycsxService);

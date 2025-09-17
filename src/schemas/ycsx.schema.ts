@@ -7,59 +7,63 @@ export type YCSXDocument = YCSX & Document;
 @Schema({ collection: 'ycsx', timestamps: false })
 export class YCSX {
   @Prop({ required: true, unique: true })
-  ma_phieu: string;
+  maPhieu: string;
 
   @Prop({
     type: MongooseSchema.Types.ObjectId,
     ref: 'nhan_vien',
     required: true,
   })
-  nguoi_tao_id: MongooseSchema.Types.ObjectId;
+  nguoiTao: MongooseSchema.Types.ObjectId;
 
   @Prop({ type: Date, required: true })
-  ngay_tao: Date;
+  ngayTao: Date;
 
   @Prop({
     type: MongooseSchema.Types.ObjectId,
     ref: 'nhan_vien',
     required: true,
   })
-  nguoi_duyet_id: MongooseSchema.Types.ObjectId;
+  nguoiDuyet: MongooseSchema.Types.ObjectId;
 
   @Prop({ type: Date, required: false })
-  ngay_duyet?: Date;
+  ngayDuyet?: Date;
 
   @Prop({ type: Date, required: false })
-  ngay_hoan_thanh?: Date;
+  ngayHoanThanh?: Date;
 
   @Prop({ required: true, enum: TrangThai })
-  trang_thai: TrangThai;
+  trangThai: TrangThai;
 
   @Prop({ required: true })
-  ma_hop_dong: string;
+  maHopDong: string;
 
   @Prop({ required: true })
-  ten_khach_hang: string;
-
-  @Prop({
-    type: MongooseSchema.Types.ObjectId,
-    ref: 'nhan_vien',
-    required: false,
-  })
-  nguoi_xu_ly_id?: MongooseSchema.Types.ObjectId;
-
-  @Prop({ type: Date, required: false })
-  ngay_xu_ly?: Date;
+  tenKhachHang: string;
 
   @Prop({
     type: [MongooseSchema.Types.ObjectId],
     ref: 'hang_muc',
     required: true,
   })
-  hang_muc_ids: MongooseSchema.Types.ObjectId[];
+  hangMuc: MongooseSchema.Types.ObjectId[];
 
-  @Prop({ type: Date, default: Date.now })
-  ngay_cap_nhat: Date;
+  @Prop({
+    type: MongooseSchema.Types.ObjectId,
+    ref: 'nhan_vien',
+    required: false,
+  })
+  nguoiXuLy: MongooseSchema.Types.ObjectId;
+
+  @Prop({ type: Date, required: false })
+  ngayXuLy?: Date;
+
+  @Prop({
+    type: [MongooseSchema.Types.ObjectId],
+    ref: 'phan_cong',
+    required: true,
+  })
+  phanCong: MongooseSchema.Types.ObjectId[];
 }
 
 export const YCSXSchema = SchemaFactory.createForClass(YCSX);

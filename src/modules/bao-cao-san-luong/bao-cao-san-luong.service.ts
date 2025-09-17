@@ -47,11 +47,11 @@ export class BaoCaoSanLuongService extends BaseService<BaoCaoSanLuongDocument> {
     }
 
     if (dto.trang_thai !== undefined) {
-      filter.trang_thai = dto.trang_thai;
+      filter.trangThai = dto.trang_thai;
     }
 
     if (dto.vi_tri !== undefined) {
-      filter.vi_tri = dto.vi_tri;
+      filter.viTri = dto.vi_tri;
     }
 
     if (dto.kho !== undefined) {
@@ -155,15 +155,15 @@ export class BaoCaoSanLuongService extends BaseService<BaoCaoSanLuongDocument> {
     }
 
     // Kiểm tra trạng thái hiện tại phải là mới tạo
-    if (baoCao.trang_thai !== BaoCaoState.NEW) {
+    if (baoCao.trangThai !== BaoCaoState.NEW) {
       throw new BadRequestException('Báo cáo không ở trạng thái mới tạo');
     }
 
     // Cập nhật thông tin duyệt
     const updateData: UpdateQuery<BaoCaoSanLuongDocument> = {
-      trang_thai: BaoCaoState.APPROVED,
-      ngay_duyet: new Date(),
-      ngay_cap_nhat: new Date(),
+      trangThai: BaoCaoState.APPROVED,
+      ngayDuyet: new Date(),
+      ngayCapNhat: new Date(),
     };
 
     // Lưu ghi chú duyệt
@@ -187,15 +187,15 @@ export class BaoCaoSanLuongService extends BaseService<BaoCaoSanLuongDocument> {
     }
 
     // Kiểm tra trạng thái hiện tại phải là mới tạo
-    if (baoCao.trang_thai !== BaoCaoState.NEW) {
+    if (baoCao.trangThai !== BaoCaoState.NEW) {
       throw new BadRequestException('Báo cáo không ở trạng thái mới tạo');
     }
 
     // Cập nhật thông tin từ chối
     const updateData: UpdateQuery<BaoCaoSanLuongDocument> = {
-      trang_thai: BaoCaoState.REJECTED,
+      trangThai: BaoCaoState.REJECTED,
       ngay_tu_choi: new Date(),
-      ngay_cap_nhat: new Date(),
+      ngayCapNhat: new Date(),
       nguoi_tu_choi_id: rejectDto.nguoi_tu_choi_id,
       ly_do_tu_choi: rejectDto.ly_do_tu_choi,
     };
@@ -222,7 +222,7 @@ export class BaoCaoSanLuongService extends BaseService<BaoCaoSanLuongDocument> {
     }
 
     // Kiểm tra trạng thái phải là đã duyệt
-    if (baoCao.trang_thai !== BaoCaoState.APPROVED) {
+    if (baoCao.trangThai !== BaoCaoState.APPROVED) {
       throw new BadRequestException(
         'Báo cáo phải được duyệt trước khi nhập kho',
       );
@@ -230,12 +230,12 @@ export class BaoCaoSanLuongService extends BaseService<BaoCaoSanLuongDocument> {
 
     // Cập nhật thông tin nhập kho
     const updateData: UpdateQuery<BaoCaoSanLuongDocument> = {
-      trang_thai: BaoCaoState.IMPORTED, // Đã nhập kho (thành phôi)
+      trangThai: BaoCaoState.IMPORTED, // Đã nhập kho (thành phôi)
       kho: importDto.kho,
-      vi_tri: importDto.vi_tri,
+      viTri: importDto.vi_tri,
       ngay_nhap_kho: new Date(),
       nguoi_nhap_kho_id: importDto.nguoi_thuc_hien_id,
-      ngay_cap_nhat: new Date(),
+      ngayCapNhat: new Date(),
     };
 
     // Lưu ghi chú nhập kho
@@ -252,7 +252,7 @@ export class BaoCaoSanLuongService extends BaseService<BaoCaoSanLuongDocument> {
   async findPendingApproval(): Promise<BaoCaoSanLuongDocument[]> {
     return await this.baoCaoSanLuongModel
       .find({
-        trang_thai: BaoCaoState.NEW,
+        trangThai: BaoCaoState.NEW,
       })
       .populate('tnsx_id', 'ten vai_tro')
       .populate('kcs_id', 'ten vai_tro');
@@ -264,7 +264,7 @@ export class BaoCaoSanLuongService extends BaseService<BaoCaoSanLuongDocument> {
   async findApproved(): Promise<BaoCaoSanLuongDocument[]> {
     return await this.baoCaoSanLuongModel
       .find({
-        trang_thai: BaoCaoState.APPROVED,
+        trangThai: BaoCaoState.APPROVED,
       })
       .populate('tnsx_id', 'ten vai_tro')
       .populate('kcs_id', 'ten vai_tro');
@@ -276,7 +276,7 @@ export class BaoCaoSanLuongService extends BaseService<BaoCaoSanLuongDocument> {
   async findImported(): Promise<BaoCaoSanLuongDocument[]> {
     return await this.baoCaoSanLuongModel
       .find({
-        trang_thai: BaoCaoState.IMPORTED,
+        trangThai: BaoCaoState.IMPORTED,
       })
       .populate('tnsx_id', 'ten vai_tro')
       .populate('kcs_id', 'ten vai_tro');
@@ -288,7 +288,7 @@ export class BaoCaoSanLuongService extends BaseService<BaoCaoSanLuongDocument> {
   async findRejected(): Promise<BaoCaoSanLuongDocument[]> {
     return await this.baoCaoSanLuongModel
       .find({
-        trang_thai: BaoCaoState.REJECTED,
+        trangThai: BaoCaoState.REJECTED,
       })
       .populate('tnsx_id', 'ten vai_tro')
       .populate('kcs_id', 'ten vai_tro');
@@ -306,16 +306,16 @@ export class BaoCaoSanLuongService extends BaseService<BaoCaoSanLuongDocument> {
   }> {
     const [newCount, approved, rejected, imported, total] = await Promise.all([
       this.baoCaoSanLuongModel.countDocuments({
-        trang_thai: BaoCaoState.NEW,
+        trangThai: BaoCaoState.NEW,
       }),
       this.baoCaoSanLuongModel.countDocuments({
-        trang_thai: BaoCaoState.APPROVED,
+        trangThai: BaoCaoState.APPROVED,
       }),
       this.baoCaoSanLuongModel.countDocuments({
-        trang_thai: BaoCaoState.REJECTED,
+        trangThai: BaoCaoState.REJECTED,
       }),
       this.baoCaoSanLuongModel.countDocuments({
-        trang_thai: BaoCaoState.IMPORTED,
+        trangThai: BaoCaoState.IMPORTED,
       }),
       this.baoCaoSanLuongModel.countDocuments({}),
     ]);
@@ -335,7 +335,7 @@ export class BaoCaoSanLuongService extends BaseService<BaoCaoSanLuongDocument> {
 
     await this.baoCaoSanLuongModel.updateMany(
       { _id: { $in: updateDto.bcsl_ids } },
-      { pallet: updateDto.pallet, ngay_cap_nhat: new Date() },
+      { pallet: updateDto.pallet, ngayCapNhat: new Date() },
     );
 
     const baoCaoSanLuongUpdated = await this.baoCaoSanLuongModel.find({
@@ -373,7 +373,7 @@ export class BaoCaoSanLuongService extends BaseService<BaoCaoSanLuongDocument> {
 
     await this.baoCaoSanLuongModel.updateMany(
       { _id: { $in: xuatHoaDonDto.bcsl_ids } },
-      { trang_thai: BaoCaoState.RESERVED, ngay_cap_nhat: new Date() },
+      { trangThai: BaoCaoState.RESERVED, ngayCapNhat: new Date() },
     );
 
     const phieuNghiepVuUpdated = await phieuNghiepVuModel

@@ -8,6 +8,7 @@ import { PhanCong, PhanCongSchema } from '../../schemas';
   imports: [
     MongooseModule.forFeature([
       { name: PhanCong.name, schema: PhanCongSchema },
+      { name: 'phan_cong', schema: PhanCongSchema },
     ]),
   ],
   controllers: [PhanCongController],

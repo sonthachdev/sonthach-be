@@ -6,4 +6,5 @@ export enum VaiTro {
   KCS = 'kcs', // Kiểm soát chất lượng
   TK = 'tk', // Thủ kho
   QD = 'qd', // Quản đốc
+  NV = 'nv', // Nhân viên
 }

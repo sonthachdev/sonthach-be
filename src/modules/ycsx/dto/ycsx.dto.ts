@@ -25,66 +25,66 @@ export class CreateYCSXDto {
     example: 'YCSX-2024-001',
   })
   @IsString()
-  ma_phieu: string;
+  maPhieu: string;
 
   @ApiProperty({
     description: 'ID người tạo yêu cầu',
     example: '507f1f77bcf86cd799439011',
   })
   @IsMongoId()
-  nguoi_tao_id: string;
+  nguoiTaoId: string;
 
   @ApiProperty({
     description: 'ID người duyệt yêu cầu - quan đốc',
     example: '507f1f77bcf86cd799439011',
   })
   @IsMongoId()
-  nguoi_duyet_id: string;
+  nguoiDuyetId: string;
 
   @ApiProperty({
     description: 'ID thư ký',
     example: '507f1f77bcf86cd799439011',
   })
   @IsMongoId()
-  thu_ky_id: string;
+  thuKyId: string;
 
   @ApiProperty({
     description: 'Mã hợp đồng',
     example: 'HD-2024-001',
   })
   @IsString()
-  ma_hop_dong: string;
+  maHopDong: string;
 
   @ApiProperty({
     description: 'Tên khách hàng',
     example: 'Công ty TNHH ABC',
   })
   @IsString()
-  ten_khach_hang: string;
+  tenKhachHang: string;
 
   @ApiProperty({
     description: 'Danh sách ID hạng mục sản xuất',
     example: [
       {
         mota: 'Đá granite',
-        group_id: '507f1f77bcf86cd799439011',
+        groupId: '507f1f77bcf86cd799439011',
         ghichu: 'Đá granite',
-        mau_da: MauDa.DEN,
-        mat_da: MatDa.BONG,
-        gia_cong: GiaCong.KHO_TAY,
-        quy_cach: {
+        mauDa: MauDa.DEN,
+        matDa: MatDa.BONG,
+        giaCong: GiaCong.KHO_TAY,
+        quyCach: {
           dai: 100,
           rong: 50,
           day: 20,
-          so_luong: 1,
-          dvt_do_luong: DonViDoLuong.MET,
-          dvt_quy_cach: DonViQuyCach.VIEN,
+          soLuong: 1,
+          dvtDoLuong: DonViDoLuong.MET,
+          dvtQuyCach: DonViQuyCach.VIEN,
         },
       },
     ],
   })
   @IsArray()
-  hang_muc: HangMucCreateYCSXDto[];
+  hangMuc: HangMucCreateYCSXDto[];
 }
 
 export class HangMucCreateYCSXDto {
@@ -101,7 +101,7 @@ export class HangMucCreateYCSXDto {
     example: MauDa.DEN,
   })
   @IsEnum(MauDa)
-  mau_da: MauDa;
+  mauDa: MauDa;
 
   @ApiProperty({
     description: 'Mặt đá',
@@ -109,7 +109,7 @@ export class HangMucCreateYCSXDto {
     example: MatDa.BONG,
   })
   @IsEnum(MatDa)
-  mat_da: MatDa;
+  matDa: MatDa;
 
   @ApiProperty({
     description: 'Gia công',
@@ -117,7 +117,7 @@ export class HangMucCreateYCSXDto {
     example: GiaCong.KHO_TAY,
   })
   @IsEnum(GiaCong)
-  gia_cong: GiaCong;
+  giaCong: GiaCong;
 
   @ApiProperty({
     description: 'Quy cách',
@@ -125,12 +125,12 @@ export class HangMucCreateYCSXDto {
       dai: 100,
       rong: 50,
       day: 20,
-      so_luong: 1,
-      dvt_do_luong: DonViDoLuong.MET,
-      dvt_quy_cach: DonViQuyCach.VIEN,
+      soLuong: 1,
+      dvtDoLuong: DonViDoLuong.MET,
+      dvtQuyCach: DonViQuyCach.VIEN,
     },
   })
-  quy_cach: QuyCach;
+  quyCach: QuyCach;
 
   @ApiProperty({
     description: 'ID nhóm',
@@ -138,14 +138,14 @@ export class HangMucCreateYCSXDto {
   })
   @IsString()
   @IsOptional()
-  group_id: string;
+  groupId: string;
 
   @ApiProperty({
     description: 'Ghi chú',
     example: 'Cắt đá vát 2 mặt',
   })
   @IsString()
-  ghichu: string;
+  ghichu?: string;
 }
 
 export class FilterYCSXDto {
@@ -155,28 +155,28 @@ export class FilterYCSXDto {
     example: TrangThai.NEW,
   })
   @IsEnum(TrangThai)
-  trang_thai: TrangThai;
+  trangThai: TrangThai;
 
   @ApiProperty({
     description: 'Sắp xếp',
     example: '+ngay_tao',
   })
   @IsString()
-  sort: string;
+  sort?: string;
 
   @ApiProperty({
     description: 'Trang',
     example: 1,
   })
   @IsNumber()
-  page: number;
+  page?: number;
 
   @ApiProperty({
     description: 'Số lượng',
     example: 10,
   })
   @IsNumber()
-  limit: number;
+  limit?: number;
 }
 
 export class UpdateDeNghiSanXuatDto {
@@ -184,9 +184,9 @@ export class UpdateDeNghiSanXuatDto {
     description: 'Danh sách đề nghị sản xuất',
     example: [
       {
-        kcs_id: '507f1f77bcf86cd799439011',
-        tnsx_id: '507f1f77bcf86cd799439011',
-        cong_doan: CongDoan.BO,
+        kcsId: '507f1f77bcf86cd799439011',
+        tnsxId: '507f1f77bcf86cd799439011',
+        congDoan: CongDoan.BO,
       },
     ],
   })
@@ -200,14 +200,14 @@ export class UpdateDeNghiSanXuatItemDto {
     example: '507f1f77bcf86cd799439011',
   })
   @IsMongoId()
-  kcs_id: string;
+  kcsId: string;
 
   @ApiProperty({
     description: 'ID người TNSX',
     example: '507f1f77bcf86cd799439011',
   })
   @IsMongoId()
-  tnsx_id: string;
+  tnsxId: string;
 
   @ApiProperty({
     description: 'Công đoạn',
@@ -215,7 +215,7 @@ export class UpdateDeNghiSanXuatItemDto {
     example: CongDoan.BO,
   })
   @IsEnum(CongDoan)
-  cong_doan: CongDoan;
+  congDoan: CongDoan;
 }
 
 export class UpdateTrangThaiYCSXDto {
@@ -225,7 +225,7 @@ export class UpdateTrangThaiYCSXDto {
     example: TrangThai.PROCESSING,
   })
   @IsEnum(TrangThai)
-  trang_thai: TrangThai;
+  trangThai: TrangThai;
 }
 
 export class UpdateHangMucYCSXDto {
@@ -233,23 +233,23 @@ export class UpdateHangMucYCSXDto {
     description: 'Danh sách ID hạng mục sản xuất',
     example: {
       mota: 'Đá granite',
-      group_id: '507f1f77bcf86cd799439011',
+      groupId: '507f1f77bcf86cd799439011',
       ghichu: 'Đá granite',
-      mau_da: MauDa.DEN,
-      mat_da: MatDa.BONG,
-      gia_cong: GiaCong.KHO_TAY,
-      quy_cach: {
+      mauDa: MauDa.DEN,
+      matDa: MatDa.BONG,
+      giaCong: GiaCong.KHO_TAY,
+      quyCach: {
         dai: 100,
         rong: 50,
         day: 20,
-        so_luong: 1,
-        dvt_do_luong: DonViDoLuong.MET,
-        dvt_quy_cach: DonViQuyCach.VIEN,
+        soLuong: 1,
+        dvtDoLuong: DonViDoLuong.MET,
+        dvtQuyCach: DonViQuyCach.VIEN,
       },
     },
   })
   @IsObject()
-  hang_muc: HangMucCreateYCSXDto;
+  hangMuc: HangMucCreateYCSXDto;
 }
 
 export class CreateHangMucYCSXDto {
@@ -258,22 +258,22 @@ export class CreateHangMucYCSXDto {
     example: [
       {
         mota: 'Đá granite',
-        group_id: '507f1f77bcf86cd799439011',
+        groupId: '507f1f77bcf86cd799439011',
         ghichu: 'Đá granite',
-        mau_da: MauDa.DEN,
-        mat_da: MatDa.BONG,
-        gia_cong: GiaCong.KHO_TAY,
-        quy_cach: {
+        mauDa: MauDa.DEN,
+        matDa: MatDa.BONG,
+        giaCong: GiaCong.KHO_TAY,
+        quyCach: {
           dai: 100,
           rong: 50,
           day: 20,
-          so_luong: 1,
-          dvt_do_luong: DonViDoLuong.MET,
-          dvt_quy_cach: DonViQuyCach.VIEN,
+          soLuong: 1,
+          dvtDoLuong: DonViDoLuong.MET,
+          dvtQuyCach: DonViQuyCach.VIEN,
         },
       },
     ],
   })
   @IsArray()
-  hang_muc: HangMucCreateYCSXDto[];
+  hangMuc: HangMucCreateYCSXDto[];
 }

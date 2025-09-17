@@ -52,7 +52,7 @@ export interface CustomApiResponse<T> {
 }
 
 @ApiTags('base')
-@Controller()
+@Controller('api')
 export abstract class BaseController<T extends Document> {
   constructor(protected readonly baseService: BaseService<T>) {}
 

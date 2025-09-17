@@ -46,26 +46,44 @@ export class PhieuNghiepVuService extends BaseService<PhieuNghiepVuDocument> {
   ): Promise<PhieuNghiepVuDocument[]> {
     const filter: Record<string, unknown> = {};
     if (query.kho) filter.kho = query.kho;
-    if (query.trangThai) filter.trang_thai = query.trangThai;
+    if (query.trangThai) filter.trangThai = query.trangThai;
     if (query.currentCongDoan) filter.currentCongDoan = query.currentCongDoan;
-    if (query.loaiPhieu) filter.loai_phieu = query.loaiPhieu;
-    const { sort = 'ngay_tao:-1' } = query;
+    if (query.loaiPhieu) filter.loaiPhieu = query.loaiPhieu;
+    // sort format: field:order,field2:order2
+    const sort: Record<string, SortOrder> = {};
+
+    if (query.sort) {
+      // Parse multiple sort fields separated by comma
+      const sortPairs = query.sort.split(',');
+      for (const pair of sortPairs) {
+        const [field, order] = pair.split(':');
+        if (field && order) {
+          const sortOrder = order === '1' ? 1 : -1;
+          sort[field] = sortOrder as SortOrder;
+        }
+      }
+    }
+
+    // Default sort if no sort specified or parsing failed
+    if (Object.keys(sort).length === 0) {
+      sort.ngayTao = -1;
+    }
 
     return this.phieuNghiepVuModel
       .find(filter)
-      .populate({ path: 'bcsl_ids', model: BaoCaoSanLuong.name })
+      .populate({ path: 'bcsl', model: BaoCaoSanLuong.name })
       .populate({
-        path: 'nguoi_tao_id',
-        select: 'ten vai_tro',
+        path: 'nguoiTao',
+        select: 'ten vaiTro',
         model: 'NhanVien',
       })
       .populate({
-        path: 'nguoi_duyet_id',
-        select: 'ten vai_tro',
+        path: 'nguoiDuyet',
+        select: 'ten vaiTro',
         model: 'NhanVien',
       })
       .select(
-        '_id ma_phieu loai_phieu ycsc_id ycsx_id nguoi_tao_id ngay_tao nguoi_duyet_id ngay_duyet kho trang_thai bcsl_ids currentCongDoan next_cong_doan',
+        '_id maPhieu loaiPhieu ycscId ycsxId nguoiTao ngayTao nguoiDuyet ngayDuyet kho trangThai bcsl currentCongDoan nextCongDoan',
       )
       .sort(sort);
   }
@@ -122,13 +140,13 @@ export class PhieuNghiepVuService extends BaseService<PhieuNghiepVuDocument> {
     createDto: CreatePhieuNghiepVuDto,
   ): Promise<PhieuNghiepVuDocument> {
     // Kiểm tra loại phiếu phải là nhập kho
-    if (createDto.loai_phieu !== LoaiPhieu.NhapKho) {
+    if (createDto.loaiPhieu !== LoaiPhieu.NhapKho) {
       throw new BadRequestException('Chỉ có thể tạo phiếu nhập kho');
     }
 
     // Kiểm tra mã phiếu đã tồn tại
     const existingPhieu = await this.phieuNghiepVuModel.findOne({
-      ma_phieu: createDto.ma_phieu,
+      maPhieu: createDto.maPhieu,
     });
     if (existingPhieu) {
       throw new BadRequestException('Mã phiếu đã tồn tại');
@@ -138,7 +156,7 @@ export class PhieuNghiepVuService extends BaseService<PhieuNghiepVuDocument> {
     const newPhieu = new this.phieuNghiepVuModel({
       ...createDto,
       trang_thai: TrangThai.REVIEWED, // Chờ duyệt
-      ngay_tao: new Date(createDto.ngay_tao),
+      ngay_tao: new Date(createDto.ngayTao),
       ngay_cap_nhat: new Date(),
     });
 
@@ -158,12 +176,12 @@ export class PhieuNghiepVuService extends BaseService<PhieuNghiepVuDocument> {
     }
 
     // Kiểm tra loại phiếu phải là nhập kho
-    if (phieu.loai_phieu !== LoaiPhieu.NhapKho) {
+    if (phieu.loaiPhieu !== LoaiPhieu.NhapKho) {
       throw new BadRequestException('Chỉ có thể duyệt phiếu nhập kho');
     }
 
     // Kiểm tra trạng thái hiện tại phải là chờ duyệt
-    if (phieu.trang_thai !== TrangThai.REVIEWED) {
+    if (phieu.trangThai !== TrangThai.REVIEWED) {
       throw new BadRequestException('Phiếu không ở trạng thái chờ duyệt');
     }
 
@@ -173,7 +191,7 @@ export class PhieuNghiepVuService extends BaseService<PhieuNghiepVuDocument> {
       ngay_duyet: new Date(),
       ngay_cap_nhat: new Date(),
       ngay_nhap_kho: new Date(), // Tự động set ngày nhập kho
-      nguoi_thuc_hien_nhap_kho_id: approveDto.nguoi_duyet_id, // Người duyệt cũng là người thực hiện nhập kho
+      nguoi_thuc_hien_nhap_kho_id: approveDto.nguoiDuyetId, // Người duyệt cũng là người thực hiện nhập kho
     };
 
     // Nếu có thông tin kho, cập nhật kho
@@ -182,21 +200,21 @@ export class PhieuNghiepVuService extends BaseService<PhieuNghiepVuDocument> {
     }
 
     // Nếu có ghi chú, lưu vào field ghi chú duyệt
-    if (approveDto.ghi_chu) {
-      updateData.ghi_chu_duyet = approveDto.ghi_chu;
+    if (approveDto.ghiChu) {
+      updateData.ghi_chu_duyet = approveDto.ghiChu;
     }
 
     // Cập nhật phiếu nghiệp vụ
     const updatedPhieu = await this.update(phieuId, updateData);
 
     // Nếu có bcsl_ids, cập nhật trạng thái báo cáo sản lượng từ "reserved" sang "imported"
-    if (phieu.bcsl_ids && phieu.bcsl_ids.length > 0) {
+    if (phieu.bcsl && phieu.bcsl.length > 0) {
       const targetKho = approveDto.kho || phieu.kho;
       if (targetKho) {
         await this.updateBaoCaoSanLuongStatus(
-          phieu.bcsl_ids,
+          phieu.bcsl,
           targetKho,
-          approveDto.nguoi_duyet_id,
+          approveDto.nguoiDuyetId,
         );
       }
     }
@@ -208,7 +226,7 @@ export class PhieuNghiepVuService extends BaseService<PhieuNghiepVuDocument> {
    * Cập nhật trạng thái báo cáo sản lượng sau khi nhập kho
    */
   private async updateBaoCaoSanLuongStatus(
-    bcslIds: any[],
+    bcsl: any[],
     kho: Kho,
     nguoiThucHienId: string,
   ): Promise<void> {
@@ -220,7 +238,7 @@ export class PhieuNghiepVuService extends BaseService<PhieuNghiepVuDocument> {
       // Cập nhật trạng thái từ "reserved" sang "imported" cho tất cả báo cáo sản lượng liên quan
       await BaoCaoSanLuongModel.updateMany(
         {
-          _id: { $in: bcslIds },
+          _id: { $in: bcsl },
           trang_thai: 'reserved', // Chỉ cập nhật những báo cáo có trạng thái "reserved"
         },
         {
@@ -248,28 +266,28 @@ export class PhieuNghiepVuService extends BaseService<PhieuNghiepVuDocument> {
   ): Promise<{ updatedBaoCaoCount: number; updatedPhieuCount: number }> {
     // Lấy các phiếu nghiệp vụ theo danh sách id
     const phieuList = await this.phieuNghiepVuModel
-      .find({ _id: { $in: dto.phieu_ids } })
-      .select('_id bcsl_ids trang_thai');
+      .find({ _id: { $in: dto.phieuIds } })
+      .select('_id bcsl trangThai');
 
     if (!phieuList || phieuList.length === 0) {
       throw new NotFoundException('Không tìm thấy phiếu nghiệp vụ nào');
     }
 
-    if (phieuList.length !== dto.phieu_ids.length) {
+    if (phieuList.length !== dto.phieuIds.length) {
       throw new NotFoundException('Không tìm thấy phiếu nghiệp vụ nào');
     }
 
     // Thu thập toàn bộ bcsl_ids từ các phiếu
-    const bcslIds: Types.ObjectId[] = [];
+    const bcsl: Types.ObjectId[] = [];
     for (const p of phieuList) {
-      if (Array.isArray(p.bcsl_ids) && p.bcsl_ids.length > 0) {
-        for (const id of p.bcsl_ids as any[]) {
-          bcslIds.push(new Types.ObjectId(id));
+      if (Array.isArray(p.bcsl) && p.bcsl.length > 0) {
+        for (const id of p.bcsl as any[]) {
+          bcsl.push(new Types.ObjectId(id));
         }
       }
     }
 
-    if (bcslIds.length === 0) {
+    if (bcsl.length === 0) {
       return { updatedBaoCaoCount: 0, updatedPhieuCount: 0 };
     }
 
@@ -280,13 +298,13 @@ export class PhieuNghiepVuService extends BaseService<PhieuNghiepVuDocument> {
 
     // Cập nhật BCSL: set vi_tri và trạng thái imported
     const bcslUpdate = await BaoCaoSanLuongModel.updateMany(
-      { _id: { $in: bcslIds } },
+      { _id: { $in: bcsl } },
       {
         $set: {
-          vi_tri: dto.vi_tri,
+          viTri: dto.viTri,
           // completed_cong_doan: CongDoan.BO,
-          trang_thai: BaoCaoState.IMPORTED,
-          ngay_cap_nhat: new Date(),
+          trangThai: BaoCaoState.IMPORTED,
+          ngayCapNhat: new Date(),
         },
       },
     );
@@ -294,8 +312,8 @@ export class PhieuNghiepVuService extends BaseService<PhieuNghiepVuDocument> {
     // Cập nhật trạng thái phiếu sang completed hoặc mapping imported
     // Trong hệ thống phiếu dùng enum TrangThai; để thể hiện imported cho nhập kho ta dùng COMPLETED
     const phieuUpdate = await this.phieuNghiepVuModel.updateMany(
-      { _id: { $in: dto.phieu_ids } },
-      { $set: { trang_thai: TrangThai.COMPLETED, ngay_cap_nhat: new Date() } },
+      { _id: { $in: dto.phieuIds } },
+      { $set: { trangThai: TrangThai.COMPLETED, ngayCapNhat: new Date() } },
     );
 
     return {
@@ -320,19 +338,19 @@ export class PhieuNghiepVuService extends BaseService<PhieuNghiepVuDocument> {
     warehouseEntryDto: WarehouseEntryDto,
   ): Promise<PhieuNghiepVuDocument> {
     const phieu = await this.phieuNghiepVuModel.findById(
-      warehouseEntryDto.phieu_id,
+      warehouseEntryDto.phieuId,
     );
     if (!phieu) {
       throw new NotFoundException('Phiếu nghiệp vụ không tồn tại');
     }
 
     // Kiểm tra loại phiếu phải là nhập kho
-    if (phieu.loai_phieu !== LoaiPhieu.NhapKho) {
+    if (phieu.loaiPhieu !== LoaiPhieu.NhapKho) {
       throw new BadRequestException('Chỉ có thể xử lý phiếu nhập kho');
     }
 
     // Kiểm tra trạng thái phải là đã duyệt
-    if (phieu.trang_thai !== TrangThai.APPROVED) {
+    if (phieu.trangThai !== TrangThai.APPROVED) {
       throw new BadRequestException('Phiếu phải được duyệt trước khi nhập kho');
     }
 
@@ -345,19 +363,18 @@ export class PhieuNghiepVuService extends BaseService<PhieuNghiepVuDocument> {
 
     // Cập nhật trạng thái thành đã nhập kho
     const updateData: any = {
-      trang_thai: TrangThai.COMPLETED,
+      trangThai: TrangThai.COMPLETED,
       kho: warehouseEntryDto.kho,
-      ngay_cap_nhat: new Date(),
-      ngay_nhap_kho: new Date(),
-      nguoi_thuc_hien_nhap_kho_id: warehouseEntryDto.nguoi_thuc_hien_id,
+      ngayCapNhat: new Date(),
+      ngayNhapKho: new Date(),
     };
 
     // Lưu thông tin người thực hiện nhập kho
-    if (warehouseEntryDto.ghi_chu) {
-      updateData.ghi_chu_nhap_kho = warehouseEntryDto.ghi_chu;
+    if (warehouseEntryDto.ghiChu) {
+      updateData.ghi_chu_nhap_kho = warehouseEntryDto.ghiChu;
     }
 
-    return await this.update(warehouseEntryDto.phieu_id, updateData);
+    return await this.update(warehouseEntryDto.phieuId, updateData);
   }
 
   /**
@@ -366,11 +383,11 @@ export class PhieuNghiepVuService extends BaseService<PhieuNghiepVuDocument> {
   async findWarehouseEntryPendingApproval(): Promise<PhieuNghiepVuDocument[]> {
     return await this.phieuNghiepVuModel
       .find({
-        loai_phieu: LoaiPhieu.NhapKho,
-        trang_thai: TrangThai.REVIEWED,
+        loaiPhieu: LoaiPhieu.NhapKho,
+        trangThai: TrangThai.REVIEWED,
       })
-      .populate('nguoi_tao_id', 'ten vai_tro')
-      .populate('nguoi_duyet_id', 'ten vai_tro');
+      .populate('nguoiTao', 'ten vaiTro')
+      .populate('nguoiDuyet', 'ten vaiTro');
   }
 
   /**
@@ -379,11 +396,11 @@ export class PhieuNghiepVuService extends BaseService<PhieuNghiepVuDocument> {
   async findWarehouseEntryApproved(): Promise<PhieuNghiepVuDocument[]> {
     return await this.phieuNghiepVuModel
       .find({
-        loai_phieu: LoaiPhieu.NhapKho,
-        trang_thai: TrangThai.APPROVED,
+        loaiPhieu: LoaiPhieu.NhapKho,
+        trangThai: TrangThai.APPROVED,
       })
-      .populate('nguoi_tao_id', 'ten vai_tro')
-      .populate('nguoi_duyet_id', 'ten vai_tro');
+      .populate('nguoiTao', 'ten vaiTro')
+      .populate('nguoiDuyet', 'ten vaiTro');
   }
 
   /**
@@ -392,11 +409,11 @@ export class PhieuNghiepVuService extends BaseService<PhieuNghiepVuDocument> {
   async findWarehouseEntryCompleted(): Promise<PhieuNghiepVuDocument[]> {
     return await this.phieuNghiepVuModel
       .find({
-        loai_phieu: LoaiPhieu.NhapKho,
-        trang_thai: TrangThai.COMPLETED,
+        loaiPhieu: LoaiPhieu.NhapKho,
+        trangThai: TrangThai.COMPLETED,
       })
-      .populate('nguoi_tao_id', 'ten vai_tro')
-      .populate('nguoi_duyet_id', 'ten vai_tro');
+      .populate('nguoiTao', 'ten vaiTro')
+      .populate('nguoiDuyet', 'ten vaiTro');
   }
 
   /**
@@ -410,19 +427,19 @@ export class PhieuNghiepVuService extends BaseService<PhieuNghiepVuDocument> {
   }> {
     const [pending, approved, completed, total] = await Promise.all([
       this.phieuNghiepVuModel.countDocuments({
-        loai_phieu: LoaiPhieu.NhapKho,
-        trang_thai: TrangThai.REVIEWED,
+        loaiPhieu: LoaiPhieu.NhapKho,
+        trangThai: TrangThai.REVIEWED,
       }),
       this.phieuNghiepVuModel.countDocuments({
-        loai_phieu: LoaiPhieu.NhapKho,
-        trang_thai: TrangThai.APPROVED,
+        loaiPhieu: LoaiPhieu.NhapKho,
+        trangThai: TrangThai.APPROVED,
       }),
       this.phieuNghiepVuModel.countDocuments({
-        loai_phieu: LoaiPhieu.NhapKho,
-        trang_thai: TrangThai.COMPLETED,
+        loaiPhieu: LoaiPhieu.NhapKho,
+        trangThai: TrangThai.COMPLETED,
       }),
       this.phieuNghiepVuModel.countDocuments({
-        loai_phieu: LoaiPhieu.NhapKho,
+        loaiPhieu: LoaiPhieu.NhapKho,
       }),
     ]);
 
@@ -436,13 +453,13 @@ export class PhieuNghiepVuService extends BaseService<PhieuNghiepVuDocument> {
     createDto: any,
   ): Promise<PhieuNghiepVuDocument> {
     // Kiểm tra loại phiếu phải là xuất kho
-    if (createDto.loai_phieu !== LoaiPhieu.XuatKho) {
+    if (createDto.loaiPhieu !== LoaiPhieu.XuatKho) {
       throw new BadRequestException('Chỉ có thể tạo phiếu xuất kho');
     }
 
     // Kiểm tra mã phiếu đã tồn tại
     const existingPhieu = await this.phieuNghiepVuModel.findOne({
-      ma_phieu: createDto.ma_phieu,
+      maPhieu: createDto.maPhieu,
     });
     if (existingPhieu) {
       throw new BadRequestException('Mã phiếu đã tồn tại');
@@ -451,9 +468,9 @@ export class PhieuNghiepVuService extends BaseService<PhieuNghiepVuDocument> {
     // Tạo phiếu mới với trạng thái chờ duyệt
     const newPhieu = new this.phieuNghiepVuModel({
       ...createDto,
-      trang_thai: TrangThai.REVIEWED, // Chờ duyệt
-      ngay_tao: new Date(createDto.ngay_tao),
-      ngay_cap_nhat: new Date(),
+      trangThai: TrangThai.REVIEWED, // Chờ duyệt
+      ngayTao: new Date(createDto.ngayTao),
+      ngayCapNhat: new Date(),
     });
 
     return await newPhieu.save();
@@ -472,25 +489,25 @@ export class PhieuNghiepVuService extends BaseService<PhieuNghiepVuDocument> {
     }
 
     // Kiểm tra loại phiếu phải là xuất kho
-    if (phieu.loai_phieu !== LoaiPhieu.XuatKho) {
+    if (phieu.loaiPhieu !== LoaiPhieu.XuatKho) {
       throw new BadRequestException('Chỉ có thể duyệt phiếu xuất kho');
     }
 
     // Kiểm tra trạng thái hiện tại phải là chờ duyệt
-    if (phieu.trang_thai !== TrangThai.REVIEWED) {
+    if (phieu.trangThai !== TrangThai.REVIEWED) {
       throw new BadRequestException('Phiếu không ở trạng thái chờ duyệt');
     }
 
     // Cập nhật thông tin duyệt
     const updateData: any = {
-      trang_thai: approveDto.trang_thai,
-      ngay_duyet: new Date(),
-      ngay_cap_nhat: new Date(),
+      trangThai: approveDto.trangThai,
+      ngayDuyet: new Date(),
+      ngayCapNhat: new Date(),
     };
 
     // Lưu ghi chú duyệt
-    if (approveDto.ghi_chu) {
-      updateData.ghi_chu_duyet = approveDto.ghi_chu;
+    if (approveDto.ghiChu) {
+      updateData.ghiChuDuyet = approveDto.ghiChu;
     }
 
     return await this.update(phieuId, updateData);
@@ -500,39 +517,39 @@ export class PhieuNghiepVuService extends BaseService<PhieuNghiepVuDocument> {
     batchApproveDto: BatchApprovePhieuXuatKhoDto,
   ): Promise<PhieuNghiepVuDocument[]> {
     const pnvs = await this.phieuNghiepVuModel.find({
-      _id: { $in: batchApproveDto.phieu_ids },
+      _id: { $in: batchApproveDto.phieuIds },
     });
-    if (pnvs.length !== batchApproveDto.phieu_ids.length) {
+    if (pnvs.length !== batchApproveDto.phieuIds.length) {
       throw new NotFoundException('Một số phiếu nghiệp vụ không tồn tại');
     }
 
     await this.phieuNghiepVuModel.updateMany(
-      { _id: { $in: batchApproveDto.phieu_ids } },
-      { $set: { trang_thai: TrangThai.COMPLETED, ngay_cap_nhat: new Date() } },
+      { _id: { $in: batchApproveDto.phieuIds } },
+      { $set: { trangThai: TrangThai.COMPLETED, ngayCapNhat: new Date() } },
     );
 
     for (const pnv of pnvs) {
-      if (pnv.bcsl_ids && pnv.bcsl_ids.length > 0) {
+      if (pnv.bcsl && pnv.bcsl.length > 0) {
         const BaoCaoSanLuongModel = this.phieuNghiepVuModel.db.model(
           BaoCaoSanLuong.name,
         );
         const setData: any = {
-          trang_thai:
-            pnv.loai_phieu === LoaiPhieu.XuatKho
+          trangThai:
+            pnv.loaiPhieu === LoaiPhieu.XuatKho
               ? BaoCaoState.EXPORTED
-              : pnv.loai_phieu === LoaiPhieu.NhapKho
+              : pnv.loaiPhieu === LoaiPhieu.NhapKho
                 ? BaoCaoState.IMPORTED
                 : BaoCaoState.FORWARDED,
           // ycsc_id: pnv.ycsc_id,
           // ycsx_id: pnv.ycsx_id,
           kho: pnv.kho,
-          ngay_cap_nhat: new Date(),
+          ngayCapNhat: new Date(),
         };
-        if (batchApproveDto.vi_tri != null) {
-          setData.vi_tri = batchApproveDto.vi_tri;
+        if (batchApproveDto.viTri != null) {
+          setData.viTri = batchApproveDto.viTri;
         }
         await BaoCaoSanLuongModel.updateMany(
-          { _id: { $in: pnv.bcsl_ids } },
+          { _id: { $in: pnv.bcsl } },
           {
             $set: setData,
           },
@@ -540,9 +557,11 @@ export class PhieuNghiepVuService extends BaseService<PhieuNghiepVuDocument> {
       }
     }
 
-    return await this.phieuNghiepVuModel.find({
-      _id: { $in: batchApproveDto.phieu_ids },
-    }).populate('bcsl_ids');
+    return await this.phieuNghiepVuModel
+      .find({
+        _id: { $in: batchApproveDto.phieuIds },
+      })
+      .populate('bcsl');
   }
 
   /**
@@ -552,34 +571,34 @@ export class PhieuNghiepVuService extends BaseService<PhieuNghiepVuDocument> {
     warehouseExitDto: any,
   ): Promise<PhieuNghiepVuDocument> {
     const phieu = await this.phieuNghiepVuModel.findById(
-      warehouseExitDto.phieu_id,
+      warehouseExitDto.phieuId,
     );
     if (!phieu) {
       throw new NotFoundException('Phiếu nghiệp vụ không tồn tại');
     }
 
     // Kiểm tra loại phiếu phải là xuất kho
-    if (phieu.loai_phieu !== LoaiPhieu.XuatKho) {
+    if (phieu.loaiPhieu !== LoaiPhieu.XuatKho) {
       throw new BadRequestException('Chỉ có thể xử lý phiếu xuất kho');
     }
 
     // Kiểm tra trạng thái phải là đã duyệt
-    if (phieu.trang_thai !== TrangThai.APPROVED) {
+    if (phieu.trangThai !== TrangThai.APPROVED) {
       throw new BadRequestException('Phiếu phải được duyệt trước khi xuất kho');
     }
 
     // Cập nhật trạng thái thành đã xuất kho
     const updateData: any = {
-      trang_thai: TrangThai.COMPLETED,
-      ngay_cap_nhat: new Date(),
+      trangThai: TrangThai.COMPLETED,
+      ngayCapNhat: new Date(),
     };
 
     // Lưu thông tin người thực hiện xuất kho
-    if (warehouseExitDto.ghi_chu) {
-      updateData.ghi_chu_xuat_kho = warehouseExitDto.ghi_chu;
+    if (warehouseExitDto.ghiChu) {
+      updateData.ghiChuXuatKho = warehouseExitDto.ghiChu;
     }
 
-    return await this.update(warehouseExitDto.phieu_id, updateData);
+    return await this.update(warehouseExitDto.phieuId, updateData);
   }
 
   /**
@@ -588,11 +607,11 @@ export class PhieuNghiepVuService extends BaseService<PhieuNghiepVuDocument> {
   async findWarehouseExitPendingApproval(): Promise<PhieuNghiepVuDocument[]> {
     return await this.phieuNghiepVuModel
       .find({
-        loai_phieu: LoaiPhieu.XuatKho,
-        trang_thai: TrangThai.REVIEWED,
+        loaiPhieu: LoaiPhieu.XuatKho,
+        trangThai: TrangThai.REVIEWED,
       })
-      .populate('nguoi_tao_id', 'ten vai_tro')
-      .populate('nguoi_duyet_id', 'ten vai_tro');
+      .populate('nguoiTao', 'ten vaiTro')
+      .populate('nguoiDuyet', 'ten vaiTro');
   }
 
   /**
@@ -601,11 +620,11 @@ export class PhieuNghiepVuService extends BaseService<PhieuNghiepVuDocument> {
   async findWarehouseExitApproved(): Promise<PhieuNghiepVuDocument[]> {
     return await this.phieuNghiepVuModel
       .find({
-        loai_phieu: LoaiPhieu.XuatKho,
-        trang_thai: TrangThai.APPROVED,
+        loaiPhieu: LoaiPhieu.XuatKho,
+        trangThai: TrangThai.APPROVED,
       })
-      .populate('nguoi_tao_id', 'ten vai_tro')
-      .populate('nguoi_duyet_id', 'ten vai_tro');
+      .populate('nguoiTao', 'ten vaiTro')
+      .populate('nguoiDuyet', 'ten vaiTro');
   }
 
   /**
@@ -614,11 +633,11 @@ export class PhieuNghiepVuService extends BaseService<PhieuNghiepVuDocument> {
   async findWarehouseExitCompleted(): Promise<PhieuNghiepVuDocument[]> {
     return await this.phieuNghiepVuModel
       .find({
-        loai_phieu: LoaiPhieu.XuatKho,
-        trang_thai: TrangThai.COMPLETED,
+        loaiPhieu: LoaiPhieu.XuatKho,
+        trangThai: TrangThai.COMPLETED,
       })
-      .populate('nguoi_tao_id', 'ten vai_tro')
-      .populate('nguoi_duyet_id', 'ten vai_tro');
+      .populate('nguoiTao', 'ten vaiTro')
+      .populate('nguoiDuyet', 'ten vaiTro');
   }
 
   /**
@@ -632,19 +651,19 @@ export class PhieuNghiepVuService extends BaseService<PhieuNghiepVuDocument> {
   }> {
     const [pending, approved, completed, total] = await Promise.all([
       this.phieuNghiepVuModel.countDocuments({
-        loai_phieu: LoaiPhieu.XuatKho,
-        trang_thai: TrangThai.REVIEWED,
+        loaiPhieu: LoaiPhieu.XuatKho,
+        trangThai: TrangThai.REVIEWED,
       }),
       this.phieuNghiepVuModel.countDocuments({
-        loai_phieu: LoaiPhieu.XuatKho,
-        trang_thai: TrangThai.APPROVED,
+        loaiPhieu: LoaiPhieu.XuatKho,
+        trangThai: TrangThai.APPROVED,
       }),
       this.phieuNghiepVuModel.countDocuments({
-        loai_phieu: LoaiPhieu.XuatKho,
-        trang_thai: TrangThai.COMPLETED,
+        loaiPhieu: LoaiPhieu.XuatKho,
+        trangThai: TrangThai.COMPLETED,
       }),
       this.phieuNghiepVuModel.countDocuments({
-        loai_phieu: LoaiPhieu.XuatKho,
+        loaiPhieu: LoaiPhieu.XuatKho,
       }),
     ]);
 
@@ -659,36 +678,36 @@ export class PhieuNghiepVuService extends BaseService<PhieuNghiepVuDocument> {
   ): Promise<PhieuNghiepVuDocument> {
     // Kiểm tra mã phiếu đã tồn tại
     const existingPhieu = await this.phieuNghiepVuModel.findOne({
-      ma_phieu: createDto.ma_phieu,
+      maPhieu: createDto.maPhieu,
     });
     if (existingPhieu) {
       throw new BadRequestException('Mã phiếu đã tồn tại');
     }
 
     // Tạo báo cáo sản lượng mới với thông tin đá
-    const BaoCaoSanLuongModel =
-      this.phieuNghiepVuModel.db.model('BaoCaoSanLuong');
+    const BaoCaoSanLuongModel = this.phieuNghiepVuModel.db.model(
+      BaoCaoSanLuong.name,
+    );
 
     const newBaoCao = new BaoCaoSanLuongModel({
-      ycsc_id: createDto.ycsc_id
-        ? new Types.ObjectId(createDto.ycsc_id)
+      ycsc: createDto.ycscId ? new Types.ObjectId(createDto.ycscId) : undefined,
+      ycsx: createDto.ycsxId ? new Types.ObjectId(createDto.ycsxId) : undefined,
+      hangMuc: createDto.hangMucId
+        ? new Types.ObjectId(createDto.hangMucId)
         : undefined,
-      ycsx_id: createDto.ycsx_id
-        ? new Types.ObjectId(createDto.ycsx_id)
-        : undefined,
-      hang_muc_id: createDto.hang_muc_id
-        ? new Types.ObjectId(createDto.hang_muc_id)
-        : undefined,
-      ma_da: createDto.ma_da,
-      mau_da: createDto.mau_da,
-      quy_cach: {
+      maDa: createDto.maDa,
+      mauDa: createDto.mauDa,
+      quyCach: {
         dai: createDto.dai,
         rong: createDto.rong,
         day: createDto.day,
+        soLuong: createDto.soLuong,
+        dvtDoLuong: createDto.dvtDoLuong,
+        dvtQuyCach: createDto.dvtQuyCach,
       },
-      ngay_tao: new Date(),
-      trang_thai: 'new', // Trạng thái mới tạo
-      ngay_cap_nhat: new Date(),
+      ngayTao: new Date(),
+      trangThai: TrangThai.NEW, // Trạng thái mới tạo
+      ngayCapNhat: new Date(),
       kho: Kho.KHO_BLOCK,
     });
 
@@ -696,24 +715,20 @@ export class PhieuNghiepVuService extends BaseService<PhieuNghiepVuDocument> {
 
     // Tạo phiếu nghiệp vụ nhập kho
     const newPhieu = new this.phieuNghiepVuModel({
-      ma_phieu: createDto.ma_phieu,
-      loai_phieu: LoaiPhieu.NhapKho,
-      ycsc_id: createDto.ycsc_id
-        ? new Types.ObjectId(createDto.ycsc_id)
-        : undefined,
-      ycsx_id: createDto.ycsx_id
-        ? new Types.ObjectId(createDto.ycsx_id)
-        : undefined,
-      nguoi_tao_id: new Types.ObjectId(createDto.nguoi_tao_id),
-      ngay_tao: new Date(),
-      nguoi_duyet_id: new Types.ObjectId(createDto.nguoi_duyet_id),
+      maPhieu: createDto.maPhieu,
+      loaiPhieu: LoaiPhieu.NhapKho,
+      ycsc: createDto.ycscId ? new Types.ObjectId(createDto.ycscId) : undefined,
+      ycsx: createDto.ycsxId ? new Types.ObjectId(createDto.ycsxId) : undefined,
+      nguoiTao: new Types.ObjectId(createDto.nguoiTaoId),
+      ngayTao: new Date(),
+      nguoiDuyet: new Types.ObjectId(createDto.nguoiDuyetId),
       kho: Kho.KHO_BLOCK, // Mặc định là kho block
-      trang_thai: TrangThai.NEW, // Chờ duyệt
-      bcsl_ids: [savedBaoCao._id], // Liên kết với báo cáo sản lượng vừa tạo
-      hang_muc_ids: createDto.hang_muc_id
-        ? [new Types.ObjectId(createDto.hang_muc_id)]
+      trangThai: TrangThai.NEW, // Chờ duyệt
+      bcsl: [savedBaoCao._id], // Liên kết với báo cáo sản lượng vừa tạo
+      hangMuc: createDto.hangMucId
+        ? [new Types.ObjectId(createDto.hangMucId)]
         : undefined,
-      ngay_cap_nhat: new Date(),
+      ngayCapNhat: new Date(),
     });
 
     return await newPhieu.save();

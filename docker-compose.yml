@@ -1,0 +1,55 @@
+version: '3.8'
+
+services:
+  # MongoDB service
+  mongodb:
+    image: mongo:8.0
+    container_name: sonthach-mongodb
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: "12345678"
+      MONGO_INITDB_DATABASE: sonthach_docker
+    volumes:
+      - mongodb_data:/data/db
+      - ./mongo-init:/docker-entrypoint-initdb.d
+    networks:
+      - sonthach-network
+    # Thêm cấu hình để MongoDB có thể kết nối từ bên ngoài
+    command: mongod --bind_ip_all
+
+  # NestJS application
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: sonthach-app
+    restart: unless-stopped
+    ports:
+      - "4300:4300"
+    environment:
+      NODE_ENV: development
+      PORT: "4300"
+      # Sử dụng tên service mongodb cho kết nối trong Docker network
+      MONGODB_URI: "mongodb://root:12345678@mongodb:27017/sonthach_docker?authSource=admin"
+      JWT_SECRET: "your-super-secret-jwt-key"
+      JWT_EXPIRES_IN: "7d"
+    depends_on:
+      - mongodb
+    networks:
+      - sonthach-network
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').get('http://localhost:' + (process.env.PORT || 3000) + '/health', (res) => { process.exit(res.statusCode === 200 ? 0 : 1) })"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+volumes:
+  mongodb_data:
+
+networks:
+  sonthach-network:
+    driver: bridge

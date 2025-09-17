@@ -7,59 +7,40 @@ export type YCSCDocument = YCSC & Document;
 @Schema({ collection: 'ycsc', timestamps: false })
 export class YCSC {
   @Prop({ required: true, unique: true })
-  ma_phieu: string;
+  maPhieu: string;
 
   @Prop({
     type: MongooseSchema.Types.ObjectId,
     ref: 'nhan_vien',
     required: true,
   })
-  nguoi_tao_id: MongooseSchema.Types.ObjectId;
+  nguoiTao: MongooseSchema.Types.ObjectId;
 
   @Prop({ type: Date, required: true })
-  ngay_tao: Date;
+  ngayTao: Date;
 
   @Prop({
     type: MongooseSchema.Types.ObjectId,
     ref: 'nhan_vien',
     required: true,
   })
-  nguoi_duyet_id: MongooseSchema.Types.ObjectId;
+  nguoiDuyet: MongooseSchema.Types.ObjectId;
 
   @Prop({ type: Date, required: false })
-  ngay_duyet?: Date;
-
-  @Prop({
-    type: MongooseSchema.Types.ObjectId,
-    ref: 'nhan_vien',
-    required: true,
-  })
-  kcs_id: MongooseSchema.Types.ObjectId;
-
-  @Prop({
-    type: MongooseSchema.Types.ObjectId,
-    ref: 'nhan_vien',
-    required: true,
-  })
-  tnsx_id: MongooseSchema.Types.ObjectId;
+  ngayDuyet?: Date;
 
   @Prop({ type: Date, required: false })
-  ngay_hoan_thanh?: Date;
+  ngayHoanThanh?: Date;
 
   @Prop({ required: true, enum: TrangThai })
-  trang_thai: TrangThai;
+  trangThai: TrangThai;
 
-  @Prop({ type: Date, default: Date.now })
-  ngay_cap_nhat: Date;
-
-  @Prop({ type: String, required: false })
-  ghi_chu?: string;
-
-  @Prop({ type: String, required: false })
-  ghi_chu_duyet?: string;
-
-  @Prop({ type: String, required: false })
-  ghi_chu_hoan_thanh?: string;
+  @Prop({
+    type: [MongooseSchema.Types.ObjectId],
+    ref: 'phan_cong',
+    required: true,
+  })
+  phanCong: MongooseSchema.Types.ObjectId[];
 }
 
 export const YCSCSchema = SchemaFactory.createForClass(YCSC);

@@ -24,35 +24,35 @@ export class CreateYCSCDto {
     example: 'YCSC-2024-001',
   })
   @IsString()
-  ma_phieu: string;
+  maPhieu: string;
 
   @ApiProperty({
     description: 'ID người tạo yêu cầu',
     example: '507f1f77bcf86cd799439011',
   })
   @IsMongoId()
-  nguoi_tao_id: string;
+  nguoiTaoId: string;
 
   @ApiProperty({
     description: 'ID người duyệt yêu cầu',
     example: '507f1f77bcf86cd799439011',
   })
   @IsMongoId()
-  nguoi_duyet_id: string;
+  nguoiDuyetId: string;
 
   @ApiProperty({
     description: 'ID người KCS',
     example: '507f1f77bcf86cd799439011',
   })
   @IsMongoId()
-  kcs_id: string;
+  kcsId: string;
 
   @ApiProperty({
     description: 'ID người TNSX',
     example: '507f1f77bcf86cd799439011',
   })
   @IsMongoId()
-  tnsx_id: string;
+  tnsxId: string;
 
   @ApiProperty({
     description: 'Danh sách ID block đá',
@@ -63,7 +63,7 @@ export class CreateYCSCDto {
   @IsOptional()
   @IsArray()
   @IsMongoId({ each: true })
-  block_ids?: string[];
+  blockIds?: string[];
 }
 
 export class ApproveYCSCDto {
@@ -72,7 +72,7 @@ export class ApproveYCSCDto {
     example: '507f1f77bcf86cd799439011',
   })
   @IsMongoId()
-  nguoi_duyet_id: string;
+  nguoiDuyetId: string;
 
   @ApiProperty({
     description: 'Trạng thái sau khi duyệt',
@@ -80,7 +80,7 @@ export class ApproveYCSCDto {
     example: TrangThai.APPROVED,
   })
   @IsEnum(TrangThai)
-  trang_thai: TrangThai;
+  trangThai: TrangThai;
 
   @ApiProperty({
     description: 'Ghi chú duyệt',
@@ -88,7 +88,7 @@ export class ApproveYCSCDto {
   })
   @IsOptional()
   @IsString()
-  ghi_chu?: string;
+  ghiChu?: string;
 }
 
 export class CompleteYCSCDto {
@@ -97,7 +97,7 @@ export class CompleteYCSCDto {
     example: '507f1f77bcf86cd799439011',
   })
   @IsMongoId()
-  nguoi_hoan_thanh_id: string;
+  nguoiHoanThanhId: string;
 
   @ApiProperty({
     description: 'Ghi chú hoàn thành',
@@ -105,7 +105,7 @@ export class CompleteYCSCDto {
   })
   @IsOptional()
   @IsString()
-  ghi_chu?: string;
+  ghiChu?: string;
 }
 
 export class BatchApproveYCSCDto {
@@ -115,7 +115,7 @@ export class BatchApproveYCSCDto {
   })
   @IsArray()
   @IsMongoId({ each: true })
-  ycsc_ids: string[];
+  ycscIds: string[];
 }
 
 export class FilterYCSCDto {
@@ -126,7 +126,7 @@ export class FilterYCSCDto {
   })
   @IsOptional()
   @IsEnum(TrangThai)
-  trang_thai?: string;
+  trangThai?: string;
 }
 
 export class AddBaoCaoSanLuongDto {
@@ -136,7 +136,7 @@ export class AddBaoCaoSanLuongDto {
   })
   @IsArray()
   @IsMongoId({ each: true })
-  bao_cao_san_luong_ids: string[];
+  baoCaoSanLuongIds: string[];
 }
 
 export class BaoCaoSanLuongDto {
@@ -145,14 +145,14 @@ export class BaoCaoSanLuongDto {
     example: 'DA-001',
   })
   @IsString()
-  ma_da: string;
+  maDa: string;
 
   @ApiProperty({
     description: 'Mã phôi',
     example: 1,
   })
   @IsNumber()
-  ma_phoi: number;
+  maPhoi: number;
 
   @ApiProperty({
     description: 'Màu đá',
@@ -160,14 +160,14 @@ export class BaoCaoSanLuongDto {
     example: MauDa.DEN,
   })
   @IsEnum(MauDa)
-  mau_da: MauDa;
+  mauDa: MauDa;
 
   @ApiProperty({
     description: 'Vị trí',
     example: 'A1',
   })
   @IsString()
-  vi_tri: string;
+  viTri: string;
 
   @ApiProperty({
     description: 'ID báo cáo sản lượng cha',
@@ -175,7 +175,7 @@ export class BaoCaoSanLuongDto {
   })
   @IsOptional()
   @IsMongoId()
-  parent_id?: string;
+  parentId?: string;
 
   @ApiProperty({
     description: 'Quy cách',
@@ -183,13 +183,13 @@ export class BaoCaoSanLuongDto {
       dai: 100,
       rong: 50,
       day: 20,
-      so_luong: 1,
-      dvt_do_luong: DonViDoLuong.MET,
-      dvt_quy_cach: DonViQuyCach.VIEN,
+      soLuong: 1,
+      dvtDoLuong: DonViDoLuong.MET,
+      dvtQuyCach: DonViQuyCach.VIEN,
     },
   })
   @IsObject()
-  quy_cach: QuyCach;
+  quyCach: QuyCach;
 
   @ApiProperty({
     description: 'Kho',
@@ -208,14 +208,14 @@ export class ApproveBaoCaoSanLuongByYCSCDto {
   })
   @IsArray()
   @IsMongoId({ each: true })
-  bao_cao_san_luong_ids: string[];
+  baoCaoSanLuongIds: string[];
 
   @ApiProperty({
     description: 'ID người duyệt',
     example: '507f1f77bcf86cd799439011',
   })
   @IsMongoId()
-  nguoi_duyet_id: string;
+  nguoiDuyetId: string;
 
   @ApiProperty({
     description: 'Trạng thái sau khi duyệt',
@@ -223,7 +223,7 @@ export class ApproveBaoCaoSanLuongByYCSCDto {
     example: BaoCaoState.APPROVED,
   })
   @IsEnum(BaoCaoState)
-  trang_thai: BaoCaoState;
+  trangThai: BaoCaoState;
 
   @ApiProperty({
     description: 'Ghi chú duyệt',
@@ -240,21 +240,21 @@ export class NhapKhoBaoCaoSanLuongDto {
     example: '507f1f77bcf86cd799439011',
   })
   @IsString()
-  ma_phieu: string;
+  maPhieu: string;
 
   @ApiProperty({
     description: 'ID người nhập kho',
     example: '507f1f77bcf86cd799439011',
   })
   @IsMongoId()
-  nguoi_tao_id: string;
+  nguoiTaoId: string;
 
   @ApiProperty({
     description: 'ID thủ kho',
     example: '507f1f77bcf86cd799439011',
   })
   @IsMongoId()
-  thu_kho_id: string;
+  thuKhoId: string;
 
   @ApiProperty({
     description: 'Danh sách ID báo cáo sản lượng',
@@ -262,5 +262,5 @@ export class NhapKhoBaoCaoSanLuongDto {
   })
   @IsArray()
   @IsMongoId({ each: true })
-  bao_cao_san_luong_ids: string[];
+  baoCaoSanLuongIds: string[];
 }

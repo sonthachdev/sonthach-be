@@ -65,22 +65,22 @@ export class SignUpDto {
   @ApiProperty({
     description: 'Vai trò của nhân viên',
     enum: VaiTro,
-    example: 'tho',
+    example: VaiTro.NV,
     required: true,
   })
   @IsEnum(VaiTro)
   @IsNotEmpty()
-  vai_tro: VaiTro;
+  vaiTro: VaiTro;
 
   @ApiProperty({
     description: 'Công đoạn của nhân viên (không bắt buộc)',
     enum: CongDoan,
-    example: 'cat_da',
+    example: CongDoan.BO,
     required: false,
   })
   @IsEnum(CongDoan)
   @IsOptional()
-  cong_doan?: CongDoan;
+  congDoan?: CongDoan;
 
   @ApiProperty({
     description: 'Trạng thái hoạt động (mặc định: true)',
@@ -90,7 +90,7 @@ export class SignUpDto {
   })
   @IsBoolean()
   @IsOptional()
-  trang_thai?: boolean;
+  trangThai?: boolean;
 }
 
 export class SignOutDto {
@@ -102,6 +102,17 @@ export class SignOutDto {
   @IsString()
   @IsNotEmpty()
   token: string;
+}
+
+export class RefreshTokenDto {
+  @ApiProperty({
+    description: 'Refresh token để tạo access token mới',
+    example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
+    required: true,
+  })
+  @IsString()
+  @IsNotEmpty()
+  refreshToken: string;
 }
 
 export class AuthResponseDto {
@@ -120,11 +131,13 @@ export class AuthResponseDto {
   @ApiProperty({
     description: 'Dữ liệu trả về',
     example: {
-      access_token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
+      accessToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
+      refreshToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
       user: {
-        id: '507f1f77bcf86cd799439011',
+        _id: '507f1f77bcf86cd799439011',
         ten: 'Nguyễn Văn A',
-        vai_tro: 'tho',
+        vaiTro: VaiTro.NVKD,
+        congDoan: CongDoan.BO,
         username: 'nguyenvana',
       },
     },

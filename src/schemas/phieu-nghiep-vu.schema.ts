@@ -7,42 +7,42 @@ export type PhieuNghiepVuDocument = PhieuNghiepVu & Document;
 @Schema({ collection: 'phieu_nghiep_vu', timestamps: false })
 export class PhieuNghiepVu {
   @Prop({ required: true, unique: true })
-  ma_phieu: string;
+  maPhieu: string;
 
   @Prop({ required: true, enum: LoaiPhieu })
-  loai_phieu: LoaiPhieu;
+  loaiPhieu: LoaiPhieu;
 
   @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'ycsc', required: false })
-  ycsc_id?: MongooseSchema.Types.ObjectId;
+  ycscId?: MongooseSchema.Types.ObjectId;
 
   @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'ycsx', required: false })
-  ycsx_id?: MongooseSchema.Types.ObjectId;
+  ycsxId?: MongooseSchema.Types.ObjectId;
 
   @Prop({
     type: MongooseSchema.Types.ObjectId,
     ref: 'nhan_vien',
     required: true,
   })
-  nguoi_tao_id: MongooseSchema.Types.ObjectId;
+  nguoiTao: MongooseSchema.Types.ObjectId;
 
   @Prop({ required: true, type: Date })
-  ngay_tao: Date;
+  ngayTao: Date;
 
   @Prop({
     type: MongooseSchema.Types.ObjectId,
     ref: 'nhan_vien',
     required: true,
   })
-  nguoi_duyet_id: MongooseSchema.Types.ObjectId;
+  nguoiDuyet: MongooseSchema.Types.ObjectId;
 
   @Prop({ required: false, type: Date })
-  ngay_duyet?: Date;
+  ngayDuyet?: Date;
 
   @Prop({ enum: Kho, required: false })
   kho?: Kho;
 
   @Prop({ required: true, enum: TrangThai })
-  trang_thai: TrangThai;
+  trangThai: TrangThai;
 
   @Prop({ enum: CongDoan, required: false })
   currentCongDoan?: CongDoan;
@@ -55,26 +55,10 @@ export class PhieuNghiepVu {
     ref: 'bao_cao_san_luong',
     required: true,
   })
-  bcsl_ids: MongooseSchema.Types.ObjectId[];
+  bcsl: MongooseSchema.Types.ObjectId[];
 
   @Prop({ type: Date, default: Date.now })
-  ngay_cap_nhat: Date;
-
-  @Prop({ type: String, required: false })
-  ghi_chu_duyet?: string;
-
-  @Prop({ type: String, required: false })
-  ghi_chu_nhap_kho?: string;
-
-  @Prop({
-    type: MongooseSchema.Types.ObjectId,
-    ref: 'nhan_vien',
-    required: false,
-  })
-  nguoi_thuc_hien_nhap_kho_id?: MongooseSchema.Types.ObjectId;
-
-  @Prop({ type: Date, required: false })
-  ngay_nhap_kho?: Date;
+  ngayCapNhat: Date;
 
   @Prop({ type: Number, required: false })
   pallet?: number; // metadata dùng để update cho BCSL đính kèm

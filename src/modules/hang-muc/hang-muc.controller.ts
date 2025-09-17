@@ -13,7 +13,7 @@ import { HangMucService } from './hang-muc.service';
 import { HangMucDocument } from '../../schemas';
 
 @ApiTags('hang-muc')
-@Controller('hang-muc')
+@Controller('api/hang-muc')
 export class HangMucController extends BaseController<HangMucDocument> {
   constructor(private readonly hangMucService: HangMucService) {
     super(hangMucService);

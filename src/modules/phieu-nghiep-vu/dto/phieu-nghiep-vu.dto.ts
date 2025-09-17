@@ -8,7 +8,15 @@ import {
   IsMongoId,
   IsNumber,
 } from 'class-validator';
-import { LoaiPhieu, TrangThai, Kho, CongDoan, MauDa } from '../../../utils';
+import {
+  LoaiPhieu,
+  TrangThai,
+  Kho,
+  CongDoan,
+  MauDa,
+  DonViDoLuong,
+  DonViQuyCach,
+} from '../../../utils';
 
 export class CreatePhieuNghiepVuDto {
   @ApiProperty({
@@ -16,7 +24,7 @@ export class CreatePhieuNghiepVuDto {
     example: 'PNV-2024-001',
   })
   @IsString()
-  ma_phieu: string;
+  maPhieu: string;
 
   @ApiProperty({
     description: 'Loại phiếu',
@@ -24,7 +32,7 @@ export class CreatePhieuNghiepVuDto {
     example: LoaiPhieu.NhapKho,
   })
   @IsEnum(LoaiPhieu)
-  loai_phieu: LoaiPhieu;
+  loaiPhieu: LoaiPhieu;
 
   @ApiProperty({
     description: 'ID yêu cầu sơ chế (nếu có)',
@@ -33,7 +41,7 @@ export class CreatePhieuNghiepVuDto {
   })
   @IsOptional()
   @IsMongoId()
-  ycsc_id?: string;
+  ycscId?: string;
 
   @ApiProperty({
     description: 'ID yêu cầu sản xuất (nếu có)',
@@ -42,28 +50,28 @@ export class CreatePhieuNghiepVuDto {
   })
   @IsOptional()
   @IsMongoId()
-  ycsx_id?: string;
+  ycsxId?: string;
 
   @ApiProperty({
     description: 'ID người tạo phiếu',
     example: '507f1f77bcf86cd799439011',
   })
   @IsMongoId()
-  nguoi_tao_id: string;
+  nguoiTao: string;
 
   @ApiProperty({
     description: 'Ngày tạo phiếu',
     example: '2024-12-01T00:00:00.000Z',
   })
   @IsDateString()
-  ngay_tao: string;
+  ngayTao: string;
 
   @ApiProperty({
     description: 'ID người duyệt phiếu',
     example: '507f1f77bcf86cd799439011',
   })
   @IsMongoId()
-  nguoi_duyet_id: string;
+  nguoiDuyetId: string;
 
   @ApiProperty({
     description: 'Kho nhập/xuất',
@@ -81,7 +89,7 @@ export class CreatePhieuNghiepVuDto {
     example: TrangThai.NEW,
   })
   @IsEnum(TrangThai)
-  trang_thai: TrangThai;
+  trangThai: TrangThai;
 
   @ApiProperty({
     description: 'Công đoạn hiện tại',
@@ -99,7 +107,7 @@ export class CreatePhieuNghiepVuDto {
   })
   @IsOptional()
   @IsEnum(CongDoan)
-  next_cong_doan?: CongDoan;
+  nextCongDoan?: CongDoan;
 
   @ApiProperty({
     description: 'Danh sách ID báo cáo sản lượng',
@@ -108,7 +116,7 @@ export class CreatePhieuNghiepVuDto {
   })
   @IsArray()
   @IsMongoId({ each: true })
-  bcsl_ids: string[];
+  bcslIds: string[];
 
   @ApiProperty({
     description: 'Danh sách ID hạng mục',
@@ -119,7 +127,7 @@ export class CreatePhieuNghiepVuDto {
   @IsOptional()
   @IsArray()
   @IsMongoId({ each: true })
-  hang_muc_ids?: string[];
+  hangMucIds?: string[];
 }
 
 export class UpdatePhieuNghiepVuDto {
@@ -130,7 +138,7 @@ export class UpdatePhieuNghiepVuDto {
   })
   @IsOptional()
   @IsEnum(TrangThai)
-  trang_thai?: TrangThai;
+  trangThai?: TrangThai;
 
   @ApiProperty({
     description: 'Ngày duyệt',
@@ -139,7 +147,7 @@ export class UpdatePhieuNghiepVuDto {
   })
   @IsOptional()
   @IsDateString()
-  ngay_duyet?: string;
+  ngayDuyet?: string;
 
   @ApiProperty({
     description: 'Kho nhập/xuất',
@@ -157,7 +165,7 @@ export class UpdatePhieuNghiepVuDto {
   })
   @IsOptional()
   @IsEnum(CongDoan)
-  currentCongDoan?: CongDoan;
+  currentCongDoan: CongDoan;
 
   @ApiProperty({
     description: 'Công đoạn tiếp theo',
@@ -166,7 +174,7 @@ export class UpdatePhieuNghiepVuDto {
   })
   @IsOptional()
   @IsEnum(CongDoan)
-  next_cong_doan?: CongDoan;
+  nextCongDoan?: CongDoan;
 }
 
 export class ApprovePhieuNghiepVuDto {
@@ -175,7 +183,7 @@ export class ApprovePhieuNghiepVuDto {
     example: '507f1f77bcf86cd799439011',
   })
   @IsMongoId()
-  nguoi_duyet_id: string;
+  nguoiDuyetId: string;
 
   @ApiProperty({
     description: 'Trạng thái sau khi duyệt',
@@ -183,7 +191,7 @@ export class ApprovePhieuNghiepVuDto {
     example: TrangThai.APPROVED,
   })
   @IsEnum(TrangThai)
-  trang_thai: TrangThai;
+  trangThai: TrangThai;
 
   @ApiProperty({
     description: 'Kho nhập/xuất',
@@ -200,7 +208,7 @@ export class ApprovePhieuNghiepVuDto {
   })
   @IsOptional()
   @IsString()
-  ghi_chu?: string;
+  ghiChu?: string;
 }
 
 export class WarehouseEntryDto {
@@ -209,7 +217,7 @@ export class WarehouseEntryDto {
     example: '507f1f77bcf86cd799439011',
   })
   @IsMongoId()
-  phieu_id: string;
+  phieuId: string;
 
   @ApiProperty({
     description: 'Kho nhập',
@@ -224,7 +232,7 @@ export class WarehouseEntryDto {
     example: '507f1f77bcf86cd799439011',
   })
   @IsMongoId()
-  nguoi_thuc_hien_id: string;
+  nguoiThucHienId: string;
 
   @ApiProperty({
     description: 'Ghi chú nhập kho',
@@ -232,7 +240,7 @@ export class WarehouseEntryDto {
   })
   @IsOptional()
   @IsString()
-  ghi_chu?: string;
+  ghiChu?: string;
 }
 
 export class CreateBlockWarehouseEntryDto {
@@ -241,28 +249,28 @@ export class CreateBlockWarehouseEntryDto {
     example: 'PNV-2024-001',
   })
   @IsString()
-  ma_phieu: string;
+  maPhieu: string;
 
   @ApiProperty({
     description: 'ID người tạo phiếu',
     example: '507f1f77bcf86cd799439011',
   })
   @IsMongoId()
-  nguoi_tao_id: string;
+  nguoiTaoId: string;
 
   @ApiProperty({
     description: 'ID người duyệt phiếu',
     example: '507f1f77bcf86cd799439011',
   })
   @IsMongoId()
-  nguoi_duyet_id: string;
+  nguoiDuyetId: string;
 
   @ApiProperty({
     description: 'Mã đá',
     example: 'DA-001',
   })
   @IsString()
-  ma_da: string;
+  maDa: string;
 
   @ApiProperty({
     description: 'Màu đá',
@@ -270,7 +278,7 @@ export class CreateBlockWarehouseEntryDto {
     example: MauDa.DEN,
   })
   @IsEnum(MauDa)
-  mau_da: MauDa;
+  mauDa: MauDa;
 
   @ApiProperty({
     description: 'Chiều dài (mm)',
@@ -294,13 +302,36 @@ export class CreateBlockWarehouseEntryDto {
   day: number;
 
   @ApiProperty({
+    description: 'Số lượng',
+    example: 1,
+  })
+  @IsNumber()
+  soLuong: number;
+
+  @ApiProperty({
+    description: 'Đơn vị đo lường',
+    enum: DonViDoLuong,
+    example: DonViDoLuong.MET,
+  })
+  @IsEnum(DonViDoLuong)
+  dvtDoLuong: DonViDoLuong;
+
+  @ApiProperty({
+    description: 'Đơn vị quy cách',
+    enum: DonViQuyCach,
+    example: DonViQuyCach.KHOI,
+  })
+  @IsEnum(DonViQuyCach)
+  dvtQuyCach: DonViQuyCach;
+
+  @ApiProperty({
     description: 'ID yêu cầu sơ chế (nếu có)',
     required: false,
     example: '507f1f77bcf86cd799439011',
   })
   @IsOptional()
   @IsMongoId()
-  ycsc_id?: string;
+  ycscId?: string;
 
   @ApiProperty({
     description: 'ID yêu cầu sản xuất (nếu có)',
@@ -309,7 +340,7 @@ export class CreateBlockWarehouseEntryDto {
   })
   @IsOptional()
   @IsMongoId()
-  ycsx_id?: string;
+  ycsxId?: string;
 
   @ApiProperty({
     description: 'ID hạng mục (nếu có)',
@@ -318,7 +349,7 @@ export class CreateBlockWarehouseEntryDto {
   })
   @IsOptional()
   @IsMongoId()
-  hang_muc_id?: string;
+  hangMucId?: string;
 }
 
 export class BlockWarehouseBatchImportDto {
@@ -329,14 +360,14 @@ export class BlockWarehouseBatchImportDto {
   })
   @IsArray()
   @IsMongoId({ each: true })
-  phieu_ids: string[];
+  phieuIds: string[];
 
   @ApiProperty({
     description: 'Vị trí đơn hàng trong kho (ví dụ: A1, B5, ...)',
     example: 'A1',
   })
   @IsString()
-  vi_tri: string;
+  viTri: string;
 }
 
 export class ListPhieuNghiepVuQueryDto {
@@ -369,9 +400,9 @@ export class ListPhieuNghiepVuQueryDto {
   loaiPhieu?: LoaiPhieu;
 
   @ApiProperty({
-    description: 'Sắp xếp (field:order)',
+    description: 'Sắp xếp (hỗ trợ nhiều trường: field1:order1,field2:order2)',
     required: false,
-    example: 'ngay_tao:-1',
+    example: 'ngayTao:-1,trangThai:1',
   })
   @IsOptional()
   @IsString()

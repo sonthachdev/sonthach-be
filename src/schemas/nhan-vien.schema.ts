@@ -10,19 +10,19 @@ export class NhanVien {
   ten: string;
 
   @Prop({ required: true, enum: VaiTro })
-  vai_tro: VaiTro;
+  vaiTro: VaiTro;
 
   @Prop({ enum: CongDoan, required: false })
-  cong_doan?: CongDoan;
+  congDoan?: CongDoan;
 
   @Prop({ type: Date, default: Date.now })
-  ngay_tao: Date;
+  ngayTao: Date;
 
   @Prop({ type: Date, default: Date.now })
-  ngay_cap_nhat: Date;
+  ngayCapNhat: Date;
 
   @Prop({ type: Boolean, default: true })
-  trang_thai: boolean;
+  trangThai: boolean;
 
   @Prop({ type: String, default: '' })
   username: string;

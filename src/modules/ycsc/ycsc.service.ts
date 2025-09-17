@@ -18,6 +18,8 @@ import {
   YCSCDocument,
   BaoCaoSanLuongDocument,
   PhieuNghiepVuDocument,
+  HangMuc,
+  PhanCong,
 } from '../../schemas';
 import { BaoCaoState, TrangThai, CongDoan, LoaiPhieu, Kho } from '../../utils';
 import {
@@ -31,6 +33,7 @@ import {
   ApproveBaoCaoSanLuongByYCSCDto,
   NhapKhoBaoCaoSanLuongDto,
 } from './dto/ycsc.dto';
+import { ObjectId } from 'mongodb';
 
 @Injectable()
 export class YCSCService extends BaseService<YCSCDocument> {
@@ -86,13 +89,13 @@ export class YCSCService extends BaseService<YCSCDocument> {
   async createYCSC(createDto: CreateYCSCDto): Promise<YCSCDocument> {
     // Kiểm tra mã phiếu đã tồn tại
     const existingYCSC = await this.ycscModel.findOne({
-      ma_phieu: createDto.ma_phieu,
+      maPhieu: createDto.maPhieu,
     });
     if (existingYCSC) {
       throw new BadRequestException('Mã phiếu đã tồn tại');
     }
 
-    if (!createDto.block_ids || createDto.block_ids.length === 0) {
+    if (!createDto.blockIds || createDto.blockIds.length === 0) {
       throw new BadRequestException(
         'Danh sách ID block đá không được để trống',
       );
@@ -100,18 +103,20 @@ export class YCSCService extends BaseService<YCSCDocument> {
 
     const BaoCaoSanLuongModel = this.ycscModel.db.model(BaoCaoSanLuong.name);
     const baoCaoSanLuongs = await BaoCaoSanLuongModel.find({
-      _id: { $in: createDto.block_ids },
+      _id: { $in: createDto.blockIds },
     });
-    if (baoCaoSanLuongs.length !== createDto.block_ids.length) {
+    if (baoCaoSanLuongs.length !== createDto.blockIds.length) {
       throw new NotFoundException('Không tìm thấy báo cáo sản lượng nào');
     }
 
     // Tạo yêu cầu mới với trạng thái chờ duyệt
     const newYCSC = new this.ycscModel({
       ...createDto,
-      trang_thai: TrangThai.NEW,
-      ngay_tao: new Date(),
-      ngay_cap_nhat: new Date(),
+      nguoiTao: createDto.nguoiTaoId,
+      nguoiDuyet: createDto.nguoiDuyetId,
+      trangThai: TrangThai.NEW,
+      ngayTao: new Date(),
+      ngayCapNhat: new Date(),
     });
 
     const ycsc = await newYCSC.save();
@@ -119,32 +124,47 @@ export class YCSCService extends BaseService<YCSCDocument> {
 
     const pnvModel = this.ycscModel.db.model(PhieuNghiepVu.name);
     await pnvModel.create({
-      ycsc_id: ycscId,
-      ma_phieu: `XuatKho-${(ycscId as any).toString()}-${new Date().getTime()}`,
-      loai_phieu: LoaiPhieu.XuatKho,
-      trang_thai: TrangThai.NEW,
-      ngay_tao: new Date(),
-      ngay_cap_nhat: new Date(),
-      bcsl_ids: createDto.block_ids,
-      nguoi_tao_id: createDto.nguoi_tao_id,
-      nguoi_duyet_id: createDto.nguoi_duyet_id,
+      ycscId: ycscId,
+      maPhieu: `XuatKho-${(ycscId as any).toString()}-${new Date().getTime()}`,
+      loaiPhieu: LoaiPhieu.XuatKho,
+      trangThai: TrangThai.NEW,
+      ngayTao: new Date(),
+      ngayCapNhat: new Date(),
+      bcsl: createDto.blockIds,
+      nguoiTao: createDto.nguoiTaoId,
+      nguoiDuyet: createDto.nguoiDuyetId,
       kho: Kho.KHO_BLOCK,
     });
 
     await BaoCaoSanLuongModel.updateMany(
       {
-        _id: { $in: createDto.block_ids },
+        _id: { $in: createDto.blockIds },
       },
       {
         $set: {
           // ycsc_id: ycscId,
-          trang_thai: BaoCaoState.RESERVED,
-          ngay_cap_nhat: new Date(),
+          trangThai: BaoCaoState.RESERVED,
+          ngayCapNhat: new Date(),
         },
       },
     );
 
-    return ycsc;
+    const phanCongModel = this.ycscModel.db.model(PhanCong.name);
+    const phanCongCreate = await phanCongModel.create({
+      kcs: createDto.kcsId,
+      tnsx: createDto.tnsxId,
+      congDoan: CongDoan.BO,
+      ycscId: ycscId,
+      ngayTao: new Date(),
+      ngayCapNhat: new Date(),
+    });
+
+    const ycscUpdated = await this.update((ycscId as any).toString(), {
+      phanCong: [phanCongCreate._id],
+      ngayCapNhat: new Date(),
+    });
+
+    return ycscUpdated;
   }
 
   /**
@@ -160,15 +180,15 @@ export class YCSCService extends BaseService<YCSCDocument> {
     }
 
     // Kiểm tra trạng thái hiện tại phải là chờ duyệt
-    if (ycsc.trang_thai !== TrangThai.NEW) {
+    if (ycsc.trangThai !== TrangThai.NEW) {
       throw new BadRequestException('Yêu cầu không ở trạng thái mới tạo');
     }
 
     // Cập nhật thông tin duyệt
     const updateData: any = {
-      trang_thai: approveDto.trang_thai,
-      ngay_duyet: new Date(),
-      ngay_cap_nhat: new Date(),
+      trangThai: approveDto.trangThai,
+      ngayDuyet: new Date(),
+      ngayCapNhat: new Date(),
     };
 
     return await this.update(ycscId, updateData);
@@ -178,21 +198,21 @@ export class YCSCService extends BaseService<YCSCDocument> {
     approveDto: BatchApproveYCSCDto,
   ): Promise<{ modifiedCount: number }> {
     const ycscs = await this.ycscModel.find({
-      _id: { $in: approveDto.ycsc_ids },
+      _id: { $in: approveDto.ycscIds },
     });
-    if (ycscs.length !== approveDto.ycsc_ids.length) {
+    if (ycscs.length !== approveDto.ycscIds.length) {
       throw new NotFoundException('Một số yêu cầu sơ chế không tồn tại');
     }
 
     const updateData: any = {
-      trang_thai: TrangThai.PROCESSING,
-      ngay_duyet: new Date(),
-      ngay_cap_nhat: new Date(),
+      trangThai: TrangThai.PROCESSING,
+      ngayDuyet: new Date(),
+      ngayCapNhat: new Date(),
       // nguoi_duyet_id: approveDto.nguoi_duyet_id,
     };
 
     const result = await this.updateMany(
-      { _id: { $in: approveDto.ycsc_ids } },
+      { _id: { $in: approveDto.ycscIds } },
       updateData,
     );
 
@@ -212,7 +232,7 @@ export class YCSCService extends BaseService<YCSCDocument> {
     }
 
     // Kiểm tra trạng thái phải là đã duyệt
-    if (ycsc.trang_thai !== TrangThai.PROCESSING) {
+    if (ycsc.trangThai !== TrangThai.PROCESSING) {
       throw new BadRequestException(
         'Yêu cầu phải được xử lý trước khi hoàn thành',
       );
@@ -220,10 +240,10 @@ export class YCSCService extends BaseService<YCSCDocument> {
 
     // Cập nhật thông tin hoàn thành
     const updateData: any = {
-      trang_thai: TrangThai.COMPLETED,
-      ngay_hoan_thanh: new Date(),
-      ngay_cap_nhat: new Date(),
-      nguoi_hoan_thanh_id: completeDto.nguoi_hoan_thanh_id,
+      trangThai: TrangThai.COMPLETED,
+      ngayHoanThanh: new Date(),
+      ngayCapNhat: new Date(),
+      nguoiHoanThanhId: completeDto.nguoiHoanThanhId,
     };
 
     return await this.update(ycscId, updateData);
@@ -235,10 +255,10 @@ export class YCSCService extends BaseService<YCSCDocument> {
   async findPendingApproval(): Promise<YCSCDocument[]> {
     return await this.ycscModel
       .find({
-        trang_thai: TrangThai.REVIEWED,
+        trangThai: TrangThai.REVIEWED,
       })
-      .populate('nguoi_tao_id', 'ten vai_tro')
-      .populate('nguoi_duyet_id', 'ten vai_tro');
+      .populate('nguoiTao', 'ten vai_tro')
+      .populate('nguoiDuyet', 'ten vai_tro');
   }
 
   /**
@@ -247,10 +267,10 @@ export class YCSCService extends BaseService<YCSCDocument> {
   async findApproved(): Promise<YCSCDocument[]> {
     return await this.ycscModel
       .find({
-        trang_thai: TrangThai.APPROVED,
+        trangThai: TrangThai.APPROVED,
       })
-      .populate('nguoi_tao_id', 'ten vai_tro')
-      .populate('nguoi_duyet_id', 'ten vai_tro');
+      .populate('nguoiTao', 'ten vai_tro')
+      .populate('nguoiDuyet', 'ten vai_tro');
   }
 
   /**
@@ -259,10 +279,10 @@ export class YCSCService extends BaseService<YCSCDocument> {
   async findCompleted(): Promise<YCSCDocument[]> {
     return await this.ycscModel
       .find({
-        trang_thai: TrangThai.COMPLETED,
+        trangThai: TrangThai.COMPLETED,
       })
-      .populate('nguoi_tao_id', 'ten vai_tro')
-      .populate('nguoi_duyet_id', 'ten vai_tro');
+      .populate('nguoiTao', 'ten vai_tro')
+      .populate('nguoiDuyet', 'ten vai_tro');
   }
 
   /**
@@ -276,13 +296,13 @@ export class YCSCService extends BaseService<YCSCDocument> {
   }> {
     const [pending, approved, completed, total] = await Promise.all([
       this.ycscModel.countDocuments({
-        trang_thai: TrangThai.REVIEWED,
+        trangThai: TrangThai.REVIEWED,
       }),
       this.ycscModel.countDocuments({
-        trang_thai: TrangThai.APPROVED,
+        trangThai: TrangThai.APPROVED,
       }),
       this.ycscModel.countDocuments({
-        trang_thai: TrangThai.COMPLETED,
+        trangThai: TrangThai.COMPLETED,
       }),
       this.ycscModel.countDocuments({}),
     ]);
@@ -298,8 +318,8 @@ export class YCSCService extends BaseService<YCSCDocument> {
     baoCaoIds: string[],
   ): Promise<YCSCDocument> {
     return await this.update(ycscId, {
-      bao_cao_san_luong_ids: baoCaoIds,
-      ngay_cap_nhat: new Date(),
+      baoCaoSanLuongIds: baoCaoIds,
+      ngayCapNhat: new Date(),
     });
   }
 
@@ -311,62 +331,68 @@ export class YCSCService extends BaseService<YCSCDocument> {
     phieuIds: string[],
   ): Promise<YCSCDocument> {
     return await this.update(ycscId, {
-      phieu_xuat_kho_ids: phieuIds,
-      ngay_cap_nhat: new Date(),
+      phieuXuatKhoIds: phieuIds,
+      ngayCapNhat: new Date(),
     });
   }
 
   async filterYCSC(filter: FilterYCSCDto): Promise<any[]> {
     const filterQuery: FilterQuery<YCSCDocument> = {};
-    if (filter.trang_thai) {
-      filterQuery.trang_thai = filter.trang_thai;
+    if (filter.trangThai) {
+      filterQuery.trangThai = filter.trangThai;
     }
     const result = await this.ycscModel
       .find(filterQuery)
-      .populate('nguoi_tao_id', 'ten vai_tro')
-      .populate('nguoi_duyet_id', 'ten vai_tro')
-      .populate('kcs_id', 'ten vai_tro')
-      .populate('tnsx_id', 'ten vai_tro')
+      .populate('nguoiTao', 'ten vai_tro')
+      .populate('nguoiDuyet', 'ten vai_tro')
+      .populate({
+        path: 'phanCong',
+        select: 'kcs tnsx congDoan',
+        populate: [
+          { path: 'kcs', select: 'ten vai_tro' },
+          { path: 'tnsx', select: 'ten vai_tro' },
+        ],
+      })
       .lean();
 
     const ycscIds = result.map((item) => item._id);
 
     const pnvModel = this.ycscModel.db.model(PhieuNghiepVu.name);
     const phieuXuatKhos = await pnvModel.find({
-      ycsc_id: { $in: ycscIds },
-      loai_phieu: LoaiPhieu.XuatKho,
+      ycscId: { $in: ycscIds },
+      loaiPhieu: LoaiPhieu.XuatKho,
       kho: Kho.KHO_BLOCK,
     });
 
-    let bcslIds: string[] = [];
-    bcslIds = [
-      ...bcslIds,
-      ...phieuXuatKhos.map((item) => item.bcsl_ids.map((id) => id.toString())),
+    let bcsl: string[] = [];
+    bcsl = [
+      ...bcsl,
+      ...phieuXuatKhos.map((item) => item.bcsl.map((id) => id.toString())),
     ].flat();
 
     const baoCaoSanLuongModel = this.ycscModel.db.model(BaoCaoSanLuong.name);
     const baoCaoSanLuongs = await baoCaoSanLuongModel.find({
-      _id: { $in: bcslIds.map((id) => new Types.ObjectId(id)) },
+      _id: { $in: bcsl.map((id) => new Types.ObjectId(id)) },
     });
 
     const res: any[] = [];
     for (const item of result) {
       console.log('item', (item as any)._id.toString());
       const phieuNghiepVus = phieuXuatKhos.filter(
-        (phieu) => String(phieu.ycsc_id) === String((item as any)._id),
+        (phieu) => String(phieu.ycscId) === String((item as any)._id),
       );
 
       const phieuNVs: any[] = [];
       for (const phieu of phieuNghiepVus) {
-        const baoCaoSanLuongIds = phieu.bcsl_ids.map((id) => id.toString());
+        const baoCaoSanLuongIds = phieu.bcsl.map((id) => id.toString());
         const baoCaoSanLuong = baoCaoSanLuongs.filter((baoCao) =>
           baoCaoSanLuongIds.includes(baoCao._id.toString()),
         );
         const plainPhieuNV = phieu.toObject ? phieu.toObject() : phieu;
-        phieuNVs.push({ ...plainPhieuNV, bao_cao_san_luong: baoCaoSanLuong });
+        phieuNVs.push({ ...plainPhieuNV, baoCaoSanLuong: baoCaoSanLuong });
       }
       const plain = (item as any).toObject ? (item as any).toObject() : item;
-      res.push({ ...plain, phieu_nghiep_vu: phieuNVs });
+      res.push({ ...plain, phieuNghiepVu: phieuNVs });
     }
     return res;
   }
@@ -382,30 +408,30 @@ export class YCSCService extends BaseService<YCSCDocument> {
 
     const pnvModel = this.ycscModel.db.model(PhieuNghiepVu.name);
     await pnvModel.create({
-      ycsc_id: ycsc._id,
-      ma_phieu: `XuatKho-${(ycsc._id as any).toString()}-${new Date().getTime()}`,
-      loai_phieu: LoaiPhieu.XuatKho,
-      trang_thai: TrangThai.NEW,
-      ngay_tao: new Date(),
-      ngay_cap_nhat: new Date(),
-      bcsl_ids: addBaoCaoSanLuongDto.bao_cao_san_luong_ids,
-      nguoi_tao_id: ycsc.nguoi_tao_id,
-      nguoi_duyet_id: ycsc.nguoi_duyet_id,
+      ycscId: ycsc._id,
+      maPhieu: `XuatKho-${(ycsc._id as any).toString()}-${new Date().getTime()}`,
+      loaiPhieu: LoaiPhieu.XuatKho,
+      trangThai: TrangThai.NEW,
+      ngayTao: new Date(),
+      ngayCapNhat: new Date(),
+      bcsl: addBaoCaoSanLuongDto.baoCaoSanLuongIds,
+      nguoiTao: ycsc.nguoiTao,
+      nguoiDuyet: ycsc.nguoiDuyet,
       kho: Kho.KHO_BLOCK,
     });
 
     const ycscUpdated = await this.update(id, {
-      ngay_cap_nhat: new Date(),
+      ngayCapNhat: new Date(),
     });
 
     const baoCaoSanLuongModel = this.ycscModel.db.model(BaoCaoSanLuong.name);
     await baoCaoSanLuongModel.updateMany(
-      { _id: { $in: addBaoCaoSanLuongDto.bao_cao_san_luong_ids } },
+      { _id: { $in: addBaoCaoSanLuongDto.baoCaoSanLuongIds } },
       {
         $set: {
-          trang_thai: BaoCaoState.RESERVED,
-          completed_cong_doan: CongDoan.BO,
-          ngay_cap_nhat: new Date(),
+          trangThai: BaoCaoState.RESERVED,
+          completedCongDoan: CongDoan.BO,
+          ngayCapNhat: new Date(),
         },
       },
     );
@@ -424,19 +450,19 @@ export class YCSCService extends BaseService<YCSCDocument> {
 
     const baoCaoSanLuongModel = this.ycscModel.db.model(BaoCaoSanLuong.name);
     const parent = await baoCaoSanLuongModel.find({
-      _id: baoCaoSanLuongDto.parent_id,
+      _id: baoCaoSanLuongDto.parentId,
     });
     if (!parent) {
       throw new NotFoundException('Báo cáo sản lượng cha không tồn tại');
     }
     const baoCaoSanLuong = await baoCaoSanLuongModel.create({
       ...baoCaoSanLuongDto,
-      quy_cach: baoCaoSanLuongDto.quy_cach,
-      parent_id: parent[0]._id,
-      trang_thai: BaoCaoState.NEW,
-      ycsc_id: ycsc._id,
-      ngay_tao: new Date(),
-      completed_cong_doan: CongDoan.BO,
+      quyCach: baoCaoSanLuongDto.quyCach,
+      parentId: parent[0]._id,
+      trangThai: BaoCaoState.NEW,
+      ycscId: ycsc._id,
+      ngayTao: new Date(),
+      completedCongDoan: CongDoan.BO,
     });
 
     return baoCaoSanLuong;
@@ -450,7 +476,7 @@ export class YCSCService extends BaseService<YCSCDocument> {
 
     const baoCaoSanLuongModel = this.ycscModel.db.model(BaoCaoSanLuong.name);
     const baoCaoSanLuong = await baoCaoSanLuongModel.find({
-      ycsc_id: ycscId,
+      ycscId: ycscId,
     });
     return baoCaoSanLuong;
   }
@@ -466,27 +492,27 @@ export class YCSCService extends BaseService<YCSCDocument> {
 
     const baoCaoSanLuongModel = this.ycscModel.db.model(BaoCaoSanLuong.name);
     const baoCaoSanLuong = await baoCaoSanLuongModel.find({
-      _id: { $in: approveDto.bao_cao_san_luong_ids },
-      ycsc_id: ycsc._id,
+      _id: { $in: approveDto.baoCaoSanLuongIds },
+      ycscId: ycsc._id,
     });
-    if (baoCaoSanLuong.length !== approveDto.bao_cao_san_luong_ids.length) {
+    if (baoCaoSanLuong.length !== approveDto.baoCaoSanLuongIds.length) {
       throw new NotFoundException('Một số báo cáo sản lượng không tồn tại');
     }
     await baoCaoSanLuongModel.updateMany(
-      { _id: { $in: approveDto.bao_cao_san_luong_ids } },
+      { _id: { $in: approveDto.baoCaoSanLuongIds } },
       {
         $set: {
-          trang_thai: approveDto.trang_thai,
-          ngay_duyet: new Date(),
-          ngay_cap_nhat: new Date(),
+          trangThai: approveDto.trangThai,
+          ngayDuyet: new Date(),
+          ngayCapNhat: new Date(),
           reason: approveDto.reason,
-          nguoi_duyet_id: approveDto.nguoi_duyet_id,
+          nguoiDuyet: approveDto.nguoiDuyetId,
         },
       },
     );
     const baoCaoSanLuongUpdated = await baoCaoSanLuongModel.find({
-      _id: { $in: approveDto.bao_cao_san_luong_ids },
-      ycsc_id: ycsc._id,
+      _id: { $in: approveDto.baoCaoSanLuongIds },
+      ycscId: ycsc._id,
     });
 
     return baoCaoSanLuongUpdated;
@@ -503,34 +529,34 @@ export class YCSCService extends BaseService<YCSCDocument> {
 
     const baoCaoSanLuongModel = this.ycscModel.db.model(BaoCaoSanLuong.name);
     const baoCaoSanLuong = await baoCaoSanLuongModel.find({
-      _id: { $in: nhapKhoDto.bao_cao_san_luong_ids },
-      ycsc_id: ycsc._id,
+      _id: { $in: nhapKhoDto.baoCaoSanLuongIds },
+      ycscId: ycsc._id,
     });
-    if (baoCaoSanLuong.length !== nhapKhoDto.bao_cao_san_luong_ids.length) {
+    if (baoCaoSanLuong.length !== nhapKhoDto.baoCaoSanLuongIds.length) {
       throw new NotFoundException('Một số báo cáo sản lượng không tồn tại');
     }
 
     const phieuNghiepVuModel = this.ycscModel.db.model(PhieuNghiepVu.name);
     const phieuNghiepVu = await phieuNghiepVuModel.create({
-      ma_phieu: nhapKhoDto.ma_phieu,
-      loai_phieu: LoaiPhieu.NhapKho,
-      ycsc_id: ycsc._id,
-      nguoi_tao_id: nhapKhoDto.nguoi_tao_id,
-      nguoi_duyet_id: nhapKhoDto.thu_kho_id,
+      maPhieu: nhapKhoDto.maPhieu,
+      loaiPhieu: LoaiPhieu.NhapKho,
+      ycscId: ycsc._id,
+      nguoiTao: nhapKhoDto.nguoiTaoId,
+      nguoiDuyet: nhapKhoDto.thuKhoId,
       kho: Kho.KHO_PHOI,
-      trang_thai: TrangThai.NEW,
+      trangThai: TrangThai.NEW,
       currentCongDoan: CongDoan.SC,
-      bcsl_ids: nhapKhoDto.bao_cao_san_luong_ids,
-      ngay_tao: new Date(),
-      ngay_cap_nhat: new Date(),
+      bcsl: nhapKhoDto.baoCaoSanLuongIds,
+      ngayTao: new Date(),
+      ngayCapNhat: new Date(),
     });
 
     await baoCaoSanLuongModel.updateMany(
-      { _id: { $in: nhapKhoDto.bao_cao_san_luong_ids } },
+      { _id: { $in: nhapKhoDto.baoCaoSanLuongIds } },
       {
         $set: {
-          trang_thai: BaoCaoState.RESERVED,
-          ngay_cap_nhat: new Date(),
+          trangThai: BaoCaoState.RESERVED,
+          ngayCapNhat: new Date(),
           // completed_cong_doan: CongDoan.SC,
         },
       },
@@ -541,25 +567,31 @@ export class YCSCService extends BaseService<YCSCDocument> {
 
   async getDetailYCSC(id: string): Promise<{
     ycsc: YCSCDocument;
-    phieu_nghiep_vu: PhieuNghiepVuDocument[];
-    bao_cao_san_luong: BaoCaoSanLuongDocument[];
+    phieuNghiepVu: PhieuNghiepVuDocument[];
+    baoCaoSanLuong: BaoCaoSanLuongDocument[];
   }> {
     const ycsc = await this.ycscModel.findById(id).populate([
       {
-        path: 'nguoi_tao_id',
-        select: '_id ten vai_tro',
+        path: 'nguoiTao',
+        select: '_id ten vaiTro',
       },
       {
-        path: 'nguoi_duyet_id',
-        select: '_id ten vai_tro',
+        path: 'nguoiDuyet',
+        select: '_id ten vaiTro',
       },
       {
-        path: 'kcs_id',
-        select: '_id ten vai_tro',
-      },
-      {
-        path: 'tnsx_id',
-        select: '_id ten vai_tro',
+        path: 'phanCong',
+        select: '_id kcs tnsx congDoan',
+        populate: [
+          {
+            path: 'kcs',
+            select: '_id ten vaiTro',
+          },
+          {
+            path: 'tnsx',
+            select: '_id ten vaiTro',
+          },
+        ],
       },
     ]);
 
@@ -570,33 +602,33 @@ export class YCSCService extends BaseService<YCSCDocument> {
     const phieuNghiepVuModel = this.ycscModel.db.model(PhieuNghiepVu.name);
     const phieuNghiepVu = await phieuNghiepVuModel
       .find({
-        ycsc_id: ycsc._id,
+        ycscId: ycsc._id,
       })
       .populate([
         {
-          path: 'nguoi_tao_id',
-          select: '_id ten vai_tro',
+          path: 'nguoiTao',
+          select: '_id ten vaiTro',
         },
         {
-          path: 'nguoi_duyet_id',
-          select: '_id ten vai_tro',
+          path: 'nguoiDuyet',
+          select: '_id ten vaiTro',
         },
         {
-          path: 'bcsl_ids',
+          path: 'bcsl',
           select:
-            '_id ma_phieu loai_phieu kho trang_thai ngay_tao ngay_cap_nhat',
+            '_id maPhieu loaiPhieu kho trangThai viTri maDa mauDa ngayTao ngayCapNhat quyCach',
         },
       ]);
 
     const baoCaoSanLuongModel = this.ycscModel.db.model(BaoCaoSanLuong.name);
     const baoCaoSanLuong = await baoCaoSanLuongModel.find({
-      ycsc_id: ycsc._id,
+      ycscId: ycsc._id,
     });
 
     const ycscWithPhieuNghiepVu = {
       ycsc: ycsc.toObject(),
-      phieu_nghiep_vu: phieuNghiepVu,
-      bao_cao_san_luong: baoCaoSanLuong,
+      phieuNghiepVu: phieuNghiepVu,
+      baoCaoSanLuong: baoCaoSanLuong,
     };
 
     return ycscWithPhieuNghiepVu;

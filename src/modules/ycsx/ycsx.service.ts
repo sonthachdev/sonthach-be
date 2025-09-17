@@ -81,25 +81,25 @@ export class YCSXService extends BaseService<YCSXDocument> {
 
   async createYCSX(createDto: CreateYCSXDto): Promise<any> {
     const existingYCSX = await this.ycsxModel.findOne({
-      ma_phieu: createDto.ma_phieu,
+      maPhieu: createDto.maPhieu,
     });
     if (existingYCSX) {
       throw new BadRequestException('Mã phiếu đã tồn tại');
     }
     const newYCSX = new this.ycsxModel({
       ...createDto,
-      trang_thai: TrangThai.NEW,
-      ngay_tao: new Date(),
-      ngay_cap_nhat: new Date(),
+      trangThai: TrangThai.NEW,
+      ngayTao: new Date(),
+      ngayCapNhat: new Date(),
     });
     const savedYCSX = await newYCSX.save();
     const hangMucModel = this.ycsxModel.db.model(HangMuc.name);
 
     const hangMucDocuments = await Promise.all(
-      createDto.hang_muc.map(async (hangMuc: HangMucCreateYCSXDto) => {
+      createDto.hangMuc.map(async (hangMuc: HangMucCreateYCSXDto) => {
         const newHangMuc = new hangMucModel({
           ...hangMuc,
-          ycsx_id: savedYCSX._id,
+          ycsxId: savedYCSX._id,
         });
         return await newHangMuc.save();
       }),
@@ -108,14 +108,14 @@ export class YCSXService extends BaseService<YCSXDocument> {
     const listHangMucIds = hangMucDocuments.map((hangMuc) => hangMuc._id);
 
     await this.update(savedYCSX._id as string, {
-      hang_muc_ids: listHangMucIds,
+      hangMuc: listHangMucIds,
     });
 
     const ycsx = await this.findById(savedYCSX._id as string);
 
     return {
       ...ycsx.toObject(),
-      hang_muc: hangMucDocuments,
+      hangMuc: hangMucDocuments,
     };
   }
 
@@ -125,16 +125,16 @@ export class YCSXService extends BaseService<YCSXDocument> {
     totalPages: number;
   }> {
     const filterQuery: FilterQuery<YCSXDocument> = {};
-    if (filter.trang_thai) {
-      filterQuery.trang_thai = filter.trang_thai;
+    if (filter.trangThai) {
+      filterQuery.trangThai = filter.trangThai;
     }
     const result = await this.findAll(filterQuery, {
       page: filter.page,
       limit: filter.limit,
       sort: filter.sort,
       populateSelect: [
-        { path: 'nguoi_tao_id', select: '_id ten vai_tro' },
-        { path: 'nguoi_duyet_id', select: '_id ten vai_tro' },
+        { path: 'nguoiTao', select: '_id ten vai_tro' },
+        { path: 'nguoiDuyet', select: '_id ten vai_tro' },
       ],
     });
     const total = await this.count(filterQuery);
@@ -161,9 +161,9 @@ export class YCSXService extends BaseService<YCSXDocument> {
       deNghiSanXuat.items.map(async (item) => {
         const newPhanCong = new phanCongModel({
           ycsx_id: ycsx._id,
-          kcs_id: item.kcs_id,
-          tnsx_id: item.tnsx_id,
-          cong_doan: item.cong_doan,
+          kcs_id: item.kcsId,
+          tnsx_id: item.tnsxId,
+          cong_doan: item.congDoan,
           ngay_tao: new Date(),
         });
         return await newPhanCong.save();
@@ -171,7 +171,7 @@ export class YCSXService extends BaseService<YCSXDocument> {
     );
     const updatedYCSX = await this.update(id, {
       ngay_cap_nhat: new Date(),
-      trang_thai: TrangThai.REVIEWED,
+      trangThai: TrangThai.REVIEWED,
     });
     return { ycsx: updatedYCSX.toObject(), phan_cong: phanCongs };
   }
@@ -185,9 +185,9 @@ export class YCSXService extends BaseService<YCSXDocument> {
       throw new NotFoundException('Yêu cầu sản xuất không tồn tại');
     }
     return this.update(id, {
-      trang_thai: body.trang_thai,
+      trangThai: body.trangThai,
       ngay_cap_nhat: new Date(),
-      ngay_duyet: new Date(),
+      ngayDuyet: new Date(),
     });
   }
 
@@ -198,20 +198,20 @@ export class YCSXService extends BaseService<YCSXDocument> {
     const ycsxModel = this.ycsxModel.db.model(YCSX.name);
     const ycsx = await ycsxModel.findById(id).populate([
       {
-        path: 'nguoi_tao_id',
-        select: '_id ten vai_tro cong_doan',
+        path: 'nguoiTao',
+        select: '_id ten vaiTro congDoan',
       },
       {
-        path: 'nguoi_duyet_id',
-        select: '_id ten vai_tro cong_doan',
+        path: 'nguoiDuyet',
+        select: '_id ten vaiTro congDoan',
       },
       {
-        path: 'nguoi_xu_ly_id',
-        select: '_id ten vai_tro cong_doan',
+        path: 'nguoiXuLy',
+        select: '_id ten vaiTro congDoan',
       },
       {
-        path: 'hang_muc_ids',
-        select: '_id mota mau_da mat_da quy_cach group_id ghichu',
+        path: 'hangMuc',
+        select: '_id mota mauDa matDa quyCach groupId ghichu',
       },
     ]);
     if (!ycsx) {
@@ -219,14 +219,14 @@ export class YCSXService extends BaseService<YCSXDocument> {
     }
 
     const phanCongModel = this.ycsxModel.db.model(PhanCong.name);
-    const phanCongs = await phanCongModel.find({ ycsx_id: id }).populate([
+    const phanCongs = await phanCongModel.find({ ycsxId: id }).populate([
       {
-        path: 'kcs_id',
-        select: '_id ten vai_tro cong_doan',
+        path: 'kcs',
+        select: '_id ten vaiTro congDoan',
       },
       {
-        path: 'tnsx_id',
-        select: '_id ten vai_tro cong_doan',
+        path: 'tnsx',
+        select: '_id ten vaiTro congDoan',
       },
     ]);
     const ycsxWithPhanCong = {
@@ -257,8 +257,8 @@ export class YCSXService extends BaseService<YCSXDocument> {
       { _id: hangMucId },
       {
         $set: {
-          ...body.hang_muc,
-          ngay_cap_nhat: new Date(),
+          ...body.hangMuc,
+          ngayCapNhat: new Date(),
         },
       },
     );
@@ -266,18 +266,18 @@ export class YCSXService extends BaseService<YCSXDocument> {
     const updatedHangMuc = await hangMucModel.findById(hangMucId);
 
     const listHangMucByGroupId = await hangMucModel.find({
-      group_id: hangMuc.group_id,
+      groupId: hangMuc.groupId,
       _id: { $ne: hangMucId },
     });
 
     if (listHangMucByGroupId.length > 0) {
       await hangMucModel.updateMany(
-        { group_id: hangMuc.group_id },
+        { groupId: hangMuc.groupId },
         {
           $set: {
             ghichu: updatedHangMuc.ghichu,
             mota: updatedHangMuc.mota,
-            ngay_cap_nhat: new Date(),
+            ngayCapNhat: new Date(),
           },
         },
       );
@@ -298,12 +298,12 @@ export class YCSXService extends BaseService<YCSXDocument> {
     }
     const hangMucModel = this.ycsxModel.db.model(HangMuc.name);
     const hangMucs = await Promise.all(
-      body.hang_muc.map(async (hangMuc: HangMucCreateYCSXDto) => {
+      body.hangMuc.map(async (hangMuc: HangMucCreateYCSXDto) => {
         const newHangMuc = new hangMucModel({
           ...hangMuc,
-          ycsx_id: ycsx._id,
-          group_id: hangMuc.group_id
-            ? hangMuc.group_id
+          ycsx: ycsx._id,
+          groupId: hangMuc.groupId
+            ? hangMuc.groupId
             : new ObjectId().toString(),
           ngay_tao: new Date(),
         });
@@ -311,10 +311,10 @@ export class YCSXService extends BaseService<YCSXDocument> {
       }),
     );
     const listHangMucNewIds = hangMucs.map((hangMuc) => hangMuc._id);
-    const listHangMucUpdate = [...ycsx.hang_muc_ids, ...listHangMucNewIds];
+    const listHangMucUpdate = [...ycsx.hangMuc, ...listHangMucNewIds];
     await this.update(id, {
       ngay_cap_nhat: new Date(),
-      hang_muc_ids: listHangMucUpdate,
+      hangMuc: listHangMucUpdate,
     });
     return hangMucs;
   }
@@ -427,17 +427,17 @@ export class YCSXService extends BaseService<YCSXDocument> {
 
     const baoCaoSanLuongModel = this.ycsxModel.db.model(BaoCaoSanLuong.name);
     const baoCaoSanLuong = await baoCaoSanLuongModel.find({
-      _id: { $in: body.bcsl_ids },
+      _id: { $in: body.bcslIds },
     });
-    if (baoCaoSanLuong.length !== body.bcsl_ids.length) {
+    if (baoCaoSanLuong.length !== body.bcslIds.length) {
       throw new NotFoundException('Một số báo cáo sản lượng không tồn tại');
     }
 
     await baoCaoSanLuongModel.updateMany(
-      { _id: { $in: body.bcsl_ids } },
+      { _id: { $in: body.bcslIds } },
       {
         $set: {
-          trang_thai: body.trang_thai,
+          trangThai: body.trangThai,
           reason: body.reason,
           ngay_cap_nhat: new Date(),
         },
@@ -445,7 +445,7 @@ export class YCSXService extends BaseService<YCSXDocument> {
     );
 
     const baoCaoSanLuongUpdated = await baoCaoSanLuongModel.find({
-      _id: { $in: body.bcsl_ids },
+      _id: { $in: body.bcslIds },
     });
 
     return baoCaoSanLuongUpdated;
@@ -469,42 +469,40 @@ export class YCSXService extends BaseService<YCSXDocument> {
 
     const baoCaoSanLuongModel = this.ycsxModel.db.model(BaoCaoSanLuong.name);
     const baoCaoSanLuong = await baoCaoSanLuongModel.find({
-      _id: { $in: body.bcsl_ids },
+      _id: { $in: body.bcslIds },
     });
-    if (baoCaoSanLuong.length !== body.bcsl_ids.length) {
+    if (baoCaoSanLuong.length !== body.bcslIds.length) {
       throw new NotFoundException('Một số báo cáo sản lượng không tồn tại');
     }
 
     const phieuNghiepVuModel = this.ycsxModel.db.model(PhieuNghiepVu.name);
 
     const bodyPhieuNghiepVu = {
-      ycsx_id: ycsx._id,
-      ma_phieu: body.ma_phieu,
-      loai_phieu: body.loai_phieu,
-      trang_thai: TrangThai.NEW,
-      kho: body.kho_nhan,
-      currentCongDoan: phanCong.cong_doan,
-      nextCongDoan: body.next_cong_doan,
-      bcsl_ids: body.bcsl_ids,
-      nguoi_tao_id: phanCong.kcs_id,
-      nguoi_duyet_id:
-        body.loai_phieu === LoaiPhieu.NhapKho
-          ? body.thu_kho_id
-          : body.kcs_nhan_id,
+      ycsxId: ycsx._id,
+      maPhieu: body.maPhieu,
+      loaiPhieu: body.loaiPhieu,
+      trangThai: TrangThai.NEW,
+      kho: body.khoNhan,
+      currentCongDoan: phanCong.congDoan,
+      nextCongDoan: body.nextCongDoan,
+      bcsl: body.bcslIds,
+      nguoiTao: phanCong.kcsId,
+      nguoiDuyet:
+        body.loaiPhieu === LoaiPhieu.NhapKho ? body.thuKhoId : body.kcsNhanId,
 
-      ngay_tao: new Date(),
-      ngay_cap_nhat: new Date(),
+      ngayTao: new Date(),
+      ngayCapNhat: new Date(),
       theoDonHang: body.theoDonHang,
     };
     const phieuNghiepVu = await phieuNghiepVuModel.create(bodyPhieuNghiepVu);
 
     await baoCaoSanLuongModel.updateMany(
-      { _id: { $in: body.bcsl_ids } },
+      { _id: { $in: body.bcslIds } },
       {
         $set: {
-          trang_thai: BaoCaoState.RESERVED,
-          ngay_cap_nhat: new Date(),
-          do_day_cua: body.do_day_cua,
+          trangThai: BaoCaoState.RESERVED,
+          ngayCapNhat: new Date(),
+          doDayCua: body.doDayCua,
           theoDonHang: body.theoDonHang,
         },
       },
@@ -512,7 +510,7 @@ export class YCSXService extends BaseService<YCSXDocument> {
 
     const phieuNghiepVuUpdated = await phieuNghiepVuModel
       .findById(phieuNghiepVu._id)
-      .populate('bcsl_ids');
+      .populate('bcsl');
     return phieuNghiepVuUpdated;
   }
 
@@ -534,39 +532,39 @@ export class YCSXService extends BaseService<YCSXDocument> {
 
     const phieuNghiepVuModel = this.ycsxModel.db.model(PhieuNghiepVu.name);
     const phieuNghiepVu = await phieuNghiepVuModel.find({
-      _id: { $in: body.pnv_ids },
+      _id: { $in: body.phieuNghiepVuIds },
     });
-    if (phieuNghiepVu.length !== body.pnv_ids.length) {
+    if (phieuNghiepVu.length !== body.phieuNghiepVuIds.length) {
       throw new NotFoundException('Một số phiếu nghiệp vụ không tồn tại');
     }
 
-    const bcslIds = phieuNghiepVu.map((pnv) => pnv.bcsl_ids).flat();
+    const bcsl = phieuNghiepVu.map((pnv) => pnv.bcsl).flat();
     const baoCaoSanLuongModel = this.ycsxModel.db.model(BaoCaoSanLuong.name);
     await baoCaoSanLuongModel.updateMany(
-      { _id: { $in: bcslIds } },
+      { _id: { $in: bcsl } },
       {
         $set: {
-          trang_thai: BaoCaoState.FORWARDED,
-          ngay_cap_nhat: new Date(),
+          trangThai: BaoCaoState.FORWARDED,
+          ngayCapNhat: new Date(),
         },
       },
     );
 
     await phieuNghiepVuModel.updateMany(
-      { _id: { $in: body.pnv_ids } },
+      { _id: { $in: body.phieuNghiepVuIds } },
       {
         $set: {
-          trang_thai: TrangThai.COMPLETED,
-          ngay_cap_nhat: new Date(),
+          trangThai: TrangThai.COMPLETED,
+          ngayCapNhat: new Date(),
         },
       },
     );
 
     const phieuNghiepVuUpdated = await phieuNghiepVuModel
       .find({
-        _id: { $in: body.pnv_ids },
+        _id: { $in: body.phieuNghiepVuIds },
       })
-      .populate('bcsl_ids');
+      .populate('bcsl');
 
     return phieuNghiepVuUpdated;
   }

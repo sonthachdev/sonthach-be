@@ -33,7 +33,7 @@ import {
 } from './dto/bao-cao-san-luong.dto';
 
 @ApiTags('bao-cao-san-luong')
-@Controller('bao-cao-san-luong')
+@Controller('api/bao-cao-san-luong')
 export class BaoCaoSanLuongController extends BaseController<BaoCaoSanLuongDocument> {
   constructor(private readonly baoCaoSanLuongService: BaoCaoSanLuongService) {
     super(baoCaoSanLuongService);

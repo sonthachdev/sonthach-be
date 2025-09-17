@@ -15,35 +15,35 @@ export class CreatePhieuXuatKhoDto {
     example: 'PXK-2024-001',
   })
   @IsString()
-  ma_phieu: string;
+  maPhieu: string;
 
   @ApiProperty({
     description: 'ID yêu cầu sơ chế',
     example: '507f1f77bcf86cd799439011',
   })
   @IsMongoId()
-  ycsc_id: string;
+  ycscId: string;
 
   @ApiProperty({
     description: 'ID người tạo phiếu',
     example: '507f1f77bcf86cd799439011',
   })
   @IsMongoId()
-  nguoi_tao_id: string;
+  nguoiTaoId: string;
 
   @ApiProperty({
     description: 'Ngày tạo phiếu',
     example: '2024-12-01T00:00:00.000Z',
   })
   @IsDateString()
-  ngay_tao: string;
+  ngayTao: string;
 
   @ApiProperty({
     description: 'ID người duyệt phiếu',
     example: '507f1f77bcf86cd799439011',
   })
   @IsMongoId()
-  nguoi_duyet_id: string;
+  nguoiDuyetId: string;
 
   @ApiProperty({
     description: 'Kho xuất',
@@ -59,7 +59,7 @@ export class CreatePhieuXuatKhoDto {
     example: TrangThai.NEW,
   })
   @IsEnum(TrangThai)
-  trang_thai: TrangThai;
+  trangThai: TrangThai;
 
   @ApiProperty({
     description: 'Công đoạn hiện tại',
@@ -77,7 +77,7 @@ export class CreatePhieuXuatKhoDto {
   })
   @IsOptional()
   @IsEnum(CongDoan)
-  next_cong_doan?: CongDoan;
+  nextCongDoan?: CongDoan;
 
   @ApiProperty({
     description: 'Danh sách ID báo cáo sản lượng',
@@ -86,7 +86,7 @@ export class CreatePhieuXuatKhoDto {
   })
   @IsArray()
   @IsMongoId({ each: true })
-  bcsl_ids: string[];
+  bcslIds: string[];
 
   @ApiProperty({
     description: 'Danh sách ID hạng mục',
@@ -97,7 +97,7 @@ export class CreatePhieuXuatKhoDto {
   @IsOptional()
   @IsArray()
   @IsMongoId({ each: true })
-  hang_muc_ids?: string[];
+  hangMucIds?: string[];
 
   @ApiProperty({
     description: 'Ghi chú xuất kho',
@@ -105,7 +105,7 @@ export class CreatePhieuXuatKhoDto {
   })
   @IsOptional()
   @IsString()
-  ghi_chu?: string;
+  ghiChu?: string;
 }
 
 export class ApprovePhieuXuatKhoDto {
@@ -114,7 +114,7 @@ export class ApprovePhieuXuatKhoDto {
     example: '507f1f77bcf86cd799439011',
   })
   @IsMongoId()
-  nguoi_duyet_id: string;
+  nguoiDuyetId: string;
 
   @ApiProperty({
     description: 'Trạng thái sau khi duyệt',
@@ -122,7 +122,7 @@ export class ApprovePhieuXuatKhoDto {
     example: TrangThai.APPROVED,
   })
   @IsEnum(TrangThai)
-  trang_thai: TrangThai;
+  trangThai: TrangThai;
 
   @ApiProperty({
     description: 'Ghi chú duyệt',
@@ -130,7 +130,7 @@ export class ApprovePhieuXuatKhoDto {
   })
   @IsOptional()
   @IsString()
-  ghi_chu?: string;
+  ghiChu?: string;
 }
 
 export class BatchApprovePhieuXuatKhoDto {
@@ -140,14 +140,14 @@ export class BatchApprovePhieuXuatKhoDto {
   })
   @IsArray()
   @IsMongoId({ each: true })
-  phieu_ids: string[];
+  phieuIds: string[];
 
   @ApiProperty({
     description: 'Vị trí đơn hàng trong kho',
     example: 'A1',
   })
   @IsString()
-  vi_tri: string;
+  viTri: string;
 }
 
 export class ProcessWarehouseExitDto {
@@ -156,14 +156,14 @@ export class ProcessWarehouseExitDto {
     example: '507f1f77bcf86cd799439011',
   })
   @IsMongoId()
-  phieu_id: string;
+  phieuId: string;
 
   @ApiProperty({
     description: 'ID người thực hiện xuất kho',
     example: '507f1f77bcf86cd799439011',
   })
   @IsMongoId()
-  nguoi_thuc_hien_id: string;
+  nguoiThucHienId: string;
 
   @ApiProperty({
     description: 'Ghi chú xuất kho',
@@ -171,5 +171,5 @@ export class ProcessWarehouseExitDto {
   })
   @IsOptional()
   @IsString()
-  ghi_chu?: string;
+  ghiChu?: string;
 }

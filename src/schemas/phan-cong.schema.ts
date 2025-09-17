@@ -7,30 +7,33 @@ export type PhanCongDocument = PhanCong & Document;
 @Schema({ collection: 'phan_cong', timestamps: false })
 export class PhanCong {
   @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'ycsx', required: false })
-  ycsx_id?: MongooseSchema.Types.ObjectId;
+  ycsx?: MongooseSchema.Types.ObjectId;
 
   @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'ycsc', required: false })
-  ycsc_id?: MongooseSchema.Types.ObjectId;
+  ycsc?: MongooseSchema.Types.ObjectId;
 
   @Prop({
     type: MongooseSchema.Types.ObjectId,
     ref: 'nhan_vien',
     required: true,
   })
-  kcs_id: MongooseSchema.Types.ObjectId;
+  kcs: MongooseSchema.Types.ObjectId;
 
   @Prop({
     type: MongooseSchema.Types.ObjectId,
     ref: 'nhan_vien',
     required: true,
   })
-  tnsx_id: MongooseSchema.Types.ObjectId;
+  tnsx: MongooseSchema.Types.ObjectId;
 
   @Prop({ enum: CongDoan, required: true })
-  cong_doan: CongDoan;
+  congDoan: CongDoan;
 
   @Prop({ type: Date, default: Date.now })
-  ngay_tao: Date;
+  ngayTao: Date;
+
+  @Prop({ type: Date, default: Date.now })
+  ngayCapNhat: Date;
 }
 
 export const PhanCongSchema = SchemaFactory.createForClass(PhanCong);

@@ -25,7 +25,7 @@ import {
 import { BatchApprovePhieuXuatKhoDto } from './dto/phieu-nghiep-vu-xuat-kho.dto';
 
 @ApiTags('phieu-nghiep-vu')
-@Controller('phieu-nghiep-vu')
+@Controller('api/phieu-nghiep-vu')
 export class PhieuNghiepVuController extends BaseController<PhieuNghiepVuDocument> {
   constructor(private readonly phieuNghiepVuService: PhieuNghiepVuService) {
     super(phieuNghiepVuService);
