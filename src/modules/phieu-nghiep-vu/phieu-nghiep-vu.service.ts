@@ -23,7 +23,7 @@ import {
   BlockWarehouseBatchImportDto,
   ListPhieuNghiepVuQueryDto,
 } from './dto/phieu-nghiep-vu.dto';
-import { BatchApprovePhieuXuatKhoDto } from './dto/phieu-nghiep-vu-xuat-kho.dto';
+import { BatchApprovePhieuXuatKhoDto, BatchRejectPhieuXuatKhoDto } from './dto/phieu-nghiep-vu-xuat-kho.dto';
 
 @Injectable()
 export class PhieuNghiepVuService extends BaseService<PhieuNghiepVuDocument> {
@@ -46,7 +46,11 @@ export class PhieuNghiepVuService extends BaseService<PhieuNghiepVuDocument> {
   ): Promise<PhieuNghiepVuDocument[]> {
     const filter: Record<string, unknown> = {};
     if (query.kho) filter.kho = query.kho;
-    if (query.trangThai) filter.trangThai = query.trangThai;
+    if (query.trangThai) {
+      // example: new,cancelled
+      const listTrangThai = query.trangThai.split(',');
+      filter.trangThai = { $in: listTrangThai };
+    }
     if (query.currentCongDoan) filter.currentCongDoan = query.currentCongDoan;
     if (query.loaiPhieu) filter.loaiPhieu = query.loaiPhieu;
     // sort format: field:order,field2:order2
@@ -732,5 +736,24 @@ export class PhieuNghiepVuService extends BaseService<PhieuNghiepVuDocument> {
     });
 
     return await newPhieu.save();
+  }
+
+  async batchRejectWarehouseExitTicket(
+    batchRejectDto: BatchRejectPhieuXuatKhoDto,
+  ): Promise<PhieuNghiepVuDocument[]> {
+    const pnvs = await this.phieuNghiepVuModel.find({
+      _id: { $in: batchRejectDto.phieuIds },
+    });
+    if (pnvs.length !== batchRejectDto.phieuIds.length) {
+      throw new NotFoundException('Một số phiếu nghiệp vụ không tồn tại');
+    }
+    await this.phieuNghiepVuModel.updateMany(
+      { _id: { $in: batchRejectDto.phieuIds } },
+      { $set: { trangThai: TrangThai.CANCELLED, ngayCapNhat: new Date() } },
+    );
+
+    return await this.phieuNghiepVuModel.find({
+      _id: { $in: batchRejectDto.phieuIds },
+    });
   }
 }

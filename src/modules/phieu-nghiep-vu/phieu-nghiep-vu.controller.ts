@@ -22,7 +22,10 @@ import {
   BlockWarehouseBatchImportDto,
   ListPhieuNghiepVuQueryDto,
 } from './dto/phieu-nghiep-vu.dto';
-import { BatchApprovePhieuXuatKhoDto } from './dto/phieu-nghiep-vu-xuat-kho.dto';
+import {
+  BatchApprovePhieuXuatKhoDto,
+  BatchRejectPhieuXuatKhoDto,
+} from './dto/phieu-nghiep-vu-xuat-kho.dto';
 
 @ApiTags('phieu-nghiep-vu')
 @Controller('api/phieu-nghiep-vu')
@@ -1418,6 +1421,54 @@ export class PhieuNghiepVuController extends BaseController<PhieuNghiepVuDocumen
       return {
         success: false,
         message: 'Cập nhật trạng thái thất bại',
+        error: message,
+      };
+    }
+  }
+
+  /**
+   * Từ chối nhiều phiếu xuất kho
+   */
+  @Put('batch-tu-choi')
+  @ApiOperation({
+    summary: 'Từ chối nhiều phiếu xuất kho',
+  })
+  @ApiBody({ type: BatchRejectPhieuXuatKhoDto })
+  @ApiOkResponse({
+    description: 'Từ chối nhiều phiếu xuất kho thành công',
+    schema: {
+      type: 'object',
+      properties: {
+        success: { type: 'boolean', example: true },
+        message: {
+          type: 'string',
+          example: 'Từ chối nhiều phiếu xuất kho thành công',
+        },
+        data: { description: 'Các phiếu đã được từ chối' },
+      },
+    },
+  })
+  @ApiBadRequestResponse({ description: 'Dữ liệu không hợp lệ' })
+  @ApiInternalServerErrorResponse({ description: 'Lỗi server' })
+  async batchRejectWarehouseExitTicket(
+    @Body() batchRejectDto: BatchRejectPhieuXuatKhoDto,
+  ): Promise<CustomApiResponse<PhieuNghiepVuDocument[]>> {
+    try {
+      const data =
+        await this.phieuNghiepVuService.batchRejectWarehouseExitTicket(
+          batchRejectDto,
+        );
+      return {
+        success: true,
+        message: 'Từ chối nhiều phiếu xuất kho thành công',
+        data,
+      };
+    } catch (error: unknown) {
+      const message =
+        error instanceof Error ? error.message : 'Lỗi không xác định';
+      return {
+        success: false,
+        message: 'Từ chối nhiều phiếu xuất kho thất bại',
         error: message,
       };
     }

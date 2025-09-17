@@ -150,6 +150,16 @@ export class BatchApprovePhieuXuatKhoDto {
   viTri: string;
 }
 
+export class BatchRejectPhieuXuatKhoDto {
+  @ApiProperty({
+    description: 'Danh sách ID phiếu xuất kho',
+    example: ['507f1f77bcf86cd799439011'],
+  })
+  @IsArray()
+  @IsMongoId({ each: true })
+  phieuIds: string[];
+}
+
 export class ProcessWarehouseExitDto {
   @ApiProperty({
     description: 'ID phiếu xuất kho',
