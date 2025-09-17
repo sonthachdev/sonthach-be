@@ -63,12 +63,21 @@ export class NhanVienService extends BaseService<NhanVienDocument> {
     vaiTro: string,
     congDoan: string,
   ): Promise<NhanVienDocument[]> {
+    const filter: Record<string, unknown> = {};
+    if (vaiTro) {
+      const listVaiTro = vaiTro.split(',');
+      filter.vaiTro = { $in: listVaiTro };
+    }
+    if (congDoan) {
+      const listCongDoan = congDoan.split(',');
+      filter.congDoan = { $in: listCongDoan };
+    }
     return await this.model
       .find({
-        vaiTro: vaiTro,
-        cong_doan: congDoan,
+        ...filter,
         trangThai: true,
       })
+      .select('ten vaiTro congDoan')
       .exec();
   }
 

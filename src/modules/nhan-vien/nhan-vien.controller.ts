@@ -32,6 +32,8 @@ import {
   RefreshTokenDto,
 } from './dto/auth.dto';
 import { JwtAuthGuard } from './jwt-auth.guard';
+import { VaiTro } from 'src/utils/vai-tro.enum';
+import { CongDoan } from 'src/utils/cong-doan.enum';
 
 @ApiTags('nhan-vien')
 @Controller('api/nhan-vien')
@@ -380,12 +382,14 @@ export class NhanVienController extends BaseController<NhanVienDocument> {
   @ApiQuery({
     name: 'vaiTro',
     description: 'Vai trò của nhân viên',
-    example: 'tho',
+    example: VaiTro.NVKD,
+    required: false,
   })
   @ApiQuery({
     name: 'congDoan',
     description: 'Công đoạn của nhân viên',
-    example: 'cat_da',
+    example: CongDoan.BO,
+    required: false,
   })
   @ApiOkResponse({
     description: 'Lấy danh sách nhân viên theo bộ lọc thành công',
