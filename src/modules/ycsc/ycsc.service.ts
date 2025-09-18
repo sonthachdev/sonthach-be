@@ -142,7 +142,7 @@ export class YCSCService extends BaseService<YCSCDocument> {
       },
       {
         $set: {
-          // ycsc_id: ycscId,
+          ycscId: ycscId,
           trangThai: BaoCaoState.RESERVED,
           ngayCapNhat: new Date(),
         },

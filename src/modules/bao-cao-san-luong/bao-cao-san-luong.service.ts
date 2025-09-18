@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-unused-vars */
+
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import {
   Injectable,
@@ -42,39 +42,39 @@ export class BaoCaoSanLuongService extends BaseService<BaoCaoSanLuongDocument> {
     >;
     const filter: FilterQuery<BaoCaoSanLuongDocument> & QuyCachFilter = {};
 
-    if (dto.mau_da !== undefined) {
-      filter.mau_da = dto.mau_da;
+    if (dto.mauDa !== undefined) {
+      filter.mauDa = dto.mauDa;
     }
 
-    if (dto.trang_thai !== undefined) {
-      filter.trangThai = dto.trang_thai;
+    if (dto.trangThai !== undefined) {
+      filter.trangThai = dto.trangThai;
     }
 
-    if (dto.vi_tri !== undefined) {
-      filter.viTri = dto.vi_tri;
+    if (dto.viTri !== undefined) {
+      filter.viTri = dto.viTri;
     }
 
     if (dto.kho !== undefined) {
       filter.kho = dto.kho;
     }
 
-    if (dto.ycsc_id !== undefined) {
-      filter.ycsc_id = dto.ycsc_id;
+    if (dto.ycscId !== undefined) {
+      filter.ycscId = dto.ycscId;
     }
 
-    if (dto.ycsx_id !== undefined) {
-      filter.ycsx_id = dto.ycsx_id;
+    if (dto.ycsxId !== undefined) {
+      filter.ycsxId = dto.ycsxId;
     }
 
     const qcFilter: QuyCachFilter = {};
     if (dto.dai !== undefined) {
-      qcFilter['quy_cach.dai'] = dto.dai;
+      qcFilter['quyCach.dai'] = dto.dai;
     }
     if (dto.rong !== undefined) {
-      qcFilter['quy_cach.rong'] = dto.rong;
+      qcFilter['quyCach.rong'] = dto.rong;
     }
     if (dto.day !== undefined) {
-      qcFilter['quy_cach.day'] = dto.day;
+      qcFilter['quyCach.day'] = dto.day;
     }
     Object.assign(filter, qcFilter);
 
@@ -134,9 +134,9 @@ export class BaoCaoSanLuongService extends BaseService<BaoCaoSanLuongDocument> {
     // Tạo báo cáo mới với trạng thái chờ duyệt
     const newBaoCao = new this.baoCaoSanLuongModel({
       ...createDto,
-      trang_thai: BaoCaoState.NEW, // Mới tạo
-      ngay_tao: new Date(createDto.ngay_tao),
-      ngay_cap_nhat: new Date(),
+      trangThai: BaoCaoState.NEW, // Mới tạo
+      ngayTao: new Date(createDto.ngayTao),
+      ngayCapNhat: new Date(),
     });
 
     return await newBaoCao.save();
@@ -167,8 +167,8 @@ export class BaoCaoSanLuongService extends BaseService<BaoCaoSanLuongDocument> {
     };
 
     // Lưu ghi chú duyệt
-    if (approveDto.ghi_chu) {
-      (updateData as any).ghi_chu_duyet = approveDto.ghi_chu;
+    if (approveDto.ghiChu) {
+      (updateData as any).ghiChuDuyet = approveDto.ghiChu;
     }
 
     return await this.update(baoCaoId, updateData);
@@ -194,15 +194,15 @@ export class BaoCaoSanLuongService extends BaseService<BaoCaoSanLuongDocument> {
     // Cập nhật thông tin từ chối
     const updateData: UpdateQuery<BaoCaoSanLuongDocument> = {
       trangThai: BaoCaoState.REJECTED,
-      ngay_tu_choi: new Date(),
+      ngayTuChoi: new Date(),
       ngayCapNhat: new Date(),
-      nguoi_tu_choi_id: rejectDto.nguoi_tu_choi_id,
-      ly_do_tu_choi: rejectDto.ly_do_tu_choi,
+      nguoiTuChoiId: rejectDto.nguoiTuChoiId,
+      lyDoTuChoi: rejectDto.lyDoTuChoi,
     };
 
     // Lưu ghi chú từ chối
-    if (rejectDto.ghi_chu) {
-      (updateData as any).ghi_chu_tu_choi = rejectDto.ghi_chu;
+    if (rejectDto.ghiChu) {
+      (updateData as any).ghiChuTuChoi = rejectDto.ghiChu;
     }
 
     return await this.update(baoCaoId, updateData);
@@ -214,9 +214,7 @@ export class BaoCaoSanLuongService extends BaseService<BaoCaoSanLuongDocument> {
   async importBaoCaoSanLuong(
     importDto: ImportBaoCaoSanLuongDto,
   ): Promise<BaoCaoSanLuongDocument> {
-    const baoCao = await this.baoCaoSanLuongModel.findById(
-      importDto.bao_cao_id,
-    );
+    const baoCao = await this.baoCaoSanLuongModel.findById(importDto.baoCaoId);
     if (!baoCao) {
       throw new NotFoundException('Báo cáo sản lượng không tồn tại');
     }
@@ -232,18 +230,18 @@ export class BaoCaoSanLuongService extends BaseService<BaoCaoSanLuongDocument> {
     const updateData: UpdateQuery<BaoCaoSanLuongDocument> = {
       trangThai: BaoCaoState.IMPORTED, // Đã nhập kho (thành phôi)
       kho: importDto.kho,
-      viTri: importDto.vi_tri,
-      ngay_nhap_kho: new Date(),
-      nguoi_nhap_kho_id: importDto.nguoi_thuc_hien_id,
+      viTri: importDto.viTri,
+      ngayNhapKho: new Date(),
+      nguoiNhapKhoId: importDto.nguoiThucHienId,
       ngayCapNhat: new Date(),
     };
 
     // Lưu ghi chú nhập kho
-    if (importDto.ghi_chu) {
-      (updateData as any).ghi_chu_nhap_kho = importDto.ghi_chu;
+    if (importDto.ghiChu) {
+      (updateData as any).ghiChuNhapKho = importDto.ghiChu;
     }
 
-    return await this.update(importDto.bao_cao_id, updateData);
+    return await this.update(importDto.baoCaoId, updateData);
   }
 
   /**
@@ -254,7 +252,7 @@ export class BaoCaoSanLuongService extends BaseService<BaoCaoSanLuongDocument> {
       .find({
         trangThai: BaoCaoState.NEW,
       })
-      .populate('tnsx_id', 'ten vai_tro')
+      .populate('tnsxId', 'ten vai_tro')
       .populate('kcs_id', 'ten vai_tro');
   }
 
@@ -266,7 +264,7 @@ export class BaoCaoSanLuongService extends BaseService<BaoCaoSanLuongDocument> {
       .find({
         trangThai: BaoCaoState.APPROVED,
       })
-      .populate('tnsx_id', 'ten vai_tro')
+      .populate('tnsxId', 'ten vai_tro')
       .populate('kcs_id', 'ten vai_tro');
   }
 
@@ -278,7 +276,7 @@ export class BaoCaoSanLuongService extends BaseService<BaoCaoSanLuongDocument> {
       .find({
         trangThai: BaoCaoState.IMPORTED,
       })
-      .populate('tnsx_id', 'ten vai_tro')
+      .populate('tnsxId', 'ten vai_tro')
       .populate('kcs_id', 'ten vai_tro');
   }
 
@@ -290,7 +288,7 @@ export class BaoCaoSanLuongService extends BaseService<BaoCaoSanLuongDocument> {
       .find({
         trangThai: BaoCaoState.REJECTED,
       })
-      .populate('tnsx_id', 'ten vai_tro')
+      .populate('tnsxId', 'ten vai_tro')
       .populate('kcs_id', 'ten vai_tro');
   }
 
@@ -327,19 +325,19 @@ export class BaoCaoSanLuongService extends BaseService<BaoCaoSanLuongDocument> {
     updateDto: UpdatePalletBaoCaoSanLuongDto,
   ): Promise<BaoCaoSanLuongDocument[]> {
     const baoCaoSanLuong = await this.baoCaoSanLuongModel.find({
-      _id: { $in: updateDto.bcsl_ids },
+      _id: { $in: updateDto.bcslIds },
     });
-    if (baoCaoSanLuong.length !== updateDto.bcsl_ids.length) {
+    if (baoCaoSanLuong.length !== updateDto.bcslIds.length) {
       throw new NotFoundException('Một số báo cáo sản lượng không tồn tại');
     }
 
     await this.baoCaoSanLuongModel.updateMany(
-      { _id: { $in: updateDto.bcsl_ids } },
+      { _id: { $in: updateDto.bcslIds } },
       { pallet: updateDto.pallet, ngayCapNhat: new Date() },
     );
 
     const baoCaoSanLuongUpdated = await this.baoCaoSanLuongModel.find({
-      _id: { $in: updateDto.bcsl_ids },
+      _id: { $in: updateDto.bcslIds },
     });
 
     return baoCaoSanLuongUpdated;
@@ -349,10 +347,10 @@ export class BaoCaoSanLuongService extends BaseService<BaoCaoSanLuongDocument> {
     xuatHoaDonDto: XuatHoaDonBaoCaoSanLuongDto,
   ): Promise<PhieuNghiepVuDocument> {
     const baoCaoSanLuong = await this.baoCaoSanLuongModel.find({
-      _id: { $in: xuatHoaDonDto.bcsl_ids },
+      _id: { $in: xuatHoaDonDto.bcslIds },
     });
 
-    if (baoCaoSanLuong.length !== xuatHoaDonDto.bcsl_ids.length) {
+    if (baoCaoSanLuong.length !== xuatHoaDonDto.bcslIds.length) {
       throw new NotFoundException('Một số báo cáo sản lượng không tồn tại');
     }
 
@@ -360,26 +358,26 @@ export class BaoCaoSanLuongService extends BaseService<BaoCaoSanLuongDocument> {
       PhieuNghiepVu.name,
     );
     const phieuNghiepVuCreated = await phieuNghiepVuModel.create({
-      bcsl_ids: xuatHoaDonDto.bcsl_ids,
-      ma_phieu: xuatHoaDonDto.ma_phieu,
+      bcsl_ids: xuatHoaDonDto.bcslIds,
+      maPhieu: xuatHoaDonDto.maPhieu,
       kho: xuatHoaDonDto.kho,
-      nguoi_tao_id: xuatHoaDonDto.nguoi_tao_id,
-      nguoi_duyet_id: xuatHoaDonDto.nguoi_duyet_id,
-      ngay_tao: new Date(),
-      ngay_cap_nhat: new Date(),
-      trang_thai: TrangThai.NEW,
-      loai_phieu: LoaiPhieu.XuatKho,
+      nguoiTao: xuatHoaDonDto.nguoiTaoId,
+      nguoiDuyet: xuatHoaDonDto.nguoiDuyetId,
+      ngayTao: new Date(),
+      ngayCapNhat: new Date(),
+      trangThai: TrangThai.NEW,
+      loaiPhieu: LoaiPhieu.XuatKho,
     });
 
     await this.baoCaoSanLuongModel.updateMany(
-      { _id: { $in: xuatHoaDonDto.bcsl_ids } },
+      { _id: { $in: xuatHoaDonDto.bcslIds } },
       { trangThai: BaoCaoState.RESERVED, ngayCapNhat: new Date() },
     );
 
     const phieuNghiepVuUpdated = await phieuNghiepVuModel
       .findById(phieuNghiepVuCreated._id)
-      .populate('bcsl_ids');
+      .populate('bcsl');
 
-    return phieuNghiepVuUpdated;
+    return phieuNghiepVuUpdated as PhieuNghiepVuDocument;
   }
 }

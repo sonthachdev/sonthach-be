@@ -46,17 +46,17 @@ export class BaoCaoSanLuongController extends BaseController<BaoCaoSanLuongDocum
   @ApiOperation({
     summary: 'Lọc báo cáo sản lượng',
     description:
-      'Lọc theo mau_da, dai, rong, day, vi_tri, trang_thai, kho, ycsc_id, ycsx_id',
+      'Lọc theo mauDa, dai, rong, day, viTri, trangThai, kho, ycscId, ycsxId',
   })
-  @ApiQuery({ name: 'mau_da', required: false })
+  @ApiQuery({ name: 'mauDa', required: false })
   @ApiQuery({ name: 'dai', required: false })
   @ApiQuery({ name: 'rong', required: false })
   @ApiQuery({ name: 'day', required: false })
-  @ApiQuery({ name: 'vi_tri', required: false })
-  @ApiQuery({ name: 'trang_thai', required: false })
+  @ApiQuery({ name: 'viTri', required: false })
+  @ApiQuery({ name: 'trangThai', required: false })
   @ApiQuery({ name: 'kho', required: false })
-  @ApiQuery({ name: 'ycsc_id', required: false })
-  @ApiQuery({ name: 'ycsx_id', required: false })
+  @ApiQuery({ name: 'ycscId', required: false })
+  @ApiQuery({ name: 'ycsxId', required: false })
   @UsePipes(new ValidationPipe({ transform: true }))
   async filter(
     @Query() query: FilterBaoCaoSanLuongDto,

@@ -9,7 +9,16 @@ import {
   IsArray,
 } from 'class-validator';
 import { Type } from 'class-transformer';
-import { BaoCaoState, MauDa, MatDa, Kho, CongDoan } from '../../../utils';
+import {
+  BaoCaoState,
+  MauDa,
+  MatDa,
+  Kho,
+  CongDoan,
+  DonViDoLuong,
+  DonViQuyCach,
+} from '../../../utils';
+import { QuyCach } from 'src/schemas/hang-muc.schema';
 
 export class CreateBaoCaoSanLuongDto {
   @ApiProperty({
@@ -19,7 +28,7 @@ export class CreateBaoCaoSanLuongDto {
   })
   @IsOptional()
   @IsMongoId()
-  ycsc_id?: string;
+  ycscId?: string;
 
   @ApiProperty({
     description: 'ID yêu cầu sản xuất (nếu có)',
@@ -28,7 +37,7 @@ export class CreateBaoCaoSanLuongDto {
   })
   @IsOptional()
   @IsMongoId()
-  ycsx_id?: string;
+  ycsxId?: string;
 
   @ApiProperty({
     description: 'ID hạng mục',
@@ -37,14 +46,14 @@ export class CreateBaoCaoSanLuongDto {
   })
   @IsOptional()
   @IsMongoId()
-  hang_muc_id?: string;
+  hangMucId?: string;
 
   @ApiProperty({
     description: 'Mã đá',
     example: 'DA-001',
   })
   @IsString()
-  ma_da: string;
+  maDa: string;
 
   @ApiProperty({
     description: 'Mã phôi',
@@ -53,7 +62,7 @@ export class CreateBaoCaoSanLuongDto {
   })
   @IsOptional()
   @IsNumber()
-  ma_phoi?: number;
+  maPhoi?: number;
 
   @ApiProperty({
     description: 'Màu đá',
@@ -61,7 +70,7 @@ export class CreateBaoCaoSanLuongDto {
     example: MauDa.DEN,
   })
   @IsEnum(MauDa)
-  mau_da: MauDa;
+  mauDa: MauDa;
 
   @ApiProperty({
     description: 'Mặt đá',
@@ -70,20 +79,27 @@ export class CreateBaoCaoSanLuongDto {
   })
   @IsOptional()
   @IsEnum(MatDa)
-  mat_da?: MatDa;
+  matDa?: MatDa;
 
   @ApiProperty({
     description: 'Quy cách đá',
-    example: { chieu_dai: 100, chieu_rong: 50, chieu_cao: 20 },
+    example: {
+      dai: 100,
+      rong: 50,
+      day: 20,
+      soLuong: 1,
+      dvtDoLuong: DonViDoLuong.MET,
+      dvtQuyCach: DonViQuyCach.VIEN,
+    },
   })
-  quy_cach: any; // Using any for now, can be refined with proper QuyCach type
+  quyCach: QuyCach;
 
   @ApiProperty({
     description: 'Ngày tạo báo cáo',
     example: '2024-12-01T00:00:00.000Z',
   })
   @IsDateString()
-  ngay_tao: string;
+  ngayTao: string;
 
   @ApiProperty({
     description: 'ID nhân viên sản xuất',
@@ -92,7 +108,7 @@ export class CreateBaoCaoSanLuongDto {
   })
   @IsOptional()
   @IsMongoId()
-  tnsx_id?: string;
+  tnsxId?: string;
 
   @ApiProperty({
     description: 'ID nhân viên KCS',
@@ -101,7 +117,7 @@ export class CreateBaoCaoSanLuongDto {
   })
   @IsOptional()
   @IsMongoId()
-  kcs_id?: string;
+  kcsId?: string;
 
   @ApiProperty({
     description: 'Kho lưu trữ',
@@ -119,7 +135,7 @@ export class CreateBaoCaoSanLuongDto {
   })
   @IsOptional()
   @IsString()
-  vi_tri?: string;
+  viTri?: string;
 
   @ApiProperty({
     description: 'ID báo cáo cha (nếu có)',
@@ -128,7 +144,7 @@ export class CreateBaoCaoSanLuongDto {
   })
   @IsOptional()
   @IsMongoId()
-  parent_id?: string;
+  parentId?: string;
 
   @ApiProperty({
     description: 'Công đoạn đã hoàn thành',
@@ -137,7 +153,7 @@ export class CreateBaoCaoSanLuongDto {
   })
   @IsOptional()
   @IsEnum(CongDoan)
-  completed_cong_doan?: CongDoan;
+  completedCongDoan?: CongDoan;
 
   @ApiProperty({
     description: 'Lý do (nếu có)',
@@ -153,7 +169,7 @@ export class CreateBaoCaoSanLuongDto {
     example: BaoCaoState.NEW,
   })
   @IsEnum(BaoCaoState)
-  trang_thai: BaoCaoState;
+  trangThai: BaoCaoState;
 }
 
 export class ApproveBaoCaoSanLuongDto {
@@ -162,7 +178,7 @@ export class ApproveBaoCaoSanLuongDto {
     example: '507f1f77bcf86cd799439011',
   })
   @IsMongoId()
-  nguoi_duyet_id: string;
+  nguoiDuyetId: string;
 
   @ApiProperty({
     description: 'Trạng thái sau khi duyệt',
@@ -170,7 +186,7 @@ export class ApproveBaoCaoSanLuongDto {
     example: BaoCaoState.APPROVED,
   })
   @IsEnum(BaoCaoState)
-  trang_thai: BaoCaoState;
+  trangThai: BaoCaoState;
 
   @ApiProperty({
     description: 'Ghi chú duyệt',
@@ -178,7 +194,7 @@ export class ApproveBaoCaoSanLuongDto {
   })
   @IsOptional()
   @IsString()
-  ghi_chu?: string;
+  ghiChu?: string;
 }
 
 export class RejectBaoCaoSanLuongDto {
@@ -187,14 +203,14 @@ export class RejectBaoCaoSanLuongDto {
     example: '507f1f77bcf86cd799439011',
   })
   @IsMongoId()
-  nguoi_tu_choi_id: string;
+  nguoiTuChoiId: string;
 
   @ApiProperty({
     description: 'Lý do từ chối',
     example: 'Chất lượng không đạt yêu cầu',
   })
   @IsString()
-  ly_do_tu_choi: string;
+  lyDoTuChoi: string;
 
   @ApiProperty({
     description: 'Ghi chú bổ sung',
@@ -202,7 +218,7 @@ export class RejectBaoCaoSanLuongDto {
   })
   @IsOptional()
   @IsString()
-  ghi_chu?: string;
+  ghiChu?: string;
 }
 
 export class ImportBaoCaoSanLuongDto {
@@ -211,7 +227,7 @@ export class ImportBaoCaoSanLuongDto {
     example: '507f1f77bcf86cd799439011',
   })
   @IsMongoId()
-  bao_cao_id: string;
+  baoCaoId: string;
 
   @ApiProperty({
     description: 'Kho nhập',
@@ -226,14 +242,14 @@ export class ImportBaoCaoSanLuongDto {
     example: 'A1',
   })
   @IsString()
-  vi_tri: string;
+  viTri: string;
 
   @ApiProperty({
     description: 'ID người thực hiện nhập kho',
     example: '507f1f77bcf86cd799439011',
   })
   @IsMongoId()
-  nguoi_thuc_hien_id: string;
+  nguoiThucHienId: string;
 
   @ApiProperty({
     description: 'Ghi chú nhập kho',
@@ -241,14 +257,14 @@ export class ImportBaoCaoSanLuongDto {
   })
   @IsOptional()
   @IsString()
-  ghi_chu?: string;
+  ghiChu?: string;
 }
 
 export class FilterBaoCaoSanLuongDto {
   @ApiProperty({ description: 'Màu đá', enum: MauDa, required: false })
   @IsOptional()
   @IsEnum(MauDa)
-  mau_da?: MauDa;
+  mauDa?: MauDa;
 
   @ApiProperty({ description: 'Chiều dài', required: false, example: 100 })
   @IsOptional()
@@ -275,7 +291,7 @@ export class FilterBaoCaoSanLuongDto {
   })
   @IsOptional()
   @IsString()
-  vi_tri?: string;
+  viTri?: string;
 
   @ApiProperty({
     description: 'Trạng thái báo cáo',
@@ -284,7 +300,7 @@ export class FilterBaoCaoSanLuongDto {
   })
   @IsOptional()
   @IsEnum(BaoCaoState)
-  trang_thai?: BaoCaoState;
+  trangThai?: BaoCaoState;
 
   @ApiProperty({
     description: 'Kho',
@@ -302,7 +318,7 @@ export class FilterBaoCaoSanLuongDto {
   })
   @IsOptional()
   @IsMongoId()
-  ycsc_id?: string;
+  ycscId?: string;
 
   @ApiProperty({
     description: 'ID yêu cầu sản xuất',
@@ -311,7 +327,7 @@ export class FilterBaoCaoSanLuongDto {
   })
   @IsOptional()
   @IsMongoId()
-  ycsx_id?: string;
+  ycsxId?: string;
 }
 
 export class UpdatePalletBaoCaoSanLuongDto {
@@ -328,7 +344,7 @@ export class UpdatePalletBaoCaoSanLuongDto {
   })
   @IsArray()
   @IsMongoId({ each: true })
-  bcsl_ids: string[];
+  bcslIds: string[];
 }
 
 export class XuatHoaDonBaoCaoSanLuongDto {
@@ -338,7 +354,7 @@ export class XuatHoaDonBaoCaoSanLuongDto {
   })
   @IsArray()
   @IsMongoId({ each: true })
-  bcsl_ids: string[];
+  bcslIds: string[];
 
   @ApiProperty({
     description: 'Kho',
@@ -353,19 +369,19 @@ export class XuatHoaDonBaoCaoSanLuongDto {
     example: 'PXK-2024-001',
   })
   @IsString()
-  ma_phieu: string;
+  maPhieu: string;
 
   @ApiProperty({
     description: 'ID người tạo phiếu',
     example: '507f1f77bcf86cd799439011',
   })
   @IsMongoId()
-  nguoi_tao_id: string;
+  nguoiTaoId: string;
 
   @ApiProperty({
     description: 'ID người duyệt phiếu',
     example: '507f1f77bcf86cd799439011',
   })
   @IsMongoId()
-  nguoi_duyet_id: string;
+  nguoiDuyetId: string;
 }
